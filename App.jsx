@@ -6,7 +6,7 @@ class App extends React.Component {
 		var imgUrl = './resources/images/background.png';
 		var divStyle = {
   			backgroundColor: 'black',
-  			width: '100vh',
+  			width: '100vw',
   			height: '100vh'
 		};
 	    return (
