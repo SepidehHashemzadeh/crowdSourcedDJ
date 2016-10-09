@@ -1,16 +1,15 @@
 import React from 'react';
-import s from './resources/css/homePage.css';
 require("./resources/css/homePage.css");
 class App extends React.Component {
 	
 	render() {
-		var imgUrl = './resources/images/background.png';
+		var imgUrl = require('./resources/images/logov2.jpg');
 	    return (
 	    	<div className="divStyle">
 	    		<div className="innerStyle">
-	    			<div className="inner">Welcome!</div>
-	    			<div className="inner">*LOGO*</div>
-	    			<div className="inner">
+	    			<div className="inner" id="homePageWelcome">Welcome!</div>
+	    			<div className="inner"><img src={imgUrl} id="logoHomePage"></img></div>
+	    			<div className="inner" id="signDiv">
 		    			<div className="inner signIn signUpIn">Sign In</div>
 		    			<div className="inner signUp signUpIn">Sign Up</div>
 	    			</div>
