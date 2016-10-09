@@ -3,12 +3,11 @@
 	font-size: 39px;
 }
 #signDiv {
-	margin-top: 20px;
+	margin-top: 38px;
 }
 #logoHomePage {
 	width: 160px;
 	height: 100px;
-	padding-top: 45px;
 }
 .divStyle {
   	background-color: #000000;
@@ -125,7 +124,7 @@
   	left: 0;
   	bottom: 0;
   	right: 0;
-  	padding-top: 263px;
+  	padding-top: 309px;
 }
 .inner {
 	vertical-align: middle;
@@ -157,6 +156,8 @@
   font-size: 20px;
   padding: 10px 20px 10px 20px;
   text-decoration: none;
+  height: 27px;
+  width: 64.75px;
 }
 
 .signUpIn:hover {
