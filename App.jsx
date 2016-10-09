@@ -10,8 +10,8 @@ class App extends React.Component {
 	    			<div className="inner" id="homePageWelcome">Welcome!</div>
 	    			<div className="inner"><img src={imgUrl} id="logoHomePage"></img></div>
 	    			<div className="inner" id="signDiv">
-		    			<div className="inner signIn signUpIn">Sign In</div>
-		    			<div className="inner signUp signUpIn">Sign Up</div>
+		    			<div className="inner signIn hvr-back-pulse signUpIn">Sign In</div>
+		    			<div className="inner signUp hvr-back-pulse signUpIn">Sign Up</div>
 	    			</div>
 	    		</div>
 	    	</div>
