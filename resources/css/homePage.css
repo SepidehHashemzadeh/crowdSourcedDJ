@@ -2,7 +2,7 @@
 #homePageWelcome {
 	font-size: 39px;
 }
-#signDiv {
+#signBtnDiv {
 	margin-top: -67px;
 }
 #logoHomePage {
@@ -44,7 +44,7 @@
   
   animation: l-bars 1s linear infinite alternate;
 }
-.divStyle {
+.homePageDiv {
   	background-color: #000000;
   	width: 100vw;
   	height: 100vh;
@@ -55,10 +55,10 @@
 @keyframes l-bars {
   0% {  
     background-size: 
+      5px 50px,
+      5px 40px,
       5px 30px,
-      5px 10px,
-      5px 10px,
-      5px 10px,
+      5px 20px,
       5px 10px,
       5px 10px,
       5px 10px,
@@ -67,11 +67,11 @@
     }
   12.5% {  
     background-size: 
-      5px 10px,
       5px 40px,
-      5px 10px,
-      5px 10px,
-      5px 10px,
+      5px 50px,
+      5px 40px,
+      5px 30px,
+      5px 20px,
       5px 10px,
       5px 10px,
       5px 10px,
@@ -79,63 +79,63 @@
     }
   25% {  
     background-size: 
-      5px 10px,
-      5px 10px,
+      5px 30px,
+      5px 40px,
       5px 50px,
-      5px 10px,
-      5px 10px,
-      5px 10px,
+      5px 40px,
+      5px 30px,
+      5px 20px,
       5px 10px,
       5px 10px,
       5px 10px;
     }
   37.5% {  
     background-size: 
-      5px 10px,
-      5px 10px,
-      5px 10px,
-      5px 60px,
-      5px 10px,
-      5px 10px,
-      5px 10px,
+      5px 20px,
+      5px 30px,
+      5px 40px,
+      5px 50px,
+      5px 40px,
+      5px 30px,
+      5px 20px,
       5px 10px,
       5px 10px;
     }
   50% {  
     background-size: 
       5px 10px,
-      5px 10px,
-      5px 10px,
-      5px 10px,
-      5px 70px,
-      5px 10px,
-      5px 10px,
-      5px 10px,
+      5px 20px,
+      5px 30px,
+      5px 40px,
+      5px 50px,
+      5px 40px,
+      5px 30px,
+      5px 20px,
       5px 10px;
     }
   62.5% {  
     background-size: 
       5px 10px,
       5px 10px,
-      5px 10px,
-      5px 10px,
-      5px 10px,
-      5px 60px,
-      5px 10px,
-      5px 10px,
-      5px 10px;
+      5px 20px,
+      5px 30px,
+      5px 40px,
+      5px 50px,
+      5px 40px,
+      5px 30px,
+      5px 20px;
     }
   75% {  
     background-size: 
       5px 10px,
       5px 10px,
       5px 10px,
-      5px 10px,
-      5px 10px,
-      5px 10px,
+      5px 20px,
+      5px 30px,
+      5px 40px,
       5px 50px,
-      5px 10px,
-      5px 10px;
+      5px 40px,
+      5px 30px;
     }
   87.5% {  
     background-size: 
@@ -143,11 +143,11 @@
       5px 10px,
       5px 10px,
       5px 10px,
-      5px 10px,
-      5px 10px,
-      5px 10px,
+      5px 20px,
+      5px 30px,
       5px 40px,
-      5px 10px;
+      5px 50px,
+      5px 40px;
     }
   100% {  
     background-size: 
@@ -156,13 +156,13 @@
       5px 10px,
       5px 10px,
       5px 10px,
-      5px 10px,
-      5px 10px,
-      5px 10px,
-      5px 30px;
+      5px 20px,
+      5px 30px,
+      5px 40px,
+      5px 50px;
     }
   }
-.innerStyle {
+.homePageColumn {
 	margin: auto;
   	position: absolute;
   	top: 0;
@@ -171,22 +171,22 @@
   	right: 0;
   	padding-top: 309px;
 }
-.inner {
+.homePageRow {
 	vertical-align: middle;
 	font-family: 'Lobster', cursive;
 	font-size: 20px;
 }
-.signUp {
+.signUpBtn {
 	display: inline-block;
 	margin-left: 5px;
 }
-.signIn {
+.signInBtn {
 	display: inline-block;
 	margin-right: 5px;
 	margin-left: 6px;
 }
 
-.signUpIn {
+.signUpInBtn {
   background: #ffffff;
   background-image: -webkit-linear-gradient(top, #ffffff, #ffffff);
   background-image: -moz-linear-gradient(top, #ffffff, #ffffff);
@@ -202,11 +202,12 @@
   padding: 10px 20px 10px 20px;
   text-decoration: none;
   height: 47px;
-  width: 104.75px;
+  width: 197.75px;
   transition: all 0.3s ease 0s;
+  border-width: 0px;
 }
 
-.signUpIn:hover {
+.signUpInBtn:hover {
   background: #0073CF;
   text-decoration: none;
   color: white;
