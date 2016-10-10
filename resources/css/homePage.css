@@ -208,7 +208,7 @@
 }
 
 .signUpInBtn:hover {
-  background: #0073CF;
+  background: #3b5998;
   text-decoration: none;
   color: white;
 }
@@ -251,7 +251,7 @@
   animation-timing-function: linear;
   -webkit-animation-iteration-count: infinite;
   animation-iteration-count: infinite;
-  background-color: #2098d1;
-  background-color: #2098d1;
+  background-color: #3b5998;
+  background-color: #3b5998;
   color: white;
 }
