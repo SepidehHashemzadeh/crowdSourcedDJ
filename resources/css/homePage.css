@@ -45,12 +45,10 @@
   animation: l-bars 1s linear infinite alternate;
 }
 .homePageDiv {
-  	background-color: #000000;
   	width: 100vw;
   	height: 100vh;
   	color: white;
   	text-align: center;
-  	
 }
 @keyframes l-bars {
   0% {  
