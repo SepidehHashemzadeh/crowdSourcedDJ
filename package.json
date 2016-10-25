@@ -17,6 +17,7 @@
     "css-loader": "^0.25.0",
     "file": "^0.2.2",
     "hover.css": "^2.0.2",
+    "mysql": "^2.5.4",
     "react": "^15.3.2",
     "react-bootstrap": "^0.30.5",
     "react-dom": "^15.3.2",

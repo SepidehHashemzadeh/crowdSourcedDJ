@@ -2,13 +2,13 @@ import React from 'react';
 import FBLogin from './components/FBLogin.jsx'
 require("./resources/css/homePage.css");
 class App extends React.Component {
-	
+
 	render() {
 		var imgUrl = require('./resources/images/logov4.png');
 	    return (
 	    	<div className="homePageDiv">
 	    		<div className="homePageColumn">
-	    			<div className="homePageRow" id="homePageWelcome">Welcome!</div>
+	    			<div className="homePageRow" id="homePageWelcome">dj.que</div>
 	    			<div className="homePageRow"><img src={imgUrl} id="logoHomePage"></img></div>
 	    			{/*<div className="homePageRow" id="signBtnDiv">
 		    			<div className="homePageRow signInBtn hvr-back-pulse signUpInBtn">Sign In</div>
