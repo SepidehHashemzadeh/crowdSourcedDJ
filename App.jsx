@@ -5,6 +5,7 @@ class App extends React.Component {
 
 	render() {
 		var imgUrl = require('./resources/images/logov4.png');
+
 	    return (
 	    	<div className="homePageDiv">
 	    		<div className="homePageColumn">
