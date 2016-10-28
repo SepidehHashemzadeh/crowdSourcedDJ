@@ -2,4 +2,24 @@
 
 .createEventFormDiv {
 	color:blue;
+	border-style: dotted;
+	border-color: white;
+	text-align: center;
+    background-color: gray;
+}
+.createEventEntry{
+	border-style:dotted;
+	border-color:black;
+}
+
+.createEventFieldName{
+	background-color:white;
+	color:black;
+	display:inline-block;
+	font-size:20px;
+	margin-right: 20px;
+}
+.createEventFieldInput{
+	background-color:white;
+	display:inline-block;
 }

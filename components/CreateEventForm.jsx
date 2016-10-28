@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//require("./../resources/css/homePage.css");
 require("./../resources/css/createEventForm.css");
 var CreateEventForm = React.createClass({
 	getInitialState: function() {
@@ -29,34 +28,47 @@ var CreateEventForm = React.createClass({
 	render: function(){
 	    return (
 	    	<div className="createEventFormDiv">
-	    		<h3>Use this form to create your event!!! cool!!!</h3>
-		    		<h5>Event Name:</h5>
-		    		<input type="text"
+		    		<h3>Use this form to create your event!!! cool!!!</h3>
+		    		<div className="createEventEntry">
+			    		<h5 className="createEventFieldName">Event Name:</h5>
+			    		<input type="text"
+			    		       className="createEventFieldInput"
+			    			   onChange={this.handleEventName}
+			    		       value={this.state.eventName} />
+			    	</div>
 
-		    			   onChange={this.handleEventName}
-		    		       value={this.state.eventName} />
-		    		<h5>Your event name is: {this.state.eventName} </h5>
+			    	<div className="createEventEntry">
+			    		<h5 className="createEventFieldName">Start Time:</h5>
+			    		<input type="datetime-local"
+			    		       className="createEventFieldInput"
+			    			   onChange={this.handleEventStartTime}
+			    		       value={this.state.eventStartTime} />
+			    	</div>
 
-	    		<h5>Start Time:</h5>
-	    		<input type="datetime-local"
-	    			   onChange={this.handleEventStartTime}
-	    		       value={this.state.eventStartTime} />
-	    		<h5>Your event time is: {this.state.eventStartTime} </h5>
+			    	<div className="createEventEntry">
+			    		<h5 className="createEventFieldName">Location:</h5>
+			    		<input type="text"
+			    		       className="createEventFieldInput"
+			    			   onChange={this.handleEventLocation}
+			    		       value={this.state.eventLocation} />
+			    	</div>
 
-	    		<h5>Location:</h5>
-	    		<input type="text"
-	    			   onChange={this.handleEventLocation}
-	    		       value={this.state.eventLocation} />
-	    		<h5>Your event location is: {this.state.eventLocation} </h5>
+			    	<div className="createEventEntry">
+						<h5 className="createEventFieldName">Description:</h5>
+			    		<textarea
+			    		       className="createEventFieldInput"
+			    			   rows="4"
+			    			   cols="40"
+			    			   onChange={this.handleEventDescription}
+			    		       value={this.state.eventDescription} />
+			    	</div>
 
-				<h5>Description:</h5>
-	    		<textarea
-	    			   rows="4"
-	    			   cols="40"
-	    			   onChange={this.handleEventDescription}
-	    		       value={this.state.eventDescription} />
-	    		<h5>Your event description is: {this.state.eventDescription} </h5>
-	    		
+			    	<div className="test">
+			    		<h5>Your event name is: {this.state.eventName} </h5>
+			    		<h5>Your event time is: {this.state.eventStartTime} </h5>
+			    		<h5>Your event location is: {this.state.eventLocation} </h5>
+			    		<h5>Your event description is: {this.state.eventDescription} </h5>
+			    	</div>
 	    	</div>
 	    );
 	}
