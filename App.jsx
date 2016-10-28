@@ -1,5 +1,6 @@
 import React from 'react';
 import FBLogin from './components/FBLogin.jsx'
+import CreateEventForm from './components/CreateEventForm.jsx'
 require("./resources/css/homePage.css");
 class App extends React.Component {
 
@@ -15,6 +16,7 @@ class App extends React.Component {
 		    			<div className="homePageRow signUpBtn hvr-back-pulse signUpInBtn">Sign Up</div>
 	    			</div>*/}
 	    			<div className="homePageRow" id="signBtnDiv"><FBLogin/></div>
+	    			<CreateEventForm/>
 	    		</div>
 	    	</div>
 	    );
