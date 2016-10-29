@@ -2,13 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 require("./../resources/css/createEventForm.css");
 var CreateEventForm = React.createClass({
-	getInitialState: function() {
+	getInitialState: function () {
 		return { 
 			eventName: '',
 			eventLocation: '',
 			eventStartTime: '',
-			eventDescription: ''
-		};
+			eventDescription: '',
+			creatingForm: false
+		}
 	},
 
 	handleEventName: function (e){
@@ -24,8 +25,23 @@ var CreateEventForm = React.createClass({
 		this.setState({ eventDescription: e.target.value});
 	},
 
+	createForm: function () {
+		this.setState({creatingForm: true});
+	},
 
-	render: function(){
+	submitForm: function () {
+		this.setState({creatingForm:false});
+	},
+
+	renderNormal: function () {
+		return (
+			<div className="createEventFormButton">
+				<button onClick={this.createForm} className="button-create">Create Event</button>
+			</div>
+		);
+	},
+
+	renderForm: function() {
 	    return (
 	    	<div className="createEventFormDiv">
 		    	<form action="#">
@@ -53,7 +69,7 @@ var CreateEventForm = React.createClass({
 				             className="createEventFieldInput"
 			    			 onChange={this.handleEventLocation}
 			    		     value={this.state.eventLocation}/> 
-				   </div>
+				   	</div>
 				  </div>
 				    
 				  <div>
@@ -82,22 +98,28 @@ var CreateEventForm = React.createClass({
 				    </div>
 				  </div>
 				  
-				  <div>
-						<div>
-				  		<input id="saveForm" name="saveForm" type="submit" value="Submit"/>
-				    </div>
-					</div>
 
-					<div className="test">
+			    	<div className="submitEventButton"> 
+			    		<button OnClick={this.submitForm} className="button-submit">Submit</button>
+			    	</div>
+
+			    	<div className="test">
 			    		<h5>Your event name is: {this.state.eventName} </h5>
 			    		<h5>Your event time is: {this.state.eventStartTime} </h5>
 			    		<h5>Your event location is: {this.state.eventLocation} </h5>
 			    		<h5>Your event description is: {this.state.eventDescription} </h5>
 			    	</div>
-				  
 				</form>
 			</div>
 	    );
+	},
+
+	render: function () {
+	    if(this.state.creatingForm) {
+	    	return this.renderForm();
+	    } else {
+	    	return this.renderNormal();
+	    }
 	}
 });
 
