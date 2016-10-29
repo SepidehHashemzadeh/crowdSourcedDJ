@@ -5,6 +5,7 @@ require("./resources/css/homePage.css");
 class App extends React.Component {
 	render() {
 		var imgUrl = require('./resources/images/logov4.png');
+
 	    return (
 	    	<div>
 		    	<div className="homePageDiv">
