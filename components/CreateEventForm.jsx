@@ -31,6 +31,10 @@ var CreateEventForm = React.createClass({
 
 	submitForm: function () {
 		this.setState({creatingForm:false});
+		var name = this.state.eventName;
+		var location = this.state.eventLocation;
+		var time = this.state.eventStartTime;
+		var description = this.state.eventDescription;
 	},
 
 	renderNormal: function () {
@@ -60,6 +64,20 @@ var CreateEventForm = React.createClass({
 				    </div>
 				  </div>
 				    
+
+				  <div>
+				    <label class="desc" id="title106" for="Field106">
+				    	Event Time
+				    </label>
+				    <div>
+				    <input type="datetime-local" id="Field106" name="Field106" class="field select medium" tabindex="11"
+			    		    className="createEventFieldInput"
+			         	    onChange={this.handleEventStartTime}
+			    		    value={this.state.eventStartTime} />
+				    </div>
+				  </div>
+
+
 				  <div>
 				    <label class="desc" id="title3" for="Field3">
 				      Location
@@ -82,19 +100,6 @@ var CreateEventForm = React.createClass({
 				               className="createEventFieldInput"
 			    			   onChange={this.handleEventDescription}
 			    		       value={this.state.eventDescription}></textarea>
-				    </div>
-				  </div>
-				  
-				  
-				  <div>
-				    <label class="desc" id="title106" for="Field106">
-				    	Event Time
-				    </label>
-				    <div>
-				    <input type="datetime-local" id="Field106" name="Field106" class="field select medium" tabindex="11"
-			    		    className="createEventFieldInput"
-			         	    onChange={this.handleEventStartTime}
-			    		    value={this.state.eventStartTime} />
 				    </div>
 				  </div>
 				  
