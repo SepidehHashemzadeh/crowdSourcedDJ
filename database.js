@@ -29,6 +29,11 @@ var connection = mysql.createConnection({
 
 app.get('/', function (req, res) {
 	connection.query(req.query['query'], function (err, rows) {
+        if (err) {
+            res.send(err);
+            return;
+        }
+        
 		res.send(rows);
 	});
 });
