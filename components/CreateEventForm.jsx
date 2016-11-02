@@ -1,6 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 require("./../resources/css/createEventForm.css");
+
+// <html>
+// 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
+// </html>
+
 var CreateEventForm = React.createClass({
 	getInitialState: function () {
 		return { 
@@ -8,8 +13,7 @@ var CreateEventForm = React.createClass({
 			eventLocation: '',
 			eventStartTime: '',
 			eventDescription: '',
-			creatingForm: false,
-			isSubmitting: false,
+			creatingForm: false
 		}
 	},
 
@@ -27,22 +31,37 @@ var CreateEventForm = React.createClass({
 	},
 
 	createForm: function () {
-		alert("create event clicked");
-		console.log("create event clicked");
 		this.setState({creatingForm: true});
 	},
 
 	submitForm: function () {
-		alert("submit form clicked");
-		console.log("submit form clicked");
-		this.setState({
-			creatingForm:false,
-			isSubmitting:true,	
-		});
-		var name = this.state.eventName;
-		var location = this.state.eventLocation;
-		var time = this.state.eventStartTime;
-		var description = this.state.eventDescription;
+		this.setState({creatingForm:false,});
+		var eventName = this.state.eventName;
+		var eventLocation = this.state.eventLocation;
+		var eventTime = this.state.eventStartTime;
+		var eventDescription = this.state.eventDescription;
+
+		// var query = 'INSERT INTO Events (name, startTime, description, location, userId, isEnded) VALUES (' + 
+		// 	eventName + ', ' + eventTime + ', ' + eventDescription + ', ' + eventLocation + ', 1, false)';
+
+		// alert('Starting ajax call');
+		this.setState({creatingForm:false});
+
+		// var URL = 'localhost:3000/?query='+ query; 
+		// alert(URL);
+
+		// $.ajax({
+		// 	type:'POST',
+		// 	dataType: 'json',
+		// 	url: URL,
+		// 	success: function(data){
+		// 		alert('loaded');
+		// 	}.bind(this),
+		// 	error: function(data){
+		// 		alert('error');
+		// 	}.bind(this)
+		// });
+		// alert('Finished ajax call');
 	},
 
 	renderNormal: function () {
@@ -113,9 +132,9 @@ var CreateEventForm = React.createClass({
 				  
 
 			    	<div className="submitEventButton"> 
+
 			    		<button type="submit" OnClick={this.submitForm} 
-			    		        className="button-submit"
-			    		        disabled={this.state.isSubmitting}>Submit</button>
+			    		        className="button-submit">Submit</button>
 			    	</div>
 
 			    	<div className="test">
@@ -137,8 +156,6 @@ var CreateEventForm = React.createClass({
 	    }
 	}
 });
-
-
 
 export default CreateEventForm; 
 
