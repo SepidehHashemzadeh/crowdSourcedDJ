@@ -8,7 +8,8 @@ var CreateEventForm = React.createClass({
 			eventLocation: '',
 			eventStartTime: '',
 			eventDescription: '',
-			creatingForm: false
+			creatingForm: false,
+			isSubmitting: false,
 		}
 	},
 
@@ -26,11 +27,18 @@ var CreateEventForm = React.createClass({
 	},
 
 	createForm: function () {
+		alert("create event clicked");
+		console.log("create event clicked");
 		this.setState({creatingForm: true});
 	},
 
 	submitForm: function () {
-		this.setState({creatingForm:false});
+		alert("submit form clicked");
+		console.log("submit form clicked");
+		this.setState({
+			creatingForm:false,
+			isSubmitting:true,	
+		});
 		var name = this.state.eventName;
 		var location = this.state.eventLocation;
 		var time = this.state.eventStartTime;
@@ -105,7 +113,9 @@ var CreateEventForm = React.createClass({
 				  
 
 			    	<div className="submitEventButton"> 
-			    		<button OnClick={this.submitForm} className="button-submit">Submit</button>
+			    		<button type="submit" OnClick={this.submitForm} 
+			    		        className="button-submit"
+			    		        disabled={this.state.isSubmitting}>Submit</button>
 			    	</div>
 
 			    	<div className="test">
