@@ -1,6 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 require("./../resources/css/createEventForm.css");
+
+// <html>
+// 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
+// </html>
+
 var CreateEventForm = React.createClass({
 	getInitialState: function () {
 		return { 
@@ -30,11 +35,33 @@ var CreateEventForm = React.createClass({
 	},
 
 	submitForm: function () {
+		var eventName = this.state.eventName;
+		var eventLocation = this.state.eventLocation;
+		var eventTime = this.state.eventStartTime;
+		var eventDescription = this.state.eventDescription;
+
+		// var query = 'INSERT INTO Events (name, startTime, description, location, userId, isEnded) VALUES (' + 
+		// 	eventName + ', ' + eventTime + ', ' + eventDescription + ', ' + eventLocation + ', 1, false)';
+
+		// alert('Starting ajax call');
 		this.setState({creatingForm:false});
-		var name = this.state.eventName;
-		var location = this.state.eventLocation;
-		var time = this.state.eventStartTime;
-		var description = this.state.eventDescription;
+
+		// var URL = 'localhost:3000/?query='+ query; 
+		// alert(URL);
+
+		// $.ajax({
+		// 	type:'POST',
+		// 	dataType: 'json',
+		// 	url: URL,
+		// 	success: function(data){
+		// 		alert('loaded');
+		// 	}.bind(this),
+		// 	error: function(data){
+		// 		alert('error');
+		// 	}.bind(this)
+		// });
+		// alert('Finished ajax call');
+			
 	},
 
 	renderNormal: function () {
@@ -105,7 +132,7 @@ var CreateEventForm = React.createClass({
 				  
 
 			    	<div className="submitEventButton"> 
-			    		<button OnClick={this.submitForm} className="button-submit">Submit</button>
+			    		<button onClick={this.submitForm} className="button-submit">Submit</button>
 			    	</div>
 
 			    	<div className="test">
@@ -127,8 +154,6 @@ var CreateEventForm = React.createClass({
 	    }
 	}
 });
-
-
 
 export default CreateEventForm; 
 
