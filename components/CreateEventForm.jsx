@@ -6,16 +6,31 @@ require("./../resources/css/createEventForm.css");
 var CreateEventForm = React.createClass({
 	getInitialState: function () {
 		return { 
-			eventName: '',
-			eventLocation: '',
-			eventStartTime: '',
-			eventDescription: '',
-			creatingForm: false
+			eventName: null,
+			eventLocation: null,
+			eventStartTime: null,
+			eventDescription: null,
+			creatingForm: false,
+			isNameValid: false,
+			hasTriedSubmitting: false,
+			submitDisabled: true
 		}
 	},
 
 	handleEventName: function (e){
 		this.setState({ eventName: e.target.value});
+	},
+	validateForm: function(){
+		var allFieldsFilled = (this.state.eventName && this.state.eventStartTime
+			    && this.state.eventDescription && this.state.eventLocation);
+		var now = new Date().toJSON();
+		var startTimeInFuture = (now < this.state.eventStartTime);
+		return (allFieldsFilled && startTimeInFuture);
+	},
+	validateStartTime: function(){
+		var now = new Date().toJSON();
+		var startTimeInFuture = (now < this.state.eventStartTime);
+		return (!this.state.eventStartTime || startTimeInFuture);
 	},
 	handleEventLocation: function (e){
 		this.setState({ eventLocation: e.target.value});
@@ -32,7 +47,8 @@ var CreateEventForm = React.createClass({
 	},
 
 	submitForm: function () {
-		this.setState({creatingForm:false,});
+		this.setState({hasTriedSubmitting:true});
+		this.setState({creatingForm:false});
 		var eventName = this.state.eventName;
 		var eventLocation = this.state.eventLocation;
 		var eventTime = this.state.eventStartTime;
@@ -75,7 +91,7 @@ var CreateEventForm = React.createClass({
 		    	<form action="#">
 				  <header>
 				    <h2 className="formTitle">Create New Event</h2>
-				    <div>add info to create event then u ken be partee leader</div>
+				    <div></div>
 				  </header>
 				  
 				  <div>
@@ -84,7 +100,8 @@ var CreateEventForm = React.createClass({
 				      <input id="Field1" name="Field1" type="text" class="field text fn"size="8" tabindex="1"
 				             className="createEventFieldInput"
 			    			 onChange={this.handleEventName}
-				             value={this.state.eventName}/>
+				             value={this.state.eventName}
+				             maxLength="255"/>
 				    </div>
 				  </div>
 				    
@@ -97,7 +114,7 @@ var CreateEventForm = React.createClass({
 				    <input type="datetime-local" id="Field106" name="Field106" class="field select medium" tabindex="11"
 			    		    className="createEventFieldInput"
 			         	    onChange={this.handleEventStartTime}
-			    		    value={this.state.eventStartTime} />
+			    		    value={this.state.eventStartTime}/>
 				    </div>
 				  </div>
 
@@ -107,7 +124,7 @@ var CreateEventForm = React.createClass({
 				      Location
 				    </label>
 				    <div>
-				      <input id="Field3" name="Field3" type="text" spellcheck="false" maxlength="255" tabindex="3"
+				      <input id="Field3" name="Field3" type="text" spellcheck="false" maxLength="255" tabindex="3"
 				             className="createEventFieldInput"
 			    			 onChange={this.handleEventLocation}
 			    		     value={this.state.eventLocation}/> 
@@ -120,19 +137,31 @@ var CreateEventForm = React.createClass({
 				    </label>
 				  
 				    <div>
-				      <textarea id="Field4" name="Field4" spellcheck="true" rows="5" cols="45" tabindex="4"
+				      <textarea id="Field4" name="Field4" spellcheck="true" rows="5" tabindex="4"
 				               className="createEventFieldInput"
 			    			   onChange={this.handleEventDescription}
 			    		       value={this.state.eventDescription}></textarea>
 				    </div>
 				  </div>
 				  
+				  	
+				    { this.validateForm() ? 
+					    	<div className="submitEventButton"> 
+			    			    <button type="submit" class="myButton" OnClick={this.submitForm} 
+			    		        className="button-submit">Submit</button> 
+					    	</div>
 
-			    	<div className="submitEventButton"> 
+				    	: 
+				    		<div><div>Please fill out all required fields.</div></div> }
 
-			    		<button type="submit" OnClick={this.submitForm} 
-			    		        className="button-submit">Submit</button>
+			    	<div>
+			    		{this.validateStartTime() ? null : 
+			    			<div>Please select an Event Time in the future.</div>}
 			    	</div>
+
+			    	
+
+
 
 			    	<div className="test">
 			    		<h5>Your event name is: {this.state.eventName} </h5>
