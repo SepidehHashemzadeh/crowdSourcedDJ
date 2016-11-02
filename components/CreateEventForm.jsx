@@ -2,9 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 require("./../resources/css/createEventForm.css");
 
-// <html>
-// 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
-// </html>
 
 var CreateEventForm = React.createClass({
 	getInitialState: function () {
