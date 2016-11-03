@@ -3,12 +3,6 @@ import ReactDOM from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 require("./../resources/css/createEventForm.css");
 
-/*var jsonp = require('jsonp');*/
-
-/* <html>
-// 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
- </html> */
-
 var CreateEventForm = React.createClass({
 	getInitialState: function () {
 		/*this.toggle = this.toggle.bind(this);
@@ -94,7 +88,15 @@ var CreateEventForm = React.createClass({
 			console.log(res);
 		});
 
-		this.setState({creatingForm:false});
+		this.setState({
+			eventName: 'hi',
+			eventLocation: 'hi',
+			eventStartTime: '',
+			eventDescription: 'hi',
+			creatingForm: false,
+			modal: false,
+			nestedModal: false
+		});
 	},
 
 	renderNormal: function () {
