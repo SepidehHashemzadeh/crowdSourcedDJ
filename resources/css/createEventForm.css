@@ -9,6 +9,7 @@
 .formTitle{
 	font-family: 'Lobster', cursive;
 	font-size:40px;
+	text-align:center;
 }
 .createEventEntry{
 	border-style:dotted;

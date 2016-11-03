@@ -100,46 +100,47 @@ var CreateEventForm = React.createClass({
 		console.log('renderNormal');
 		return (
 			<div className="createEventFormButton">
-				<Button color="danger" onClick={this.createForm} className="button-create">Create Event</Button>
-				{/*<Modal isOpen={this.state.modal} toggle={this.toggle}>
+				<Button color="danger" onClick={this.toggle} className="button-create">Create Event</Button>
+				<Modal isOpen={this.state.modal} toggle={this.toggle}>
 					<ModalBody>
 						<div>
-							<form action="#">
+							<form>
 							  <header>
 							    <h2 className="formTitle">Create New Event</h2>
-							    <div>add info to create event then u ken be partee leader</div>
+							    <div></div>
 							  </header>
 							  
 							  <div>
-							    <label class="desc" id="title1" for="Field1">Event Name</label>
+							    <label>Event Name</label>
 							    <div>
-							      <input id="Field1" name="Field1" type="text" class="field text fn"size="8" tabindex="1"
+							      <input type="text" size="8" 
 							             className="createEventFieldInput"
 						    			 onChange={this.handleEventName}
-							             value={this.state.eventName}/>
+							             value={this.state.eventName}
+							             maxLength="255"/>
 							    </div>
 							  </div>
 							    
 
 							  <div>
-							    <label class="desc" id="title106" for="Field106">
+							    <label>
 							    	Event Time
 							    </label>
 							    <div>
-							    <input type="datetime-local" id="Field106" name="Field106" class="field select medium" tabindex="11"
+							    <input type="datetime-local"
 						    		    className="createEventFieldInput"
 						         	    onChange={this.handleEventStartTime}
-						    		    value={this.state.eventStartTime} />
+						    		    value={this.state.eventStartTime}/>
 							    </div>
 							  </div>
 
 
 							  <div>
-							    <label class="desc" id="title3" for="Field3">
+							    <label>
 							      Location
 							    </label>
 							    <div>
-							      <input id="Field3" name="Field3" type="text" spellCheck="false" maxLength="255" tabindex="3"
+							      <input type="text" maxLength="255"
 							             className="createEventFieldInput"
 						    			 onChange={this.handleEventLocation}
 						    		     value={this.state.eventLocation}/> 
@@ -147,35 +148,34 @@ var CreateEventForm = React.createClass({
 							  </div>
 							    
 							  <div>
-							    <label class="desc" id="title4" for="Field4">
+							    <label>
 							      Event Description
 							    </label>
 							  
 							    <div>
-							      <textarea id="Field4" name="Field4" spellCheck="true" rows="5" cols="45" tabindex="4"
+							      <textarea rows="5"
 							               className="createEventFieldInput"
 						    			   onChange={this.handleEventDescription}
 						    		       value={this.state.eventDescription}></textarea>
 							    </div>
 							  </div>
 							  
+							  	
+							    { this.validateForm() ? 
+								    	null
+							    	: 
+							    		<div><div>Please fill out all required fields.</div></div> }
 
-						    	<div className="submitEventButton"> 
-
-						    		<button type="submit" onClick={this.submitForm} 
-						    		        className="button-submit">Submit</button>
-						    	</div>
-
-						    	<div className="test">
-						    		<h5>Your event name is: {this.state.eventName} </h5>
-						    		<h5>Your event time is: {this.state.eventStartTime} </h5>
-						    		<h5>Your event location is: {this.state.eventLocation} </h5>
-						    		<h5>Your event description is: {this.state.eventDescription} </h5>
+						    	<div>
+						    		{this.validateStartTime() ? null : 
+						    			<div>Please select an Event Time in the future.</div>}
 						    	</div>
 							</form>
 						</div>
             			<br />
-            			<Button color="success" onClick={this.toggleNested}>Show Nested Model</Button>
+          			</ModalBody>
+          			<ModalFooter>
+            			<Button disabled={!this.validateForm()} color="primary" onClick={this.toggleNested}>Submit</Button>
            				<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested}>
               				<ModalHeader>Nested Modal title</ModalHeader>
               				<ModalBody>Stuff and things</ModalBody>
@@ -183,20 +183,17 @@ var CreateEventForm = React.createClass({
                 				<Button color="primary" onClick={this.toggleNested}>Done</Button>{' '}
                 				<Button color="secondary" onClick={this.toggle}>All Done</Button>
               				</ModalFooter>
-            			</Modal>
-          			</ModalBody>
-          			<ModalFooter>
-            			<Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
+            			</Modal>{' '}
             			<Button color="secondary" onClick={this.toggle}>Cancel</Button>
           			</ModalFooter>
-        		</Modal>*/}
+        		</Modal>
 			</div>
 		);
 	},
 
 	renderForm: function() {
 	    return (
-	    	<div className="createEventFormDiv">
+	    	{/*<div className="createEventFormDiv">
 		    	<form>
 				  <header>
 				    <h2 className="formTitle">Create New Event</h2>
@@ -256,8 +253,8 @@ var CreateEventForm = React.createClass({
 				  	
 				    { this.validateForm() ? 
 					    	<div className="submitEventButton"> 
-			    			    <button type="submit" class="myButton" OnClick={this.submitForm} 
-			    		        className="button-submit">Submit</button> 
+			    			    <Button color="primary" type="submit" class="myButton" OnClick={this.submitForm} 
+			    		        className="button-submit">Submit</Button> 
 					    	</div>
 
 				    	: 
@@ -267,15 +264,8 @@ var CreateEventForm = React.createClass({
 			    		{this.validateStartTime() ? null : 
 			    			<div>Please select an Event Time in the future.</div>}
 			    	</div>
-
-			    	<div className="test">
-			    		<h5>Your event name is: {this.state.eventName} </h5>
-			    		<h5>Your event time is: {this.state.eventStartTime} </h5>
-			    		<h5>Your event location is: {this.state.eventLocation} </h5>
-			    		<h5>Your event description is: {this.state.eventDescription} </h5>
-			    	</div>
 				</form>
-			</div>
+			</div>*/}
 	    );
 	}, 
 
