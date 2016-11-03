@@ -40,6 +40,7 @@ var search = function (s, callback) {
  *
  * @param eventID: the foreign key ID of the event we are adding to
  * @param songURL: the URL of the specific song we are adding to the event database
+<<<<<<< HEAD
  * @param callback: gets the JSON result from mySQL
  *
  */
@@ -68,6 +69,24 @@ var addToPlaylist = function (eventID, songURL, callback) {
             callback(res);
         });
     });
+=======
+ * @param sequence: the place in the playlist the song will be added to (should this autoincrement?)
+ * @param callback: gets the JSON result from mySQL
+ *
+ */
+var addToPlaylist = function (eventID, songURL, sequence, callback) {
+    var url = "https://djque.herokuapp.com/?query=";
+    var query = "INSERT INTO Event_Song VALUES (";
+    query += eventID + ", '";
+    query += songURL + "', 'youtube', ";
+    query += sequence + ");";
+
+    fetch(encodeURI(url + query)).then((res) => {
+        return res.json();
+    }).then((res) => {
+        callback(res);
+    });    
+>>>>>>> searchCreateEvent
 };
 
 exports.search = search;

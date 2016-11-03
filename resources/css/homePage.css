@@ -45,6 +45,8 @@
   
   animation: l-bars 1s linear infinite alternate;
 }
+
+
 .homePageDiv {
   	width: 100vw;
   	height: 100vh;
@@ -253,4 +255,12 @@
   background-color: #3b5998;
   background-color: #3b5998;
   color: white;
+}
+
+#displayNone {
+  display: none;
+}
+
+#moveLogoUp {
+  padding-top: 0;
 }
