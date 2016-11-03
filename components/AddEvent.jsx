@@ -2,7 +2,7 @@ import React from 'react';
 class AddEvent extends React.Component {
 	render() {
         return (
-			<button className="addEventButton" type="button" onClick={this.addEventClick}>Add Event</button>
+			<span id="addEventButton" className="btnadd" onClick={this.addEventClick}>Add Event</span>
 	    );
     }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-require("../resources/css/search.css");
+require("../resources/css/dashboard.css");
 class Search extends React.Component {
       render() {
                return (

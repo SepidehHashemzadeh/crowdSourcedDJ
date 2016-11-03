@@ -1,11 +1,11 @@
 import React from 'react';
-import Search from './Search.jsx'
-import AddEvent from './AddEvent.jsx'
+import Search from './Search.jsx';
+import AddEvent from './AddEvent.jsx';
 
 class Dashboard extends React.Component {
 	render () {
 		return (
-			<div>
+			<div id="searchAndAdd">
 				<Search />
 				<AddEvent />
 			</div>
