@@ -2,14 +2,13 @@
 
 
 .createEventFormDiv {
-	color:blue;
-	border-style: dotted;
-	border-color: white;
+	color:white;
     background-color: gray;
 }
 
 .formTitle{
 	font-family: 'Lobster', cursive;
+	font-size:40px;
 }
 .createEventEntry{
 	border-style:dotted;
@@ -20,13 +19,8 @@
 	background-color:white;
 	color:black;
 	display:inline-block;
-	font-size:20px;
+	font-size:25px;
 	margin-right: 50px;
-}
-.createEventFieldInput{
-	background-color:white;
-	display:inline-block;
-	left: 80px;
 }
 
 
@@ -81,8 +75,9 @@ input[type=text],
 input[type=email],
 input[type=url],
 input[type=password],
+input[type=datetime-local],
 textarea {
-	width: 100%;
+	width: 75%;
   border-top: 1px solid #ccc;
   border-left: 1px solid #ccc;
   border-right: 1px solid #eee;
@@ -91,16 +86,21 @@ textarea {
 input[type=text],
 input[type=email],
 input[type=url],
-input[type=password] {
-  width: 50%;
+input[type=datetime-local],
+input[type=password],
+textarea {
+  width: 75%;
+  color:black;
 }
 input[type=text]:focus,
 input[type=email]:focus,
 input[type=url]:focus,
+input[type=datetime-local],:focus
 input[type=password]:focus,
 textarea:focus {
   outline: 0;
   border-color: #4697e4;
+  color: black;
 }
 
 @media (max-width: 600px) {
@@ -132,4 +132,10 @@ textarea:focus {
 	legend {
   	text-align: right;
   }
+}
+
+.submitEventButton, .myButton{
+	padding-left: 30px;
+	color: black;
+	text-align: center;
 }

@@ -9,13 +9,16 @@ var CreateEventForm = React.createClass({
 		this.toggleNested = this.toggleNested.bind(this);*/
 
 		return { 
-			eventName: 'hi',
-			eventLocation: 'hi',
-			eventStartTime: '',
-			eventDescription: 'hi',
+			eventName: null,
+			eventLocation: null,
+			eventStartTime: null,
+			eventDescription: null,
 			creatingForm: false,
+			isNameValid: false,
+			submitDisabled: true
 			modal: false,
 			nestedModal: false
+
 		}
 	},
 
@@ -29,6 +32,18 @@ var CreateEventForm = React.createClass({
 
 	handleEventName: function (e){
 		this.setState({ eventName: e.target.value});
+	},
+	validateForm: function(){
+		var allFieldsFilled = (this.state.eventName && this.state.eventStartTime
+			    && this.state.eventDescription && this.state.eventLocation);
+		var now = new Date().toJSON();
+		var startTimeInFuture = (now < this.state.eventStartTime);
+		return (allFieldsFilled && startTimeInFuture);
+	},
+	validateStartTime: function(){
+		var now = new Date().toJSON();
+		var startTimeInFuture = (now < this.state.eventStartTime);
+		return (!this.state.eventStartTime || startTimeInFuture);
 	},
 	handleEventLocation: function (e){
 		this.setState({ eventLocation: e.target.value});
@@ -45,7 +60,6 @@ var CreateEventForm = React.createClass({
 	},
 
 	submitForm: function () {
-		debugger;
 		var url = "https://djque.herokuapp.com/?query="; 
 		var eventName = this.state.eventName;
 		var eventLocation = this.state.eventLocation;
@@ -186,7 +200,7 @@ var CreateEventForm = React.createClass({
 		    	<form>
 				  <header>
 				    <h2 className="formTitle">Create New Event</h2>
-				    <div>add info to create event then u ken be partee leader</div>
+				    <div></div>
 				  </header>
 				  
 				  <div>
@@ -195,7 +209,8 @@ var CreateEventForm = React.createClass({
 				      <input type="text" size="8" 
 				             className="createEventFieldInput"
 			    			 onChange={this.handleEventName}
-				             value={this.state.eventName}/>
+				             value={this.state.eventName}
+				             maxLength="255"/>
 				    </div>
 				  </div>
 				    
@@ -208,7 +223,7 @@ var CreateEventForm = React.createClass({
 				    <input type="datetime-local"
 			    		    className="createEventFieldInput"
 			         	    onChange={this.handleEventStartTime}
-			    		    value={this.state.eventStartTime} />
+			    		    value={this.state.eventStartTime}/>
 				    </div>
 				  </div>
 
@@ -231,17 +246,26 @@ var CreateEventForm = React.createClass({
 				    </label>
 				  
 				    <div>
-				      <textarea rows="5" cols="45"
+				      <textarea rows="5"
 				               className="createEventFieldInput"
 			    			   onChange={this.handleEventDescription}
 			    		       value={this.state.eventDescription}></textarea>
 				    </div>
 				  </div>
 				  
+				  	
+				    { this.validateForm() ? 
+					    	<div className="submitEventButton"> 
+			    			    <button type="submit" class="myButton" OnClick={this.submitForm} 
+			    		        className="button-submit">Submit</button> 
+					    	</div>
 
-			    	<div className="submitEventButton"> 
-			    		<button type="submit" onClick={this.submitForm} 
-			    		        className="button-submit">Submit</button>
+				    	: 
+				    		<div><div>Please fill out all required fields.</div></div> }
+
+			    	<div>
+			    		{this.validateStartTime() ? null : 
+			    			<div>Please select an Event Time in the future.</div>}
 			    	</div>
 
 			    	<div className="test">
