@@ -1,15 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import FacebookLogin from 'react-facebook-login';
-var jsonp = require('jsonp');
-var JSONP = require('node-jsonp');
-var fetchJsonp = require('fetch-jsonp');
-var https = require('https');
 var url = 'https://djque.herokuapp.com/?query=';
 require("./../resources/css/homePage.css");
 const responseFacebook = (response) => {
 	//TODO: CLEANUP
-	console.log(response);
 	var name = response.name;
 	var email = response.email;
 	var id = response.id;
@@ -18,10 +13,6 @@ const responseFacebook = (response) => {
     query += id + ", '";
     query += name + "', '";
     query += email + "');";
-	var query1 = 'SELECT * from Users;';
-	var query2 = 'DELETE FROM Users WHERE id=2147483647;';
-	console.log(encodeURI(url+query1));
-	console.log(encodeURI(url+query2));
 	fetch(encodeURI(url + query)).then((res) => {
         return res.json();
     }).then((res) => {
