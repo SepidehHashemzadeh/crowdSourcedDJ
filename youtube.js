@@ -1,7 +1,5 @@
 // youtube.js
 
-var https = require("https");
-
 var key = "AIzaSyCDR9t2Gt8C1G7x7Grle-ey2az36JsRfH0";
 var url = "https://www.googleapis.com";
 var path = "/youtube/v3/search";
@@ -17,55 +15,20 @@ var params = "?part=snippet&type=video&videoEmbeddable=true&maxResults=10&key=" 
  * @param callback: function that receives the id list
  *
  */
-function search(s, callback) {
-    var ids = [];
+var search = function (s, callback) {
+    fetch(url + path + params + s).then((res) => {
+        return res.json();
+    }).then((res) => {
+        let ids = [];
+        let baseURL = "https://www.youtube.com/watch?v=";
 
-    https.get(url + path + params + s, (res) => {
-        const statusCode = res.statusCode;
-        const contentType = res.headers["content-type"];
-
-        let error;
-
-        if (statusCode !== 200) {
-            error = new Error(`Request Failed.\nStatus Code: ${statusCode}`);
-        } else if (!/^application\/json/.test(contentType)) {
-            error = new Error(`Invalid content-type.\nExpected application/json but received ${contentType}`);
+        for (var i = 0; i < 10; i++) {
+            ids.push(baseURL + res["items"][i]["id"]["videoId"]);
         }
 
-        if (error) {
-            console.log(error.message);
-            res.resume();
-            return;
-        }
-
-        res.setEncoding("utf8");
-        let rawData = "";
-        res.on("data", (chunk) => rawData += chunk);
-
-        res.on("end", () => {
-            try {
-                let parsedData = JSON.parse(rawData);
-                //console.log(parsedData["items"]);
-
-                let baseURL = "https://www.youtube.com/watch?v=";
-
-                // building id list
-                for (var i = 0; i < 10; i++) {
-                    ids.push(baseURL + parsedData["items"][i]["id"]["videoId"]);
-                }
-
-                //console.log(ids);
-                callback(ids);
-
-            } catch (e) {
-                console.log(e.message);
-            }
-        });
-
-    }).on("error", (e) => {
-        console.log(`Got error: ${e.message}`);
+        callback(ids);
     });
-}
+};
 
 
 /* addToPlaylist
@@ -78,59 +41,22 @@ function search(s, callback) {
  * @param eventID: the foreign key ID of the event we are adding to
  * @param songURL: the URL of the specific song we are adding to the event database
  * @param sequence: the place in the playlist the song will be added to (should this autoincrement?)
+ * @param callback: gets the JSON result from mySQL
+ *
  */
-function addToPlaylist(eventID, songURL, sequence) {
-    url = "https://djque.herokuapp.com/?query=";
-    query = "INSERT INTO Event_Song VALUES (";
+var addToPlaylist = function (eventID, songURL, sequence, callback) {
+    var url = "https://djque.herokuapp.com/?query=";
+    var query = "INSERT INTO Event_Song VALUES (";
     query += eventID + ", '";
     query += songURL + "', 'youtube', ";
     query += sequence + ");";
 
-    console.log(encodeURI(url + query));
+    fetch(encodeURI(url + query)).then((res) => {
+        return res.json();
+    }).then((res) => {
+        callback(res);
+    });    
+};
 
-    https.get(encodeURI(url + query), (res) => {
-        const statusCode = res.statusCode;
-        const contentType = res.headers["content-type"];
-
-        let error;
-
-        if (statusCode !== 200) {
-            error = new Error(`Request Failed.\nStatus Code: ${statusCode}`);
-        } else if (!/^application\/json/.test(contentType)) {
-            error = new Error(`Invalid content-type.\nExpected application/json but received ${contentType}`);
-        }
-
-        if (error) {
-            console.log(error.message);
-            res.resume();
-            return;
-        }
-
-        res.setEncoding("utf8");
-        let rawData = "";
-        res.on("data", (chunk) => rawData += chunk);
-
-        res.on("end", () => {
-            try {
-                let parsedData = JSON.parse(rawData);
-
-                console.log(parsedData);
-            } catch (e) {
-                console.log(e.message);
-            }
-        });
-
-    }).on("error", (e) => {
-        console.log(`Got error: ${e.message}`);
-    });
-}
-
-/*// usage example; provide custom callback to handle result ids
-//   -adding first result to event ID 1 in sequence spot #10
-search("Red Hot Chili Peppers", (res) => {
-    //console.log(res);
-    console.log(`First Result: ${res[0]}`);
-    console.log("Adding to event w/ Id 0...");
-    addToPlaylist(1, res[0], 10);
-    console.log("Done adding");
-});*/
+exports.search = search;
+exports.addToPlaylist = addToPlaylist;
