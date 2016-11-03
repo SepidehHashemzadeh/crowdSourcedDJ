@@ -20,10 +20,9 @@ var search = function (s, callback) {
         return res.json();
     }).then((res) => {
         let ids = [];
-        let baseURL = "https://www.youtube.com/watch?v=";
 
         for (var i = 0; i < 10; i++) {
-            ids.push(baseURL + res["items"][i]["id"]["videoId"]);
+            ids.push(res["items"][i]["id"]["videoId"]);
         }
 
         callback(ids);
