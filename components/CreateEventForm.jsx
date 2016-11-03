@@ -44,7 +44,7 @@ var CreateEventForm = React.createClass({
 		this.setState({creatingForm: true});
 	},
 
-	submitForm: function (response) {
+	submitForm: function () {
 		debugger;
 		var url = "https://djque.herokuapp.com/?query="; 
 		var eventName = this.state.eventName;
@@ -64,23 +64,6 @@ var CreateEventForm = React.createClass({
 
 		console.log(url + query);
 		console.log(encodeURI(url + query));
-
-		/*var URL = 'localhost:3000/?query='+ '"' + query + '"'; 
-		alert(URL);
-
-		$.ajax({
-			type:'POST',
-			dataType: 'json',
-			url: URL,
-			success: function(data){
-				alert('loaded');
-			}.bind(this),
-			error: function(data){
-				alert('error');
-			}.bind(this)
-		});
-		alert('Finished ajax call');*/
-
 
 		fetch(encodeURI(url + query)).then((res) => {
 			return res.json();
@@ -200,16 +183,16 @@ var CreateEventForm = React.createClass({
 	renderForm: function() {
 	    return (
 	    	<div className="createEventFormDiv">
-		    	<form action="#">
+		    	<form>
 				  <header>
 				    <h2 className="formTitle">Create New Event</h2>
 				    <div>add info to create event then u ken be partee leader</div>
 				  </header>
 				  
 				  <div>
-				    <label class="desc" id="title1" for="Field1">Event Name</label>
+				    <label>Event Name</label>
 				    <div>
-				      <input id="Field1" name="Field1" type="text" class="field text fn"size="8" tabIndex="1"
+				      <input type="text" size="8" 
 				             className="createEventFieldInput"
 			    			 onChange={this.handleEventName}
 				             value={this.state.eventName}/>
@@ -218,11 +201,11 @@ var CreateEventForm = React.createClass({
 				    
 
 				  <div>
-				    <label class="desc" id="title106" for="Field106">
+				    <label>
 				    	Event Time
 				    </label>
 				    <div>
-				    <input type="datetime-local" id="Field106" name="Field106" class="field select medium" tabIndex="11"
+				    <input type="datetime-local"
 			    		    className="createEventFieldInput"
 			         	    onChange={this.handleEventStartTime}
 			    		    value={this.state.eventStartTime} />
@@ -231,11 +214,11 @@ var CreateEventForm = React.createClass({
 
 
 				  <div>
-				    <label class="desc" id="title3" for="Field3">
+				    <label>
 				      Location
 				    </label>
 				    <div>
-				      <input id="Field3" name="Field3" type="text" spellCheck="false" maxLength="255" tabIndex="3"
+				      <input type="text" maxLength="255"
 				             className="createEventFieldInput"
 			    			 onChange={this.handleEventLocation}
 			    		     value={this.state.eventLocation}/> 
@@ -243,12 +226,12 @@ var CreateEventForm = React.createClass({
 				  </div>
 				    
 				  <div>
-				    <label class="desc" id="title4" for="Field4">
+				    <label>
 				      Event Description
 				    </label>
 				  
 				    <div>
-				      <textarea id="Field4" name="Field4" spellCheck="true" rows="5" cols="45" tabIndex="4"
+				      <textarea rows="5" cols="45"
 				               className="createEventFieldInput"
 			    			   onChange={this.handleEventDescription}
 			    		       value={this.state.eventDescription}></textarea>
@@ -257,7 +240,6 @@ var CreateEventForm = React.createClass({
 				  
 
 			    	<div className="submitEventButton"> 
-
 			    		<button type="submit" onClick={this.submitForm} 
 			    		        className="button-submit">Submit</button>
 			    	</div>
