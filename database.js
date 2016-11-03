@@ -28,6 +28,7 @@ var connection = mysql.createConnection({
 });
 
 app.get('/', function (req, res) {
+	res.addHeader("Access-Control-Allow-Origin", "*");
 	connection.query(req.query['query'], function (err, rows) {
         if (err) {
             res.send(err);
