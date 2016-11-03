@@ -16,6 +16,8 @@ class App extends React.Component {
 			FBLoginClass: "displayNone",
 			LogoId: "moveLogoUp"
 		});
+		document.getElementById("dashboard").style.display = "block";
+		document.getElementById("app").style.height = "23vh";
 	}
 	render() {
 		var imgUrl = require('./resources/images/logov4.png');
