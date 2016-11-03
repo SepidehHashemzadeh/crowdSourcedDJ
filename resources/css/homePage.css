@@ -185,6 +185,8 @@
 	display: inline-block;
 	margin-right: 5px;
 	margin-left: 6px;
+  visibility: visible;
+  opacity: 1;
 }
 
 .signUpInBtn {
@@ -263,4 +265,5 @@
 
 #moveLogoUp {
   padding-top: 0;
+  transition: padding-top 0.3s ease;
 }
