@@ -1,6 +1,8 @@
 import React from 'react';
 import FBLogin from './components/FBLogin.jsx'
+import CreateEventForm from './components/CreateEventForm.jsx'
 require("./resources/css/homePage.css");
+require("./resources/css/dashboard.css");
 
 class App extends React.Component {
 	constructor(props) {

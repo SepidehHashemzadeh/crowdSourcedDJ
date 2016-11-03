@@ -17,7 +17,8 @@ var config = {
    },
 
    node: {
-      fs: "empty"
+      fs: "empty",
+      dns: "empty"
    },
 	
    module: {
