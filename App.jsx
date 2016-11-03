@@ -1,6 +1,7 @@
 import React from 'react';
 import FBLogin from './components/FBLogin.jsx'
 require("./resources/css/homePage.css");
+
 class App extends React.Component {
 	constructor(props) {
 		super();
@@ -29,12 +30,5 @@ class App extends React.Component {
 	    );
 	}
 }
-
-
-var MyComponentClass = React.createClass({
-  render: function () {
-    return <h1>Hello world</h1>;
-  }
-});
 
 export default App;
