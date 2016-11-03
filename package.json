@@ -10,15 +10,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "hover.css": "^2.0.2",
-    "mysql": "^2.5.4",
     "express": "^4.10.6",
+    "hover.css": "^2.0.2",
+    "json-loader": "^0.5.4",
+    "mysql": "^2.5.4",
+    "node-fetch": "^1.6.3",
     "react": "^15.3.2",
     "react-bootstrap": "^0.30.5",
     "react-dom": "^15.3.2",
     "react-facebook-login": "^3.3.2",
     "webpack": "^1.13.2",
-    "webpack-dev-server": "^1.16.2"
+    "webpack-dev-server": "^1.16.2",
+    "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
     "css-loader": "^0.25.0",
