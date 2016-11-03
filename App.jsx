@@ -22,4 +22,11 @@ class App extends React.Component {
 	}
 }
 
+
+var MyComponentClass = React.createClass({
+  render: function () {
+    return <h1>Hello world</h1>;
+  }
+});
+
 export default App;
