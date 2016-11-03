@@ -6,4 +6,4 @@ import AddEvent from './AddEvent.jsx';
 
 ReactDOM.render(<AddEvent />, document.getElementById('add'));
 ReactDOM.render(<Search />, document.getElementById('search'));
-ReactDOM.render(<App />, document.getElementById('app'));
+//ReactDOM.render(<App />, document.getElementById('app'));
