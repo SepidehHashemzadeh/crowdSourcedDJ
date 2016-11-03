@@ -256,3 +256,11 @@
   background-color: #3b5998;
   color: white;
 }
+
+#displayNone {
+  display: none;
+}
+
+#moveLogoUp {
+  padding-top: 0;
+}

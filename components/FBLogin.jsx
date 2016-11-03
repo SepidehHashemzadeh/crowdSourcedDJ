@@ -3,23 +3,28 @@ import ReactDOM from 'react-dom';
 import FacebookLogin from 'react-facebook-login';
 var url = 'https://djque.herokuapp.com/?query=';
 require("./../resources/css/homePage.css");
-const responseFacebook = (response) => {
-	//TODO: CLEANUP
-	var name = response.name;
-	var email = response.email;
-	var id = response.id;
-	var accessToken = response.accessToken;
-	var query = "INSERT INTO Users VALUES (";
-    query += id + ", '";
-    query += name + "', '";
-    query += email + "');";
-	fetch(encodeURI(url + query)).then((res) => {
-        return res.json();
-    }).then((res) => {
-        console.log(res);
-    });
-};
 class FBLogin extends React.Component {
+	constructor(props) {
+		super(props);
+		this.responseFacebook = this.responseFacebook.bind(this);
+	}
+	responseFacebook(response) {
+		//TODO: CLEANUP
+		var name = response.name;
+		var email = response.email;
+		var id = response.id;
+		var accessToken = response.accessToken;
+		var query = "INSERT INTO Users VALUES (";
+		query += id + ", '";
+		query += name + "', '";
+		query += email + "');";
+		fetch(encodeURI(url + query)).then((res) => {
+		    return res.json();
+		}).then((res) => {
+			this.props.onLogin();
+		    console.log(res);
+		});
+	};
 	render() {
 	    return (
 	    	<div className="signInFormDiv">
@@ -28,7 +33,7 @@ class FBLogin extends React.Component {
 				autoLoad={true}
 				fields="name,email,picture"
 				cssClass="homePageRow hvr-back-pulse signUpInBtn" 
-				callback={responseFacebook} />
+				callback={this.responseFacebook} />
 				{/*onClick={componentClicked}*/}
 	    	</div>
 	    );
