@@ -15,7 +15,7 @@ var CreateEventForm = React.createClass({
 			eventDescription: null,
 			creatingForm: false,
 			isNameValid: false,
-			submitDisabled: true
+			submitDisabled: true,
 			modal: false,
 			nestedModal: false
 
