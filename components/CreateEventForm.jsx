@@ -1,20 +1,36 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 require("./../resources/css/createEventForm.css");
 
-// <html>
+/*var jsonp = require('jsonp');*/
+
+/* <html>
 // 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
-// </html>
+ </html> */
 
 var CreateEventForm = React.createClass({
 	getInitialState: function () {
+		/*this.toggle = this.toggle.bind(this);
+		this.toggleNested = this.toggleNested.bind(this);*/
+
 		return { 
-			eventName: '',
-			eventLocation: '',
+			eventName: 'hi',
+			eventLocation: 'hi',
 			eventStartTime: '',
-			eventDescription: '',
-			creatingForm: false
+			eventDescription: 'hi',
+			creatingForm: false,
+			modal: false,
+			nestedModal: false
 		}
+	},
+
+	toggle: function () {
+			this.setState({ modal: !this.state.modal });
+	},
+
+	toggleNested: function () {
+			this.setState({ nestedModal: !this.state.nestedModal });
 	},
 
 	handleEventName: function (e){
@@ -34,40 +50,147 @@ var CreateEventForm = React.createClass({
 		this.setState({creatingForm: true});
 	},
 
-	submitForm: function () {
-		this.setState({creatingForm:false,});
+	submitForm: function (response) {
+		debugger;
+		var url = "https://djque.herokuapp.com/?query="; 
 		var eventName = this.state.eventName;
 		var eventLocation = this.state.eventLocation;
 		var eventTime = this.state.eventStartTime;
+		eventTime = eventTime.replace('T', ' ');
+		eventTime += ':00';
+		console.log("timestamp: " + eventTime);
 		var eventDescription = this.state.eventDescription;
 
-		// var query = 'INSERT INTO Events (name, startTime, description, location, userId, isEnded) VALUES (' + 
-		// 	eventName + ', ' + eventTime + ', ' + eventDescription + ', ' + eventLocation + ', 1, false)';
+		var query = "INSERT INTO Events (name, startTime, description, location, userId, isEnded, songAmt) VALUES ('"; 
+		query +=  eventName + "', '";
+		query += eventTime + "', '" 
+		query += eventDescription + "', '" 
+		query += eventLocation + "', 1, 0, 0); ";
+		var query2 = "INSERT INTO Events (name, startTime, description, location, userId, isEnded, songAmt) VALUES ('lol2', 2, 'description', 'location', 1, 0, 0); "
 
-		// alert('Starting ajax call');
+		console.log(url + query);
+		console.log(encodeURI(url + query));
+
+		/*var URL = 'localhost:3000/?query='+ '"' + query + '"'; 
+		alert(URL);
+
+		$.ajax({
+			type:'POST',
+			dataType: 'json',
+			url: URL,
+			success: function(data){
+				alert('loaded');
+			}.bind(this),
+			error: function(data){
+				alert('error');
+			}.bind(this)
+		});
+		alert('Finished ajax call');*/
+
+
+		fetch(encodeURI(url + query)).then((res) => {
+			return res.json();
+		}).then((res) => {
+			console.log(res);
+		});
+
 		this.setState({creatingForm:false});
-
-		// var URL = 'localhost:3000/?query='+ query; 
-		// alert(URL);
-
-		// $.ajax({
-		// 	type:'POST',
-		// 	dataType: 'json',
-		// 	url: URL,
-		// 	success: function(data){
-		// 		alert('loaded');
-		// 	}.bind(this),
-		// 	error: function(data){
-		// 		alert('error');
-		// 	}.bind(this)
-		// });
-		// alert('Finished ajax call');
 	},
 
 	renderNormal: function () {
+		console.log('renderNormal');
 		return (
 			<div className="createEventFormButton">
-				<button onClick={this.createForm} className="button-create">Create Event</button>
+				<Button color="danger" onClick={this.createForm} className="button-create">Create Event</Button>
+				{/*<Modal isOpen={this.state.modal} toggle={this.toggle}>
+					<ModalBody>
+						<div>
+							<form action="#">
+							  <header>
+							    <h2 className="formTitle">Create New Event</h2>
+							    <div>add info to create event then u ken be partee leader</div>
+							  </header>
+							  
+							  <div>
+							    <label class="desc" id="title1" for="Field1">Event Name</label>
+							    <div>
+							      <input id="Field1" name="Field1" type="text" class="field text fn"size="8" tabindex="1"
+							             className="createEventFieldInput"
+						    			 onChange={this.handleEventName}
+							             value={this.state.eventName}/>
+							    </div>
+							  </div>
+							    
+
+							  <div>
+							    <label class="desc" id="title106" for="Field106">
+							    	Event Time
+							    </label>
+							    <div>
+							    <input type="datetime-local" id="Field106" name="Field106" class="field select medium" tabindex="11"
+						    		    className="createEventFieldInput"
+						         	    onChange={this.handleEventStartTime}
+						    		    value={this.state.eventStartTime} />
+							    </div>
+							  </div>
+
+
+							  <div>
+							    <label class="desc" id="title3" for="Field3">
+							      Location
+							    </label>
+							    <div>
+							      <input id="Field3" name="Field3" type="text" spellCheck="false" maxLength="255" tabindex="3"
+							             className="createEventFieldInput"
+						    			 onChange={this.handleEventLocation}
+						    		     value={this.state.eventLocation}/> 
+							   	</div>
+							  </div>
+							    
+							  <div>
+							    <label class="desc" id="title4" for="Field4">
+							      Event Description
+							    </label>
+							  
+							    <div>
+							      <textarea id="Field4" name="Field4" spellCheck="true" rows="5" cols="45" tabindex="4"
+							               className="createEventFieldInput"
+						    			   onChange={this.handleEventDescription}
+						    		       value={this.state.eventDescription}></textarea>
+							    </div>
+							  </div>
+							  
+
+						    	<div className="submitEventButton"> 
+
+						    		<button type="submit" onClick={this.submitForm} 
+						    		        className="button-submit">Submit</button>
+						    	</div>
+
+						    	<div className="test">
+						    		<h5>Your event name is: {this.state.eventName} </h5>
+						    		<h5>Your event time is: {this.state.eventStartTime} </h5>
+						    		<h5>Your event location is: {this.state.eventLocation} </h5>
+						    		<h5>Your event description is: {this.state.eventDescription} </h5>
+						    	</div>
+							</form>
+						</div>
+            			<br />
+            			<Button color="success" onClick={this.toggleNested}>Show Nested Model</Button>
+           				<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested}>
+              				<ModalHeader>Nested Modal title</ModalHeader>
+              				<ModalBody>Stuff and things</ModalBody>
+              				<ModalFooter>
+                				<Button color="primary" onClick={this.toggleNested}>Done</Button>{' '}
+                				<Button color="secondary" onClick={this.toggle}>All Done</Button>
+              				</ModalFooter>
+            			</Modal>
+          			</ModalBody>
+          			<ModalFooter>
+            			<Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
+            			<Button color="secondary" onClick={this.toggle}>Cancel</Button>
+          			</ModalFooter>
+        		</Modal>*/}
 			</div>
 		);
 	},
@@ -84,7 +207,7 @@ var CreateEventForm = React.createClass({
 				  <div>
 				    <label class="desc" id="title1" for="Field1">Event Name</label>
 				    <div>
-				      <input id="Field1" name="Field1" type="text" class="field text fn"size="8" tabindex="1"
+				      <input id="Field1" name="Field1" type="text" class="field text fn"size="8" tabIndex="1"
 				             className="createEventFieldInput"
 			    			 onChange={this.handleEventName}
 				             value={this.state.eventName}/>
@@ -97,7 +220,7 @@ var CreateEventForm = React.createClass({
 				    	Event Time
 				    </label>
 				    <div>
-				    <input type="datetime-local" id="Field106" name="Field106" class="field select medium" tabindex="11"
+				    <input type="datetime-local" id="Field106" name="Field106" class="field select medium" tabIndex="11"
 			    		    className="createEventFieldInput"
 			         	    onChange={this.handleEventStartTime}
 			    		    value={this.state.eventStartTime} />
@@ -110,7 +233,7 @@ var CreateEventForm = React.createClass({
 				      Location
 				    </label>
 				    <div>
-				      <input id="Field3" name="Field3" type="text" spellcheck="false" maxlength="255" tabindex="3"
+				      <input id="Field3" name="Field3" type="text" spellCheck="false" maxLength="255" tabIndex="3"
 				             className="createEventFieldInput"
 			    			 onChange={this.handleEventLocation}
 			    		     value={this.state.eventLocation}/> 
@@ -123,7 +246,7 @@ var CreateEventForm = React.createClass({
 				    </label>
 				  
 				    <div>
-				      <textarea id="Field4" name="Field4" spellcheck="true" rows="5" cols="45" tabindex="4"
+				      <textarea id="Field4" name="Field4" spellCheck="true" rows="5" cols="45" tabIndex="4"
 				               className="createEventFieldInput"
 			    			   onChange={this.handleEventDescription}
 			    		       value={this.state.eventDescription}></textarea>
@@ -133,7 +256,7 @@ var CreateEventForm = React.createClass({
 
 			    	<div className="submitEventButton"> 
 
-			    		<button type="submit" OnClick={this.submitForm} 
+			    		<button type="submit" onClick={this.submitForm} 
 			    		        className="button-submit">Submit</button>
 			    	</div>
 
@@ -146,9 +269,10 @@ var CreateEventForm = React.createClass({
 				</form>
 			</div>
 	    );
-	},
+	}, 
 
 	render: function () {
+		console.log('start');
 	    if(this.state.creatingForm) {
 	    	return this.renderForm();
 	    } else {
