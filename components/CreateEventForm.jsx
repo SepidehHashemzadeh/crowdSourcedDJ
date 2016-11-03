@@ -18,7 +18,6 @@ var CreateEventForm = React.createClass({
 			submitDisabled: true,
 			modal: false,
 			nestedModal: false
-
 		}
 	},
 
@@ -97,7 +96,7 @@ var CreateEventForm = React.createClass({
 		});
 	},
 
-	renderNormal: function () {
+	render: function () {
 		return (
 			<div id="createEventFormOuterDiv" className="createEventFormButton">
 				<Button color="danger" onClick={this.toggle} className="button-create" id="addEventButton">+</Button>
@@ -159,13 +158,10 @@ var CreateEventForm = React.createClass({
 						    		       value={this.state.eventDescription}></textarea>
 							    </div>
 							  </div>
-							  
-							  	
 							    { this.validateForm() ? 
 								    	null
 							    	: 
 							    		<div><div>Please fill out all required fields.</div></div> }
-
 						    	<div>
 						    		{this.validateStartTime() ? null : 
 						    			<div>Please select an Event Time in the future.</div>}
@@ -189,93 +185,6 @@ var CreateEventForm = React.createClass({
         		</Modal>
 			</div>
 		);
-	},
-
-	renderForm: function() {
-	    return (
-	    	{/*<div className="createEventFormDiv">
-		    	<form>
-				  <header>
-				    <h2 className="formTitle">Create New Event</h2>
-				    <div></div>
-				  </header>
-				  
-				  <div>
-				    <label>Event Name</label>
-				    <div>
-				      <input type="text" size="8" 
-				             className="createEventFieldInput"
-			    			 onChange={this.handleEventName}
-				             value={this.state.eventName}
-				             maxLength="255"/>
-				    </div>
-				  </div>
-				    
-
-				  <div>
-				    <label>
-				    	Event Time
-				    </label>
-				    <div>
-				    <input type="datetime-local"
-			    		    className="createEventFieldInput"
-			         	    onChange={this.handleEventStartTime}
-			    		    value={this.state.eventStartTime}/>
-				    </div>
-				  </div>
-
-
-				  <div>
-				    <label>
-				      Location
-				    </label>
-				    <div>
-				      <input type="text" maxLength="255"
-				             className="createEventFieldInput"
-			    			 onChange={this.handleEventLocation}
-			    		     value={this.state.eventLocation}/> 
-				   	</div>
-				  </div>
-				    
-				  <div>
-				    <label>
-				      Event Description
-				    </label>
-				  
-				    <div>
-				      <textarea rows="5"
-				               className="createEventFieldInput"
-			    			   onChange={this.handleEventDescription}
-			    		       value={this.state.eventDescription}></textarea>
-				    </div>
-				  </div>
-				  
-				  	
-				    { this.validateForm() ? 
-					    	<div className="submitEventButton"> 
-			    			    <Button color="primary" type="submit" class="myButton" OnClick={this.submitForm} 
-			    		        className="button-submit">Submit</Button> 
-					    	</div>
-
-				    	: 
-				    		<div><div>Please fill out all required fields.</div></div> }
-
-			    	<div>
-			    		{this.validateStartTime() ? null : 
-			    			<div>Please select an Event Time in the future.</div>}
-			    	</div>
-				</form>
-			</div>*/}
-	    );
-	}, 
-
-	render: function () {
-		console.log('start');
-	    if(this.state.creatingForm) {
-	    	return this.renderForm();
-	    } else {
-	    	return this.renderNormal();
-	    }
 	}
 });
 

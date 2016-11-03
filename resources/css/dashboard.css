@@ -63,6 +63,7 @@
 	display: inline-block;
 	margin-left: 1vw;
   font-size: 17px;
+  position: relative;
 }
 
 #searchAndAdd {
