@@ -40,7 +40,6 @@ class FBLogin extends React.Component {
 				fields="name,email,picture"
 				cssClass="homePageRow hvr-back-pulse signUpInBtn" 
 				callback={this.responseFacebook} />
-				{/*onClick={componentClicked}*/}
 	    	</div>
 	    );
 	}

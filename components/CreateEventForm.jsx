@@ -3,69 +3,71 @@ import ReactDOM from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 require("./../resources/css/createEventForm.css");
 
-var CreateEventForm = React.createClass({
-	getInitialState: function () {
-		/*this.toggle = this.toggle.bind(this);
-		this.toggleNested = this.toggleNested.bind(this);*/
-		return { 
-			eventName: null,
-			eventLocation: null,
-			eventStartTime: null,
-			eventDescription: null,
+class CreateEventForm extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = { 
+			eventName: "",
+			eventLocation: "",
+			eventStartTime: "",
+			eventDescription: "",
 			creatingForm: false,
 			isNameValid: false,
 			submitDisabled: true,
 			modal: false,
 			nestedModal: false
-		}
-	},
-
-	toggle: function () {
-		debugger;
-		console.log('toggle');
+		};
+		this.toggle = this.toggle.bind(this);
+		this.toggleNested = this.toggleNested.bind(this);
+		this.handleEventName = this.handleEventName.bind(this);
+		this.validateForm = this.validateForm.bind(this);
+		this.validateStartTime = this.validateStartTime.bind(this);
+		this.handleEventLocation = this.handleEventLocation.bind(this);
+		this.handleEventStartTime = this.handleEventStartTime.bind(this);
+		this.handleEventDescription = this.handleEventDescription.bind(this);
+		this.createForm = this.createForm.bind(this);
+		this.submitForm = this.submitForm.bind(this);
+		this.render = this.render.bind(this);
+	}
+	toggle() {
 		this.setState({ 
-			modal: !this.state.modal,
-			user: JSON.parse(document.getElementById("userInfo").value)
+			modal: !this.state.modal
 		});
-		console.log(this.state.user);
-	},
-
-	toggleNested: function () {
+	}
+	toggleNested() {
 		this.setState({ nestedModal: !this.state.nestedModal });
-	},
+	}
 
-	handleEventName: function (e){
+	handleEventName(e){
 		this.setState({ eventName: e.target.value});
-	},
-	validateForm: function(){
+	}
+	validateForm(){
 		var allFieldsFilled = (this.state.eventName && this.state.eventStartTime
 			    && this.state.eventDescription && this.state.eventLocation);
 		var now = new Date().toJSON();
 		var startTimeInFuture = (now < this.state.eventStartTime);
 		return (allFieldsFilled && startTimeInFuture);
-	},
-	validateStartTime: function(){
+	}
+	validateStartTime(){
 		var now = new Date().toJSON();
 		var startTimeInFuture = (now < this.state.eventStartTime);
 		return (!this.state.eventStartTime || startTimeInFuture);
-	},
-	handleEventLocation: function (e){
+	}
+	handleEventLocation(e){
 		this.setState({ eventLocation: e.target.value});
-	},
-	handleEventStartTime: function(e){
+	}
+	handleEventStartTime(e){
 		this.setState({ eventStartTime: e.target.value});
-	},
-	handleEventDescription: function(e){
+	}
+	handleEventDescription(e){
 		this.setState({ eventDescription: e.target.value});
-	},
-
-	createForm: function () {
+	}
+	createForm() {
 		this.setState({
 			creatingForm: true,
 		});
-	},
-
-	submitForm: function () {
+	}
+	submitForm() {
 		var url = "https://djque.herokuapp.com/?query="; 
 		var eventName = this.state.eventName;
 		var eventLocation = this.state.eventLocation;
@@ -81,8 +83,6 @@ var CreateEventForm = React.createClass({
 		query += eventDescription + "', '" 
 		query += eventLocation + "', 1, 0, 0); ";
 		var query2 = "INSERT INTO Events (name, startTime, description, location, userId, isEnded, songAmt) VALUES ('lol2', 2, 'description', 'location', 1, 0, 0); "
-
-		console.log(url + query);
 		console.log(encodeURI(url + query));
 
 		fetch(encodeURI(url + query)).then((res) => {
@@ -100,9 +100,8 @@ var CreateEventForm = React.createClass({
 			modal: false,
 			nestedModal: false
 		});
-	},
-
-	render: function () {
+	}
+	render() {
 		return (
 			<div id="createEventFormOuterDiv" className="createEventFormButton">
 				<Button color="danger" onClick={this.toggle} className="button-create" id="addEventButton">+</Button>
@@ -192,7 +191,7 @@ var CreateEventForm = React.createClass({
 			</div>
 		);
 	}
-});
+}
 
 export default CreateEventForm; 
 
