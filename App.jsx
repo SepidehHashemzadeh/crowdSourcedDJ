@@ -13,11 +13,15 @@ class App extends React.Component {
 			LogoId: ""
 		};
 	}
-	moveUp() {
+	moveUp(user) {
+		debugger;
 		this.setState({
 			FBLoginClass: "displayNone",
-			LogoId: "moveLogoUp"
+			LogoId: "moveLogoUp",
+			user: user
 		});
+		
+		document.getElementById("userInfo").value = JSON.stringify(user);
 		document.getElementById("dashboard").style.display = "block";
 		document.getElementById("app").style.height = "23vh";
 	}

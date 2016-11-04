@@ -9,11 +9,17 @@ class FBLogin extends React.Component {
 		this.responseFacebook = this.responseFacebook.bind(this);
 	}
 	responseFacebook(response) {
-		if(!(typeof response.status === "undefined")) {
+		if(!(typeof response.id === "undefined")) {
 			var name = response.name;
 			var email = response.email;
 			var id = response.id;
 			var accessToken = response.accessToken;
+			var user = {
+				name: name,
+				email: email,
+				id: id,
+				accessToken: accessToken
+			};
 			var query = "INSERT INTO Users VALUES (";
 			query += id + ", '";
 			query += name + "', '";
@@ -21,7 +27,7 @@ class FBLogin extends React.Component {
 			fetch(encodeURI(url + query)).then((res) => {
 			    return res.json();
 			}).then((res) => {
-				this.props.onLogin();
+				this.props.onLogin(user);
 			});
 		}
 	};

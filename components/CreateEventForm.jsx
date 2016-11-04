@@ -17,7 +17,8 @@ var CreateEventForm = React.createClass({
 			isNameValid: false,
 			submitDisabled: true,
 			modal: false,
-			nestedModal: false
+			nestedModal: false,
+			user: JSON.parse(document.getElementById("userInfo").value)
 		}
 	},
 
