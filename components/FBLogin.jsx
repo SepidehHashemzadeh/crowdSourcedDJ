@@ -9,7 +9,7 @@ class FBLogin extends React.Component {
 		this.responseFacebook = this.responseFacebook.bind(this);
 	}
 	responseFacebook(response) {
-		if(!(typeof response === "undefined")) {
+		if(!(typeof response.status === "undefined")) {
 			var name = response.name;
 			var email = response.email;
 			var id = response.id;
