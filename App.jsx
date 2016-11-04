@@ -14,7 +14,6 @@ class App extends React.Component {
 		};
 	}
 	moveUp(user) {
-		debugger;
 		this.setState({
 			FBLoginClass: "displayNone",
 			LogoId: "moveLogoUp",

@@ -7,7 +7,6 @@ var CreateEventForm = React.createClass({
 	getInitialState: function () {
 		/*this.toggle = this.toggle.bind(this);
 		this.toggleNested = this.toggleNested.bind(this);*/
-
 		return { 
 			eventName: null,
 			eventLocation: null,
@@ -17,14 +16,18 @@ var CreateEventForm = React.createClass({
 			isNameValid: false,
 			submitDisabled: true,
 			modal: false,
-			nestedModal: false,
-			user: JSON.parse(document.getElementById("userInfo").value)
+			nestedModal: false
 		}
 	},
 
 	toggle: function () {
+		debugger;
 		console.log('toggle');
-		this.setState({ modal: !this.state.modal });
+		this.setState({ 
+			modal: !this.state.modal,
+			user: JSON.parse(document.getElementById("userInfo").value)
+		});
+		console.log(this.state.user);
 	},
 
 	toggleNested: function () {
@@ -57,7 +60,9 @@ var CreateEventForm = React.createClass({
 	},
 
 	createForm: function () {
-		this.setState({creatingForm: true});
+		this.setState({
+			creatingForm: true,
+		});
 	},
 
 	submitForm: function () {
