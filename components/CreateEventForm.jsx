@@ -13,13 +13,13 @@ class CreateEventForm extends React.Component {
 			eventDescription: "",
 			creatingForm: false,
 			isNameValid: false,
-			submitDisabled: true,
 			modal: false,
 			nestedModal: false
 		};
 		this.toggle = this.toggle.bind(this);
 		this.toggleNested = this.toggleNested.bind(this);
 		this.handleEventName = this.handleEventName.bind(this);
+		this.validateFields = this.validateFields.bind(this);
 		this.validateForm = this.validateForm.bind(this);
 		this.validateStartTime = this.validateStartTime.bind(this);
 		this.handleEventLocation = this.handleEventLocation.bind(this);
@@ -41,17 +41,20 @@ class CreateEventForm extends React.Component {
 	handleEventName(e){
 		this.setState({ eventName: e.target.value});
 	}
-	validateForm(){
-		var allFieldsFilled = (this.state.eventName && this.state.eventStartTime
-			    && this.state.eventDescription && this.state.eventLocation);
-		var now = new Date().toJSON();
-		var startTimeInFuture = (now < this.state.eventStartTime);
-		return (allFieldsFilled && startTimeInFuture);
-	}
 	validateStartTime(){
 		var now = new Date().toJSON();
 		var startTimeInFuture = (now < this.state.eventStartTime);
 		return (!this.state.eventStartTime || startTimeInFuture);
+	}
+	validateFields(){
+		var allFieldsFilled = (this.state.eventName && this.state.eventStartTime
+			    && this.state.eventDescription && this.state.eventLocation);
+		return (allFieldsFilled);
+	}
+	validateForm(){
+		var validFields = this.validateFields(); 
+		var validTime = this.validateStartTime(); 
+		return (validFields && validTime);
 	}
 	handleEventLocation(e){
 		this.setState({ eventLocation: e.target.value});
@@ -163,12 +166,10 @@ class CreateEventForm extends React.Component {
 						    		       value={this.state.eventDescription}></textarea>
 							    </div>
 							  </div>
-							    { this.validateForm() ? 
-								    	null
-							    	: 
-							    		<div><div>Please fill out all required fields.</div></div> }
+							    { this.validateFields() ? null : 
+							    		<div><div>Please fill out all fields.</div></div> }
 						    	<div>
-						    		{this.validateStartTime() ? null : 
+						    		{ this.validateStartTime() ? null : 
 						    			<div>Please select an Event Time in the future.</div>}
 						    	</div>
 							</form>
