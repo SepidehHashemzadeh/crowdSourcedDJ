@@ -13,9 +13,7 @@ var CreateEventForm = React.createClass({
 			eventLocation: null,
 			eventStartTime: null,
 			eventDescription: null,
-			creatingForm: false,
 			isNameValid: false,
-			submitDisabled: true,
 			modal: false,
 			nestedModal: false
 		}
@@ -55,10 +53,6 @@ var CreateEventForm = React.createClass({
 		this.setState({ eventDescription: e.target.value});
 	},
 
-	createForm: function () {
-		this.setState({creatingForm: true});
-	},
-
 	submitForm: function () {
 		var url = "https://djque.herokuapp.com/?query="; 
 		var eventName = this.state.eventName;
@@ -90,7 +84,6 @@ var CreateEventForm = React.createClass({
 			eventLocation: 'hi',
 			eventStartTime: '',
 			eventDescription: 'hi',
-			creatingForm: false,
 			modal: false,
 			nestedModal: false
 		});
