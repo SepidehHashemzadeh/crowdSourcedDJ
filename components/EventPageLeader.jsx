@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input } from 'reactstrap';
+import YouTubePlayer from 'react-youtube-player';
 require("./../resources/css/eventPage.css");
 
 class EventPageLeader extends React.Component {
@@ -11,7 +12,8 @@ class EventPageLeader extends React.Component {
 			eventLocation: "",
 			eventStartTime: "",
 			eventDescription: "",
-			eventID: 30
+			eventID: 30,
+			songID: ""
 		};
 		this.render = this.render.bind(this);
 	}
@@ -32,6 +34,20 @@ class EventPageLeader extends React.Component {
 				eventDescription: res[0].description
 			});
 		});
+
+		var songQuery = "SELECT songUrl FROM Event_Song WHERE eventId="+ this.state.eventID + ";";
+		console.log(encodeURI(url + songQuery));
+		fetch(encodeURI(url + songQuery)).then((res) => {
+			return res.json();
+		}).then((res) => {
+			console.log(res[0]);
+			console.log(res[0].songUrl);
+			var videoId = res[0].songUrl.substring(res[0].songUrl.indexOf('=')+1);
+			this.setState({
+				songID: videoId
+			});
+		});
+
 	}
 
 	render() {
@@ -47,6 +63,12 @@ class EventPageLeader extends React.Component {
 				<hr/>
 				<div id="queue">
 					<p>Display Widgets Here!</p>
+					<YouTubePlayer
+			            height='260'
+			            playbackState='paused'
+			            videoId={this.state.songID}
+			            width='540'
+			        />
 				</div>
 			</div>
 		);
