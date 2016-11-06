@@ -108,7 +108,7 @@ class CreateEventForm extends React.Component {
 	render() {
 		return (
 			<div id="createEventFormOuterDiv" className="createEventFormButton">
-				<Button color="danger" onClick={this.createForm className="button-create" id="addEventButton">+</Button>
+				<Button color="danger" onClick={this.createForm} className="button-create" id="addEventButton">+</Button>
 				<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventModal">
 					<ModalBody>
 						<div>
