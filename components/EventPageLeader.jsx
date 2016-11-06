@@ -40,6 +40,14 @@ class EventPageLeader extends React.Component {
 				<h2 className="eventName">{this.state.eventName}</h2>
 				<p className="eventLocationTime">{this.state.eventLocation} at {this.state.eventStartTime}</p>
 				<p>description: {this.state.eventDescription}!!!!</p>
+				<hr/>
+				<div id="addSong">
+					<p>Add Song to Queue Here!</p>
+				</div>
+				<hr/>
+				<div id="queue">
+					<p>Display Widgets Here!</p>
+				</div>
 			</div>
 		);
 	}
