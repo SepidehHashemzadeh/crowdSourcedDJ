@@ -41,8 +41,14 @@ class CreateEventForm extends React.Component {
 		this.setState({ eventName: e.target.value});
 	}
 	validateStartTime(){
-		var now = new Date().toJSON();
+		var now = new Date();
+		now.setHours(now.getHours() - 7);
+		now = now.toJSON();
 		var startTimeInFuture = (now < this.state.eventStartTime);
+		console.log("now:");
+		console.log(now);
+		console.log("start time:");
+		console.log(this.state.eventStartTime);
 		return (!this.state.eventStartTime || startTimeInFuture);
 	}
 	validateFields(){
@@ -102,8 +108,8 @@ class CreateEventForm extends React.Component {
 	render() {
 		return (
 			<div id="createEventFormOuterDiv" className="createEventFormButton">
-				<Button color="danger" onClick={this.createForm} className="button-create" id="addEventButton">+</Button>
-				<Modal isOpen={this.state.modal} toggle={this.toggle}>
+				<Button color="danger" onClick={this.createForm className="button-create" id="addEventButton">+</Button>
+				<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventModal">
 					<ModalBody>
 						<div>
 							<Form>
