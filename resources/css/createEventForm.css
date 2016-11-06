@@ -28,6 +28,17 @@
 	display:inline-block;
 }
 
+.createEventModal {
+   position: absolute;
+   top: 200px;
+   right: 50px;
+   bottom: 0;
+   left: 0;
+   z-index: 10040;
+   text-align: center;
+   overflow: auto;
+   overflow-y: auto;
+}
 
 * {
   -webkit-box-sizing: border-box;
