@@ -96,6 +96,8 @@ class CreateEventForm extends React.Component {
 		}).then((res) => {
 			console.log(res);
 		});
+
+		this.toggleNested();
 	}
 	render() {
 		return (
@@ -170,13 +172,12 @@ class CreateEventForm extends React.Component {
             			<br />
           			</ModalBody>
           			<ModalFooter>
-            			<Button disabled={!this.validateForm} color="primary" onClick={this.toggleNested}>Submit</Button>
+            			<Button disabled={!this.validateForm} color="primary" onClick={this.submitForm}>Submit</Button>
            				<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested}>
-              				<ModalHeader>Nested Modal title</ModalHeader>
-              				<ModalBody>Stuff and things</ModalBody>
+              				<ModalHeader>Success!</ModalHeader>
+              				<ModalBody>Your event has been created.</ModalBody>
               				<ModalFooter>
-                				<Button color="primary" onClick={this.toggleNested}>Done</Button>{' '}
-                				<Button color="secondary" onClick={this.toggle}>All Done</Button>
+                				<Button color="primary" onClick={this.toggle}>Done</Button>{' '}
               				</ModalFooter>
             			</Modal>{' '}
             			<Button color="secondary" onClick={this.toggle}>Cancel</Button>
