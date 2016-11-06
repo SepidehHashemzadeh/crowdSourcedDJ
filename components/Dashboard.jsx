@@ -1,6 +1,7 @@
 import React from 'react';
 import Search from './Search.jsx';
 import CreateEventForm from './CreateEventForm.jsx';
+import EventPageLeader from './EventPageLeader.jsx';
 require("../resources/css/dashboard.css");
 
 class Dashboard extends React.Component {
@@ -9,9 +10,14 @@ class Dashboard extends React.Component {
 	}
 	render () {
 		return (
-			<div id="searchAndAdd">
-				<Search />
-				<CreateEventForm user={this.props.user}/>
+			<div>
+				<div id="searchAndAdd">
+					<Search />
+					<CreateEventForm user={this.props.user}/>
+				</div>
+				<div>
+					<EventPageLeader />
+				</div>
 			</div>
 		);
 	}

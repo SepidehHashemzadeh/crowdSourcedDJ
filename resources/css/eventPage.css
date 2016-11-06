@@ -1,0 +1,10 @@
+@import url("./fonts/fonts.css");
+
+.eventPageLeader {
+	position: relative;
+	background-color: blue;
+	border-color: black;
+	color: black;
+	width: 500px;
+	height: 500px;
+}
