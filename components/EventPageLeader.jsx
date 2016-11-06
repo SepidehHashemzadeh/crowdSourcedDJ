@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input } from 'reactstrap';
-require("./../resources/css/createEventForm.css");
+require("./../resources/css/eventPage.css");
 
 class EventPageLeader extends React.Component {
 	constructor(props) {
@@ -18,7 +18,7 @@ class EventPageLeader extends React.Component {
 
 	render() {
 		return (
-			<div className="eventPageLeader">
+			<div id="eventPageLeader">
 				<p>EVENT PAGE!!!!</p>
 			</div>
 		);
