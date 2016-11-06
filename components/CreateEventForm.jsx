@@ -45,10 +45,6 @@ class CreateEventForm extends React.Component {
 		now.setHours(now.getHours() - 7);
 		now = now.toJSON();
 		var startTimeInFuture = (now < this.state.eventStartTime);
-		console.log("now:");
-		console.log(now);
-		console.log("start time:");
-		console.log(this.state.eventStartTime);
 		return (!this.state.eventStartTime || startTimeInFuture);
 	}
 	validateFields(){
@@ -86,9 +82,7 @@ class CreateEventForm extends React.Component {
 		var eventTime = this.state.eventStartTime;
 		eventTime = eventTime.replace('T', ' ');
 		eventTime += ':00';
-		console.log("timestamp: " + eventTime);
 		var eventDescription = this.state.eventDescription;
-
 		var query = "INSERT INTO Events (name, startTime, description, location, userId, isEnded, songAmt) VALUES ('"; 
 		query +=  eventName + "', '";
 		query += eventTime + "', '" 
