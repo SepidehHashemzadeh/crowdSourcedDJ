@@ -111,7 +111,7 @@ textarea {
 input[type=text]:focus,
 input[type=email]:focus,
 input[type=url]:focus,
-input[type=datetime-local],:focus
+input[type=datetime-local]:focus,
 input[type=password]:focus,
 textarea:focus {
   outline: 0;

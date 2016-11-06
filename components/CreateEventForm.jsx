@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input } from 'reactstrap';
 require("./../resources/css/createEventForm.css");
 
 class CreateEventForm extends React.Component {
@@ -11,7 +11,6 @@ class CreateEventForm extends React.Component {
 			eventLocation: "",
 			eventStartTime: "",
 			eventDescription: "",
-			creatingForm: false,
 			isNameValid: false,
 			modal: false,
 			nestedModal: false
@@ -73,8 +72,12 @@ class CreateEventForm extends React.Component {
 	}
 	createForm() {
 		this.setState({
-			creatingForm: true,
+			eventName: "",
+			eventLocation: "",
+			eventStartTime: "",
+			eventDescription: "",
 		});
+		this.toggle();
 	}
 	submitForm() {
 		var url = "https://djque.herokuapp.com/?query="; 
@@ -99,25 +102,15 @@ class CreateEventForm extends React.Component {
 		}).then((res) => {
 			console.log(res);
 		});
-
-		this.setState({
-			eventName: 'hi',
-			eventLocation: 'hi',
-			eventStartTime: '',
-			eventDescription: 'hi',
-			creatingForm: false,
-			modal: false,
-			nestedModal: false
-		});
 	}
 	render() {
 		return (
 			<div id="createEventFormOuterDiv" className="createEventFormButton">
-				<Button color="danger" onClick={this.toggle} className="button-create" id="addEventButton">+</Button>
+				<Button color="danger" onClick={this.createForm className="button-create" id="addEventButton">+</Button>
 				<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventModal">
 					<ModalBody>
 						<div>
-							<form>
+							<Form>
 							  <header>
 							    <h2 className="formTitle">Create New Event</h2>
 							    <div></div>
@@ -178,12 +171,12 @@ class CreateEventForm extends React.Component {
 						    		{ this.validateStartTime() ? null : 
 						    			<div>Please select an Event Time in the future.</div>}
 						    	</div>
-							</form>
+							</Form>
 						</div>
             			<br />
           			</ModalBody>
           			<ModalFooter>
-            			<Button disabled={!this.validateForm()} color="primary" onClick={this.toggleNested}>Submit</Button>
+            			<Button disabled={!this.validateForm} color="primary" onClick={this.toggleNested}>Submit</Button>
            				<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested}>
               				<ModalHeader>Nested Modal title</ModalHeader>
               				<ModalBody>Stuff and things</ModalBody>
@@ -201,4 +194,3 @@ class CreateEventForm extends React.Component {
 }
 
 export default CreateEventForm; 
-
