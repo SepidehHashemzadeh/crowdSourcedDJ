@@ -32,15 +32,13 @@ class EventPageLeader extends React.Component {
 				eventDescription: res[0].description
 			});
 		});
-
 	}
 
 	render() {
 		return (
 			<div id="eventPageLeader">
-				<p>EVENT PAGE for {this.state.eventName}!!!!</p>
-				<p>happenin at {this.state.eventLocation}!!!!</p>
-				<p>happenin at {this.state.eventStartTime}!!!!</p>
+				<h2 className="eventName">{this.state.eventName}</h2>
+				<p className="eventLocationTime">{this.state.eventLocation} at {this.state.eventStartTime}</p>
 				<p>description: {this.state.eventDescription}!!!!</p>
 			</div>
 		);

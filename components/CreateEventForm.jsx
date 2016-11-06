@@ -88,7 +88,6 @@ class CreateEventForm extends React.Component {
 		query += eventTime + "', '" 
 		query += eventDescription + "', '" 
 		query += eventLocation + "', 1, 0, 0); ";
-		var query2 = "INSERT INTO Events (name, startTime, description, location, userId, isEnded, songAmt) VALUES ('lol2', 2, 'description', 'location', 1, 0, 0); "
 		console.log(encodeURI(url + query));
 
 		fetch(encodeURI(url + query)).then((res) => {
