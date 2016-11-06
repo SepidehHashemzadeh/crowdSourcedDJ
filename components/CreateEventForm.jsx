@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input } from 'reactstrap';
 require("./../resources/css/createEventForm.css");
 
 class CreateEventForm extends React.Component {
@@ -111,7 +111,7 @@ class CreateEventForm extends React.Component {
 				<Modal isOpen={this.state.modal} toggle={this.toggle}>
 					<ModalBody>
 						<div>
-							<form>
+							<Form>
 							  <header>
 							    <h2 className="formTitle">Create New Event</h2>
 							    <div></div>
@@ -172,7 +172,7 @@ class CreateEventForm extends React.Component {
 						    		{ this.validateStartTime() ? null : 
 						    			<div>Please select an Event Time in the future.</div>}
 						    	</div>
-							</form>
+							</Form>
 						</div>
             			<br />
           			</ModalBody>
