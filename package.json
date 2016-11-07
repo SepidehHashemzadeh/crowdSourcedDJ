@@ -25,6 +25,7 @@
     "react-addons-css-transition-group": "^15.3.2",
     "react-addons-transition-group": "^15.3.2",
     "react-bootstrap": "^0.30.6",
+    "react-cardstack": "^0.1.1",
     "react-dom": "^15.3.2",
     "react-facebook-login": "^3.3.2",
     "react-search-bar": "^1.1.4",

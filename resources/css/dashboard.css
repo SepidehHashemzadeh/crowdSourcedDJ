@@ -74,4 +74,47 @@
   transition: all 0.5s linear;
   display: block;
   width: 71%;
+  margin-bottom: 5ex;
+}
+
+#searchAndAdd .fade.in {
+    -webkit-animation-name: fadeIn;
+}
+
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0.3;
+        -webkit-transform: translateY(100px);
+    } 
+    100% {
+        opacity: 1;
+        -webkit-transform: translateY(0%);
+    }
+}
+
+
+.eventsDivs {
+  text-align: center;
+  padding-left: 16ex;
+  transition-property: all;
+  transition-duration: .5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  width: 90ex;
+  margin-right: auto;
+  margin-left: auto;
+  font-family: 'Lobster', cursive;
+}
+
+.eventsDivs.closed {
+  max-height: 0;
+}
+
+.eventTypeHeading{
+  padding-right: 8ex;
+}
+
+#eventDivsOuter {
+  margin-right: auto;
+  margin-left: auto;
+  
 }

@@ -22,6 +22,7 @@ class App extends React.Component {
 			user: user,
 			showDashboard: true
 		});
+		document.body.style.overflowY = "scroll";
 	}
 	render() {
 		var imgUrl = require('./resources/images/logov4.png');

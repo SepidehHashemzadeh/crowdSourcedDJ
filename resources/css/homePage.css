@@ -270,5 +270,8 @@
 
 #moveLogoUp {
   padding-top: 0;
-  transition: padding-top 0.7s ease;
+  transition: all 0.7s ease;
+  margin-top: 0px;
+  height: 30ex;
+  margin-bottom: 0px;
 }

@@ -9,6 +9,7 @@ class FBLogin extends React.Component {
 		this.responseFacebook = this.responseFacebook.bind(this);
 	}
 	responseFacebook(response) {
+		console.log(response);
 		if(!(typeof response.id === "undefined")) {
 			var name = response.name;
 			var email = response.email;
@@ -37,6 +38,7 @@ class FBLogin extends React.Component {
 	    		<FacebookLogin
 				appId="1124524594303257"
 				autoLoad={true}
+				scope="public_profile, email, user_birthday"
 				fields="name,email,picture"
 				cssClass="homePageRow hvr-back-pulse signUpInBtn" 
 				callback={this.responseFacebook} />

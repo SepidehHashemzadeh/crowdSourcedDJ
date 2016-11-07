@@ -29,6 +29,9 @@ class CreateEventForm extends React.Component {
 		this.render = this.render.bind(this);
 	}
 	toggle() {
+		if(this.state.modal) {
+			this.submitForm();
+		}
 		this.setState({ 
 			modal: !this.state.modal
 		});
@@ -75,12 +78,12 @@ class CreateEventForm extends React.Component {
 		eventTime += ':00';
 		console.log("timestamp: " + eventTime);
 		var eventDescription = this.state.eventDescription;
-
+		debugger;
 		var query = "INSERT INTO Events (name, startTime, description, location, userId, isEnded, songAmt) VALUES ('"; 
 		query +=  eventName + "', '";
 		query += eventTime + "', '" 
 		query += eventDescription + "', '" 
-		query += eventLocation + "', 1, 0, 0); ";
+		query += eventLocation + "', "+this.props.user.id+", 0, 0); ";
 		var query2 = "INSERT INTO Events (name, startTime, description, location, userId, isEnded, songAmt) VALUES ('lol2', 2, 'description', 'location', 1, 0, 0); "
 		console.log(encodeURI(url + query));
 
