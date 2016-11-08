@@ -1,5 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactScrollableList from '../dist/index.js';
+
+require('../resources/css/searchSong.css');
+var yt = require('../youtube.js');
 
 var SearchSong = React.createClass({
 
@@ -30,10 +34,23 @@ var SearchSong = React.createClass({
         // generate list
         listDiv = document.createElement('div');
         listDiv.id = 'listDiv';
+        listDiv.style.overflow = 'auto';
+        listDiv.style.maxHeight = 400;
+        listDiv.style.paddingTop = "50px";
         var app = document.getElementById('app');
         app.parentNode.insertBefore(listDiv, app.nextSibling);
 
+        yt.getTitles(str, (res) => {
+          let listItems = [];
 
+          for (let i = 0; i < res.length; i++) {
+            listItems.push({id: i, content: res[i]});
+          }
+
+          ReactDOM.render(<ReactScrollableList
+          listItems={listItems}
+          />, document.getElementById('listDiv'));
+        });
       },
 
       render: function() {

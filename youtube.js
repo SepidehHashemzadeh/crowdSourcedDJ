@@ -29,6 +29,19 @@ var search = function (s, callback) {
     });
 };
 
+var getTitles = function (s, callback) {
+    fetch(url + path + params + s).then((res) => {
+        return res.json();
+    }).then((res) => {
+        let ids = [];
+
+        for (var i = 0; i < 10; i++) {
+            ids.push(res["items"][i]["snippet"]["title"]);
+        }
+
+        callback(ids);
+    });
+};
 
 /* addToPlaylist
  * 
@@ -70,4 +83,5 @@ var addToPlaylist = function (eventID, songURL, callback) {
 };
 
 exports.search = search;
+exports.getTitles = getTitles;
 exports.addToPlaylist = addToPlaylist;
