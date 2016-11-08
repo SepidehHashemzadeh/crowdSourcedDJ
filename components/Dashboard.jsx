@@ -15,7 +15,7 @@ class Dashboard extends React.Component {
 					<Search />
 					<CreateEventForm user={this.props.user}/>
 				</div>
-				<div id="eventPage">
+				<div>
 					<EventPageLeader />
 				</div>
 			</div>

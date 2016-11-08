@@ -180,9 +180,10 @@ class EventPageLeader extends React.Component {
 							<Button color="info" onClick={this.edit}>Edit</Button>
 						</ButtonToolbar>
 					</div>
-					<p className="eventLocation">{this.state.eventLocation}</p>
-					<p>{this.formatDateTime()}</p>
-					<p>{this.state.eventDescription}</p>
+					<p className="eventDetails">{this.state.eventLocation}</p>
+					<p className="eventDetails">{this.formatDateTime()}</p>
+					<br/>
+					<p className="eventDetails">{this.state.eventDescription}</p>
 					<hr/>
 					<div id="addSong">
 						<p>Search</p>
