@@ -4,11 +4,8 @@
 	position: relative;
 	background: rgba(255, 255, 255, 0.85) ;
 	color: black;
-	width: 500px;
-	height: 500px;
-	text-align: center;
 	width: 75%;
-	margin-top: 40px;
+	margin-top: 0px;
 	padding-top: 5px;
 	padding-right: 50px;
 	padding-left: 50px;
@@ -20,11 +17,11 @@
 
 .eventName{
 	font-family: 'Lobster', cursive;
-	font-size: 40px;
+	font-size: 60px;
 	text-align:center;
 }
 
-.eventLocationTime{
+.eventLocation{
 	font-size: 20px;
 	text-align:center;
 }
@@ -39,10 +36,21 @@ hr {
 }
 
 #addSong{
-
+	font-family: 'Lobster', cursive;
+	font-size: 30px;
+	text-align:center;
 }
 
 #queue{
 	overflow-y: scroll;
 	height: 200px;
+	font-family: 'Lobster', cursive;
+	font-size: 30px;
+	text-align:center;
 }
+
+#videos{
+	display: inline-block;
+	margin: auto;
+}
+

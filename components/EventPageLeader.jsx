@@ -22,6 +22,8 @@ class EventPageLeader extends React.Component {
 		this.back = this.back.bind(this);
 		this.end = this.end.bind(this);
 		this.edit = this.edit.bind(this);
+		this.delete = this.delete.bind(this);
+		this.formatDateTime = this.formatDateTime.bind(this);
 	}
 	componentWillMount() {
 		this.setState({
@@ -58,12 +60,6 @@ class EventPageLeader extends React.Component {
 			});
 		});
 	}
-	/*formatDateTime() {
-		var year = this.state.eventStartTime.substring(0,3);
-		var month = this.state.eventStartTime.substring(5,6);
-		var date = this.state.eventStartTime.substring(8,9);
-		console.log(year);
-	}*/
 	back(){
 		console.log("back");
 		this.setState({
@@ -85,6 +81,56 @@ class EventPageLeader extends React.Component {
 	}
 	edit(){
 	}
+	delete(vidID){
+
+	}
+	formatDateTime() {
+		var year = this.state.eventStartTime.toString().substring(0,4);
+		var month = this.state.eventStartTime.toString().substring(5,7);
+		var date = this.state.eventStartTime.toString().substring(8,10);
+
+		var hour = this.state.eventStartTime.toString().substring(11,13);
+		var minute = this.state.eventStartTime.toString().substring(14,16);
+		var period = "AM";
+
+		if (hour == "13" | hour == "14" | hour == "15" | hour == "16" | hour == "17" | hour == "18" | hour == "19" | hour == "20" | hour == "21" | hour == "22" | hour == "23")
+			period = "PM";
+
+		if (month == "1") month = "January";
+		else if (month == "2") month = "February";
+		else if (month == "3") month = "March";
+		else if (month == "4") month = "April";
+		else if (month == "5") month = "May";
+		else if (month == "6") month = "June";
+		else if (month == "7") month = "July";
+		else if (month == "8") month = "August";
+		else if (month == "9") month = "September";
+		else if (month == "10") month = "October";
+		else if (month == "11") month = "November";
+		else if (month == "12") month = "December";
+
+		if (date == "01" | date == "02" | date == "03" | date == "04" | date == "05" | date == "06" | date == "07" | date == "08" | date == "09")
+			date = date.substring(1,2);
+
+		if (hour == "01" | hour == "02" | hour == "03" | hour == "04" | hour == "05" | hour == "06" | hour == "07" | hour == "08" | hour == "09")
+			hour = hour.substring(1,2);
+		else if (hour == "13")	hour = "1";
+		else if (hour == "14")	hour = "2";
+		else if (hour == "15")	hour = "3";
+		else if (hour == "16")	hour = "4";
+		else if (hour == "17")	hour = "5";
+		else if (hour == "18")	hour = "6";
+		else if (hour == "19")	hour = "7";
+		else if (hour == "20")	hour = "8";
+		else if (hour == "21")	hour = "9";
+		else if (hour == "22")	hour = "10";
+		else if (hour == "23")	hour = "11";
+		else if (hour == "00")	hour = "12";
+
+		var formattedDateTime = month.concat(" ", date, ", ", year, " at ", hour, ":", minute, " ", period);
+
+		return formattedDateTime;
+	}
 	render() {
 		return (
 			<div>
@@ -98,26 +144,31 @@ class EventPageLeader extends React.Component {
 							<Button color="info" onClick={this.edit}>Edit</Button>
 						</ButtonToolbar>
 					</div>
-					<p className="eventLocationTime">{this.state.eventLocation} at {this.state.eventStartTime}</p>
+					<p className="eventLocation">{this.state.eventLocation}</p>
+					<p>{this.formatDateTime()}</p>
 					<p>{this.state.eventDescription}</p>
 					<hr/>
 					<div id="addSong">
-						<p>Add Song to Queue Here!</p>
+						<p>Search</p>
 					</div>
 					<hr/>
 					<div id="queue">
-						<p>Display Widgets Here!</p>
+						<p>Event Queue</p>
+						<div id="videos">
 						{ 	this.state.queue.map(function(vidID, i) {
 								return 	<div key={i}>
 											<YouTubePlayer
-								            	height='150'
+								            	height='350'
 								            	playbackState='paused'
 								            	videoId={vidID}
-								            	width='320'
-								        	/> <br/>
+								            	width='680'
+								        	/> 
+								        	<Button color="danger" onClick={() => this.delete(vidID)}>Delete</Button>
+								        	<br/>
 								        </div>
 					       	})
 				    	}
+			    		</div>
 					</div>
 				</div>
 			}
