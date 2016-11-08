@@ -83,7 +83,7 @@ class CreateEventForm extends React.Component {
 		query +=  eventName + "', '";
 		query += eventTime + "', '" 
 		query += eventDescription + "', '" 
-		query += eventLocation + "', "+this.props.user.id+", 0, 0); ";
+		query += eventLocation + "', '"+this.props.user.id+"', 0, 0); ";
 		var query2 = "INSERT INTO Events (name, startTime, description, location, userId, isEnded, songAmt) VALUES ('lol2', 2, 'description', 'location', 1, 0, 0); "
 		console.log(encodeURI(url + query));
 
@@ -92,7 +92,7 @@ class CreateEventForm extends React.Component {
 		}).then((res) => {
 			console.log(res);
 		});
-
+		this.props.eventCreated();
 		this.setState({
 			eventName: 'hi',
 			eventLocation: 'hi',

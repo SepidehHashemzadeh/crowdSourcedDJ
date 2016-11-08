@@ -1,0 +1,23 @@
+ul {
+  display: table;
+  width: 400px;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 0;
+}
+ul li {
+  list-style-type: none;
+  display: table-cell;
+  /* border-left: 1px solid #fff; */
+  /* border-bottom: 1px solid #fff; */
+  position: relative;
+  overflow: hidden;
+  float: left;
+  /* margin-top: -3px; */
+  width: 400px;
+  /* min-width: 158px; */
+  /* max-width: 500px; */
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid white;
+}

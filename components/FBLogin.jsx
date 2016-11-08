@@ -15,16 +15,19 @@ class FBLogin extends React.Component {
 			var email = response.email;
 			var id = response.id;
 			var accessToken = response.accessToken;
+			var picture = response.picture.data;
 			var user = {
 				name: name,
 				email: email,
 				id: id,
-				accessToken: accessToken
+				accessToken: accessToken,
+				picture: picture
 			};
-			var query = "INSERT INTO Users VALUES (";
-			query += id + ", '";
+			var query = "INSERT INTO Users VALUES ('";
+			query += id + "', '";
 			query += name + "', '";
 			query += email + "');";
+			console.log(encodeURI(url + query));
 			fetch(encodeURI(url + query)).then((res) => {
 			    return res.json();
 			}).then((res) => {

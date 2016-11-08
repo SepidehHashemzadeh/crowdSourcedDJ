@@ -2,20 +2,24 @@ import React from 'react';
 import Search from './Search.jsx';
 import ControlledTabs from './ControlledTabs.jsx';
 import CreateEventForm from './CreateEventForm.jsx';
+import EventList from './EventList.jsx'
 //import CardStack from './CardStack.jsx';
 //import Card from './Card.jsx';
-import { CardStack, Card } from 'react-cardstack';
+//import { CardStack, Card } from 'react-cardstack';
 require("../resources/css/dashboard.css");
+require("../resources/css/eventList.css");
 var url = 'https://djque.herokuapp.com/?query=';
 import { Tabs, Tab } from 'reactstrap';
 class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			eventsCreated: [],
-			eventsAttending: [],
-			eventsAttended: [],
-			//tabKey: 1,
+			myPresent: [],
+			myFuture: [],
+			myPast: [],
+			otherPresent: [],
+			otherFuture: [],
+			otherPast: [],
 			myEventsStyle: {
 				display: 'block'
 			},
@@ -24,32 +28,77 @@ class Dashboard extends React.Component {
 			}
 		};
 		this.refreshEventsList = this.refreshEventsList.bind(this);
-		//this.refreshEventsList();
+		this.refreshEventsList();
 		this.eventCreated = this.eventCreated.bind(this);
 		this.selectTab = this.selectTab.bind(this);
 	}
 	refreshEventsList() {
-		var query = "SELECT * FROM Events WHERE userId="+this.props.user.id+";";
+		var query = "SELECT * FROM Events WHERE userId='"+this.props.user.id+"';";
 		var query1 = 'SELECT * FROM Events;';
 		console.log(encodeURI(url + query));
 		console.log(encodeURI(url + query1));
 		fetch(encodeURI(url + query)).then((res) => {
 		    return res.json();
 		}).then((res) => {
-			var created = [];
-			var attending = [];
-			var attended = [];
-			var currentlyAttending = [];
-			//var 
-			var currentTime = new Date();
+			var myPresent = [];
+			var myFuture = [];
+			var myPast = [];
+			if(res.length > 0) {
+				var currentTime = new Date();
+				res.map(function mapMyEvents(eventRow){
+					var eventTime = new Date(eventRow.startTime);
+					if(eventTime<=currentTime&&!eventRow.isEnded) {
+						myPresent.push(eventRow);
+					}
+					else if(eventTime>currentTime) {
+						myFuture.push(eventRow);
+					}
+					else {
+						myPast.push(eventRow);
+					}
+				});
+			}
+			this.setState({
+				myPresent: myPresent,
+				myFuture: myFuture,
+				myPast: myPast
+			});
+		});
+		var query2 = "SELECT * FROM Events WHERE id IN (SELECT eventId FROM Event_User WHERE userId='"+this.props.user.id+"');";
+		console.log(encodeURI(url + query2));
+		fetch(encodeURI(url + query2)).then((res) => {
+		    return res.json();
+		}).then((res) => {
+			var otherPresent = [];
+			var otherFuture = [];
+			var otherPast = [];
+			if(res.length > 0) {
+				var currentTime = new Date();
+				res.map(function mapMyEvents(eventRow){
+					var eventTime = new Date(eventRow.startTime);
+					if(eventTime<=currentTime&&!eventRow.isEnded) {
+						otherPresent.push(eventRow);
+					}
+					else if(eventTime>currentTime) {
+						otherFuture.push(eventRow);
+					}
+					else {
+						otherPast.push(eventRow);
+					}
+				});
+			}
+			this.setState({
+				otherPresent: otherPresent,
+				otherFuture: otherFuture,
+				otherPast: otherPast
+			});
 		});
 		//setTimeout(refreshEventsList, 5000);
 	}
 	eventCreated() {
-
+		 this.refreshEventsList();
 	}
 	selectTab(key) {
-		//this.setState({ tabKey: key });
 		if(key == 1) {
 			this.setState({
 				myEventsStyle: {
@@ -72,6 +121,14 @@ class Dashboard extends React.Component {
 		}
 	}
 	render () {
+		var noEvents = <div className="noEvents">No Events 😔</div>;
+		var eventList = (listOfEvents, title) => (
+			<div><h1 className="eventTypeHeading">{title}:</h1>
+			{listOfEvents.length>0?
+				<EventList eventList={listOfEvents}/>
+				:noEvents}
+				</div>
+		);
 		return (
 			<div id="searchAndAdd">
 				<Search />
@@ -81,114 +138,24 @@ class Dashboard extends React.Component {
 				</div>
 				<div id="myEventsDivsOuter" style={this.state.myEventsStyle}>
 					<div id="presentMyEventsDiv" className="eventsDivs">
-						<h1 className="eventTypeHeading">Present:</h1>
-						<CardStack
-						    height={300}
-						    width={400}
-						    background='#f8f8f8'
-						    hoverOffset={25}>
-
-						    <Card background='#2980B9'>
-						        <h1>Number 1</h1>
-						    </Card>
-
-						    <Card background='#27AE60'>
-						        <h1>Number 2</h1>
-						    </Card>
-
-						</CardStack>
+						{eventList(this.state.myPresent, "Present")}
 					</div>
 					<div id="futureMyEventsDiv" className="eventsDivs">
-						<h1 className="eventTypeHeading">Future:</h1>
-						<CardStack
-						    height={300}
-						    width={400}
-						    background='#f8f8f8'
-						    hoverOffset={25}>
-
-						    <Card background='#2980B9'>
-						        <h1>Number 1</h1>
-						    </Card>
-
-						    <Card background='#27AE60'>
-						        <h1>Number 2</h1>
-						    </Card>
-
-						</CardStack>
+						{eventList(this.state.myFuture, "Future")}
 					</div>
-					<div id="futureMyEventsDiv" className="eventsDivs">
-						<h1 className="eventTypeHeading">Past:</h1>
-						<CardStack
-						    height={300}
-						    width={400}
-						    background='#f8f8f8'
-						    hoverOffset={25}>
-
-						    <Card background='#2980B9'>
-						        <h1>Number 1</h1>
-						    </Card>
-
-						    <Card background='#27AE60'>
-						        <h1>Number 2</h1>
-						    </Card>
-
-						</CardStack>
+					<div id="pastMyEventsDiv" className="eventsDivs">
+						{eventList(this.state.myPast, "Past")}
 					</div>
 				</div>
 				<div id="otherEventsDivsOuter" style={this.state.otherEventsStyle}>
 					<div id="presentOtherEventsDiv" className="eventsDivs">
-						<h1 className="eventTypeHeading">Present:</h1>
-						<CardStack
-						    height={300}
-						    width={400}
-						    background='#f8f8f8'
-						    hoverOffset={25}>
-
-						    <Card background='#2980B9'>
-						        <h1>Number 1</h1>
-						    </Card>
-
-						    <Card background='#27AE60'>
-						        <h1>Number 2</h1>
-						    </Card>
-
-						</CardStack>
+						{eventList(this.state.otherPresent, "Present")}
 					</div>
 					<div id="futureOtherEventsDiv" className="eventsDivs">
-						<h1 className="eventTypeHeading">Future:</h1>
-						<CardStack
-						    height={300}
-						    width={400}
-						    background='#f8f8f8'
-						    hoverOffset={25}>
-
-						    <Card background='#2980B9'>
-						        <h1>Number 1</h1>
-						    </Card>
-
-						    <Card background='#27AE60'>
-						        <h1>Number 2</h1>
-						    </Card>
-
-						</CardStack>
+						{eventList(this.state.otherFuture, "Future")}
 					</div>
-					<div id="futureOtherEventsDiv" className="eventsDivs">
-						<h1 className="eventTypeHeading">Past:</h1>
-						<CardStack
-						    height={300}
-						    width={400}
-						    background='#f8f8f8'
-						    hoverOffset={25}>
-
-						    <Card background='#2980B9'>
-						        <h1>Number 1</h1>
-						    </Card>
-
-						    <Card background='#27AE60'>
-						        <h1>Number 2</h1>
-						    </Card>
-
-						</CardStack>
+					<div id="pastOtherEventsDiv" className="eventsDivs">
+						{eventList(this.state.otherPast, "Past")}
 					</div>
 				</div>
 			</div>
@@ -261,6 +228,5 @@ const Event = (props) => (
 		</div>
   </div>
 );
-
 
 export default Dashboard;

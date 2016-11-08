@@ -1,0 +1,38 @@
+.c-tabs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  cursor: pointer;
+}
+#tabsOuterDiv {
+    margin-top: 3ex;
+    font-family: 'Lobster', cursive;
+    width: 26em;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: pointer;
+    font-size: medium;
+}
+.c-tabs input[type='checkbox'],
+.c-tabs input[type='radio'] {
+  display: none;
+}
+
+.c-tabs label {
+  flex: 1;
+  padding: 10px 0;
+  text-align: center;
+  color: #d9534f;
+  border: 1px solid #d9534f;
+  border-left-width: 0;
+}
+
+.c-tabs label:nth-child(2) {
+  border-left-width: 1px;
+}
+
+.c-tabs input:checked + label {
+  color: #fff;
+  background: #d9534f;
+  transition: all 1.5s ease;
+}
