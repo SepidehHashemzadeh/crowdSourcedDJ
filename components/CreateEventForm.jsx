@@ -87,7 +87,7 @@ class CreateEventForm extends React.Component {
 		query +=  eventName + "', '";
 		query += eventTime + "', '" 
 		query += eventDescription + "', '" 
-		query += eventLocation + "', 1, 0, 0); ";
+		query += eventLocation + "', '10154230939168043', 0, 0); ";
 		console.log(encodeURI(url + query));
 
 		fetch(encodeURI(url + query)).then((res) => {
@@ -95,7 +95,7 @@ class CreateEventForm extends React.Component {
 		}).then((res) => {
 			console.log(res);
 		});
-
+		this.toggle();
 		this.toggleNested();
 	}
 	render() {
@@ -106,60 +106,52 @@ class CreateEventForm extends React.Component {
 					<ModalBody>
 						<div>
 							<Form>
-							  <header>
-							    <h2 className="formTitle">Create New Event</h2>
-							    <div></div>
-							  </header>
+								<header>
+									<h2 className="formTitle">Create New Event</h2>
+							  	</header>
 							  
-							  <div>
-							    <label>Event Name</label>
-							    <div>
-							      <input type="text" size="8" 
-							             className="createEventFieldInput"
-						    			 onChange={this.handleEventName}
-							             value={this.state.eventName}
-							             maxLength="255"/>
-							    </div>
-							  </div>
+							  	<div>
+							    	<label>Event Name</label>
+							    	<div>
+							      		<input type="text" size="8" 
+							            	className="createEventFieldInput"
+						    				onChange={this.handleEventName}
+							            	value={this.state.eventName}
+							            	maxLength="255"/>
+							    	</div>
+							  	</div>
 							    
 
-							  <div>
-							    <label>
-							    	Event Time
-							    </label>
-							    <div>
-							    <input type="datetime-local"
-						    		    className="createEventFieldInput"
-						         	    onChange={this.handleEventStartTime}
-						    		    value={this.state.eventStartTime}/>
-							    </div>
-							  </div>
+							  	<div>
+							    	<label>Event Time</label>
+							    	<div>
+							    		<input type="datetime-local"
+						    		    	className="createEventFieldInput"
+						         	    	onChange={this.handleEventStartTime}
+						    		    	value={this.state.eventStartTime}/>
+							    	</div>
+							  	</div>
 
 
-							  <div>
-							    <label>
-							      Location
-							    </label>
-							    <div>
-							      <input type="text" maxLength="255"
-							             className="createEventFieldInput"
-						    			 onChange={this.handleEventLocation}
-						    		     value={this.state.eventLocation}/> 
-							   	</div>
-							  </div>
+							  	<div>
+							    	<label>Location</label>
+							    	<div>
+							      		<input type="text" maxLength="255"
+							             	className="createEventFieldInput"
+						    			 	onChange={this.handleEventLocation}
+						    		     	value={this.state.eventLocation}/> 
+							   		</div>
+							  	</div>
 							    
-							  <div>
-							    <label>
-							      Event Description
-							    </label>
-							  
-							    <div>
-							      <textarea rows="5"
-							               className="createEventFieldInput"
-						    			   onChange={this.handleEventDescription}
-						    		       value={this.state.eventDescription}></textarea>
-							    </div>
-							  </div>
+							  	<div>
+							    	<label>Event Description</label>
+							    	<div>
+							      		<textarea rows="5"
+							               	className="createEventFieldInput"
+						    			   	onChange={this.handleEventDescription}
+						    		       	value={this.state.eventDescription}></textarea>
+							    	</div>
+							  	</div>
 							    { this.validateFields() ? null : 
 							    		<div><div>Please fill out all fields.</div></div> }
 						    	<div>
@@ -172,16 +164,17 @@ class CreateEventForm extends React.Component {
           			</ModalBody>
           			<ModalFooter>
             			<Button disabled={!this.validateForm} color="primary" onClick={this.submitForm}>Submit</Button>
-           				<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested}>
-              				<ModalHeader>Success!</ModalHeader>
-              				<ModalBody>Your event has been created.</ModalBody>
-              				<ModalFooter>
-                				<Button color="primary" onClick={this.toggle}>Done</Button>{' '}
-              				</ModalFooter>
-            			</Modal>{' '}
+           				{' '}
             			<Button color="secondary" onClick={this.toggle}>Cancel</Button>
           			</ModalFooter>
         		</Modal>
+        		<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested}>
+              		<ModalHeader>Success!</ModalHeader>
+              		<ModalBody>Your event has been created.</ModalBody>
+              		<ModalFooter>
+                		<Button color="primary" onClick={this.toggleNested}>Done</Button>
+              		</ModalFooter>
+            	</Modal>
 			</div>
 		);
 	}

@@ -12,7 +12,7 @@ class EventPageLeader extends React.Component {
 			eventLocation: "",
 			eventStartTime: "",
 			eventDescription: "",
-			eventID: 30,
+			eventID: 16,
 			songID: ""
 		};
 		this.render = this.render.bind(this);
