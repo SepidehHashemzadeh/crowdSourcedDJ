@@ -32,6 +32,9 @@ class Dashboard extends React.Component {
 		this.eventCreated = this.eventCreated.bind(this);
 		this.selectTab = this.selectTab.bind(this);
 	}
+	timeStampSorter(x,y) {
+		return x.startTime-y.startTime;
+	}
 	refreshEventsList() {
 		var query = "SELECT * FROM Events WHERE userId='"+this.props.user.id+"';";
 		var query1 = 'SELECT * FROM Events;';
@@ -57,6 +60,9 @@ class Dashboard extends React.Component {
 						myPast.push(eventRow);
 					}
 				});
+				myPresent.sort(this.timeStampSorter);
+				myFuture.sort(this.timeStampSorter);
+				myPast.sort(this.timeStampSorter);
 			}
 			this.setState({
 				myPresent: myPresent,
@@ -86,6 +92,9 @@ class Dashboard extends React.Component {
 						otherPast.push(eventRow);
 					}
 				});
+				otherPresent.sort(this.timeStampSorter);
+				otherFuture.sort(this.timeStampSorter);
+				otherPast.sort(this.timeStampSorter);
 			}
 			this.setState({
 				otherPresent: otherPresent,
@@ -122,10 +131,10 @@ class Dashboard extends React.Component {
 	}
 	render () {
 		var noEvents = <div className="noEvents">No Events 😔</div>;
-		var eventList = (listOfEvents, title) => (
+		var eventList = (listOfEvents, title, name) => (
 			<div><h1 className="eventTypeHeading">{title}:</h1>
 			{listOfEvents.length>0?
-				<EventList eventList={listOfEvents}/>
+				<EventList eventList={listOfEvents} name={name}/>
 				:noEvents}
 				</div>
 		);
@@ -138,24 +147,24 @@ class Dashboard extends React.Component {
 				</div>
 				<div id="myEventsDivsOuter" style={this.state.myEventsStyle}>
 					<div id="presentMyEventsDiv" className="eventsDivs">
-						{eventList(this.state.myPresent, "Present")}
+						{eventList(this.state.myPresent, "Present", "presentMy")}
 					</div>
 					<div id="futureMyEventsDiv" className="eventsDivs">
-						{eventList(this.state.myFuture, "Future")}
+						{eventList(this.state.myFuture, "Future", "futureMy")}
 					</div>
 					<div id="pastMyEventsDiv" className="eventsDivs">
-						{eventList(this.state.myPast, "Past")}
+						{eventList(this.state.myPast, "Past", "pastMy")}
 					</div>
 				</div>
 				<div id="otherEventsDivsOuter" style={this.state.otherEventsStyle}>
 					<div id="presentOtherEventsDiv" className="eventsDivs">
-						{eventList(this.state.otherPresent, "Present")}
+						{eventList(this.state.otherPresent, "Present", "presentOther")}
 					</div>
 					<div id="futureOtherEventsDiv" className="eventsDivs">
-						{eventList(this.state.otherFuture, "Future")}
+						{eventList(this.state.otherFuture, "Future", "futureOther")}
 					</div>
 					<div id="pastOtherEventsDiv" className="eventsDivs">
-						{eventList(this.state.otherPast, "Past")}
+						{eventList(this.state.otherPast, "Past", "pastOther")}
 					</div>
 				</div>
 			</div>

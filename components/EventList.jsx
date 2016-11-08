@@ -1,53 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Image } from 'reactstrap';
+import EventListItem from './EventListItem.jsx';
+import { getUserInfo } from '../databaseShortcuts.js';
 var url = 'https://djque.herokuapp.com/?query=';
 require("../resources/css/eventList.css");
 
 class EventList extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {};
-		this.getEventDiv = this.getEventDiv.bind(this);
-		this.render = this.render.bind(this);
+		this.state = { userInfo: [] };
+		this.getEventList = this.getEventList.bind(this);
 	}
-	getEventDiv(eventInfo){
-		var noImageUrl = require('../resources/images/noprofile.png');
-		var query = "SELECT * FROM Users WHERE id='"+eventInfo.userId+"';";
-		var query1 = 'SELECT * FROM Users;';
-		fetch(encodeURI(url + query)).then((res) => {
-		    return res.json();
-		}).then((res) => {
-			this.setState({ userInfo: res[0] });
-			FB.api('/'+this.state.userInfo.id+'/picture', 'GET', {},
-				function(response) {
-					return response;
-				}
-			);			
+	getEventList() {
+		var arr = [];
+		let key=0;
+		this.props.eventList.map((item) => {
+			var user = getUserInfo(item.userId);
+			key++;
+			arr.push(
+				<EventListItem name={this.props.name} eventInfo={item} key={key} userInfo={user} />
+			);
 		});
-		if(typeof this.state.userInfo !== "undefined")
-		{ 
-			return (<li>
-					<div>
-						<p>
-							{eventInfo.name}
-						</p>
-						<p>{eventInfo.description}</p>
-						<p> Starts At: {eventInfo.startTime} </p>
-						<p> Where: {eventInfo.location} </p>
-						<p> By: {this.state.userInfo.name} </p>
-					</div>
-				</li>);
-		}
+		return arr;
 	}
 	render() {
-		var cursorStyle = {
-			cursor: "pointer"
-		};
 		return(
-			<div id="eventListItemOuterDiv">
+			<div id={this.props.name+"EventListItemOuterDiv"}>
 			    <ul>
-					{this.props.eventList.map(this.getEventDiv)}
+					{this.getEventList()}
 				</ul>
 		    </div>
 		);
