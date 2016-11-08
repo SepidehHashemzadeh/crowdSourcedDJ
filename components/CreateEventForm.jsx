@@ -168,7 +168,7 @@ class CreateEventForm extends React.Component {
             			<Button color="secondary" onClick={this.toggle}>Cancel</Button>
           			</ModalFooter>
         		</Modal>
-        		<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested}>
+        		<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested} className="createEventNestedModal">
               		<ModalHeader>Success!</ModalHeader>
               		<ModalBody>Your event has been created.</ModalBody>
               		<ModalFooter>
