@@ -14,6 +14,10 @@
 	padding-left: 50px;
 }
 
+#eventPageLeaderHeader{
+	display: inline-block;
+}
+
 .eventName{
 	font-family: 'Lobster', cursive;
 	font-size: 40px;
