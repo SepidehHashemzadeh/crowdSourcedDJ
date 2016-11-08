@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 var SearchSong = React.createClass({
 
@@ -14,7 +15,25 @@ var SearchSong = React.createClass({
       },
 
       doSearch: function(str) {
-        console.log(str);
+        var listDiv = document.getElementById('listDiv');
+
+        // delete list if currently present
+        if (listDiv != null) {
+          listDiv.parentNode.removeChild(listDiv);
+        }
+
+        // don't process empty search
+        if (str.length == 0) {
+          return;
+        }
+
+        // generate list
+        listDiv = document.createElement('div');
+        listDiv.id = 'listDiv';
+        var app = document.getElementById('app');
+        app.parentNode.insertBefore(listDiv, app.nextSibling);
+
+
       },
 
       render: function() {
