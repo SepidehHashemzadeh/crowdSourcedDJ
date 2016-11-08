@@ -12,12 +12,13 @@ class EventPageLeader extends React.Component {
 			eventLocation: "",
 			eventStartTime: "",
 			eventDescription: "",
-			eventID: 16,
-			songID: ""
+			eventID: 22,
+			songID: "",
+			queue: []
 		};
 		this.render = this.render.bind(this);
 	}
-	componentDidMount() {
+	componentWillMount() {
 		var url = "https://djque.herokuapp.com/?query="; 
 
 		var eventQuery = "SELECT * FROM Events WHERE id="+ this.state.eventID + ";";
@@ -25,8 +26,6 @@ class EventPageLeader extends React.Component {
 		fetch(encodeURI(url + eventQuery)).then((res) => {
 			return res.json();
 		}).then((res) => {
-			console.log(res);
-			console.log(res[0]);
 			this.setState({
 				eventName: res[0].name,
 				eventLocation: res[0].location,
@@ -36,26 +35,32 @@ class EventPageLeader extends React.Component {
 		});
 
 		var songQuery = "SELECT songUrl FROM Event_Song WHERE eventId="+ this.state.eventID + ";";
-		console.log(encodeURI(url + songQuery));
+		var vidIds = [];
 		fetch(encodeURI(url + songQuery)).then((res) => {
 			return res.json();
 		}).then((res) => {
-			console.log(res[0]);
-			console.log(res[0].songUrl);
-			var videoId = res[0].songUrl.substring(res[0].songUrl.indexOf('=')+1);
+			res.map(function(item) {
+				var videoId = item.songUrl.substring(item.songUrl.indexOf('=')+1);
+				vidIds.push(videoId);
+				console.log(videoId);
+			});
 			this.setState({
-				songID: videoId
+				queue: vidIds
 			});
 		});
-
 	}
-
+	/*formatDateTime() {
+		var year = this.state.eventStartTime.substring(0,3);
+		var month = this.state.eventStartTime.substring(5,6);
+		var date = this.state.eventStartTime.substring(8,9);
+		console.log(year);
+	}*/
 	render() {
 		return (
 			<div id="eventPageLeader">
 				<h2 className="eventName">{this.state.eventName}</h2>
 				<p className="eventLocationTime">{this.state.eventLocation} at {this.state.eventStartTime}</p>
-				<p>description: {this.state.eventDescription}!!!!</p>
+				<p>{this.state.eventDescription}</p>
 				<hr/>
 				<div id="addSong">
 					<p>Add Song to Queue Here!</p>
@@ -63,12 +68,17 @@ class EventPageLeader extends React.Component {
 				<hr/>
 				<div id="queue">
 					<p>Display Widgets Here!</p>
-					<YouTubePlayer
-			            height='260'
-			            playbackState='paused'
-			            videoId={this.state.songID}
-			            width='540'
-			        />
+					{ 	this.state.queue.map(function(vidID, i) {
+							return 	<div key={i}>
+										<YouTubePlayer
+							            	height='150'
+							            	playbackState='paused'
+							            	videoId={vidID}
+							            	width='320'
+							        	/> <br/>
+							        </div>
+				       	})
+			    	}
 				</div>
 			</div>
 		);
