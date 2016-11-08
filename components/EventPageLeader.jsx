@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input, ButtonToolbar } from 'reactstrap';
 import YouTubePlayer from 'react-youtube-player';
 require("./../resources/css/eventPage.css");
 
@@ -13,12 +13,22 @@ class EventPageLeader extends React.Component {
 			eventStartTime: "",
 			eventDescription: "",
 			eventID: 22,
+			eventIsEnded: false,
 			songID: "",
-			queue: []
+			queue: [],
+			hide: false
 		};
 		this.render = this.render.bind(this);
+		this.back = this.back.bind(this);
+		this.end = this.end.bind(this);
+		this.edit = this.edit.bind(this);
+		this.delete = this.delete.bind(this);
+		this.formatDateTime = this.formatDateTime.bind(this);
 	}
 	componentWillMount() {
+		this.setState({
+			hide: false
+		});
 		var url = "https://djque.herokuapp.com/?query="; 
 
 		var eventQuery = "SELECT * FROM Events WHERE id="+ this.state.eventID + ";";
@@ -30,7 +40,8 @@ class EventPageLeader extends React.Component {
 				eventName: res[0].name,
 				eventLocation: res[0].location,
 				eventStartTime: res[0].startTime,
-				eventDescription: res[0].description
+				eventDescription: res[0].description,
+				eventIsEnded: res[0].isEnded
 			});
 		});
 
@@ -48,6 +59,30 @@ class EventPageLeader extends React.Component {
 				queue: vidIds
 			});
 		});
+	}
+	back(){
+		console.log("back");
+		this.setState({
+			hide: true
+		});
+	}
+	end(){
+		var url = "https://djque.herokuapp.com/?query="; 
+		var endEventQuery = "UPDATE Events SET isEnded=true WHERE id="+this.state.eventID+";";
+		console.log(endEventQuery);
+		console.log(encodeURI(url + endEventQuery));
+		fetch(encodeURI(url + endEventQuery)).then((res) => {
+			return res.json();
+		}).then((res) => {
+			this.setState({
+				isEnded: true
+			});
+		});
+	}
+	edit(){
+	}
+	delete(vidID){
+
 	}
 	formatDateTime() {
 		var year = this.state.eventStartTime.toString().substring(0,4);
@@ -98,33 +133,46 @@ class EventPageLeader extends React.Component {
 	}
 	render() {
 		return (
-			<div id="eventPageLeader">
-				<h2 className="eventName">{this.state.eventName}</h2>
-				<p className="eventDetails">{this.state.eventLocation}</p>
-				<p className="eventDetails">{this.formatDateTime()}</p>
-				<br/>
-				<p className="eventDetails">{this.state.eventDescription}</p>
-				<hr/>
-				<div id="addSong">
-					<p>Search</p>
+			<div>
+			{ this.state.hide ? null : 
+				<div id="eventPageLeader">
+					<div id="eventPageLeaderHeader">
+						<h2 className="eventName">{this.state.eventName}</h2>
+						<ButtonToolbar>
+							<Button color="default" onClick={this.back}>Back</Button>
+							<Button color="danger" onClick={this.end}>End</Button>
+							<Button color="info" onClick={this.edit}>Edit</Button>
+						</ButtonToolbar>
+					</div>
+					<p className="eventDetails">{this.state.eventLocation}</p>
+					<p className="eventDetails">{this.formatDateTime()}</p>
+					<br/>
+					<p className="eventDetails">{this.state.eventDescription}</p>
+					<hr/>
+					<div id="addSong">
+						<p>Search</p>
+					</div>
+					<hr/>
+					<div id="queue">
+						<p>Event Queue</p>
+						<div id="videos">
+						{ 	this.state.queue.map(function(vidID, i) {
+								return 	<div key={i}>
+											<YouTubePlayer
+								            	height='350'
+								            	playbackState='paused'
+								            	videoId={vidID}
+								            	width='680'
+								        	/> 
+								        	<Button color="danger" onClick={() => this.delete(vidID)}>Delete</Button>
+								        	<br/>
+								        </div>
+					       	})
+				    	}
+			    		</div>
+					</div>
 				</div>
-				<hr/>
-				<div id="queue">
-					<p>Event Queue</p>
-					<div id="videos">
-					{ 	this.state.queue.map(function(vidID, i) {
-							return 	<div key={i} >
-										<YouTubePlayer
-							            	height='350'
-							            	playbackState='paused'
-							            	videoId={vidID}
-							            	width='680'
-							        	/> <br/>
-							        </div>
-				       	})
-			    	}
-		    		</div>
-				</div>
+			}
 			</div>
 		);
 	}

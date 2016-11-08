@@ -11,6 +11,7 @@ class CreateEventForm extends React.Component {
 			eventLocation: "",
 			eventStartTime: "",
 			eventDescription: "",
+			eventLeader: this.props.user,
 			isNameValid: false,
 			modal: false,
 			nestedModal: false
@@ -87,8 +88,10 @@ class CreateEventForm extends React.Component {
 		query +=  eventName + "', '";
 		query += eventTime + "', '" 
 		query += eventDescription + "', '" 
-		query += eventLocation + "', '10154230939168043', 0, 0); ";
+		query += eventLocation + "','";
+		query += this.props.user.id + "', 0, 0); ";
 		console.log(encodeURI(url + query));
+		console.log(query);
 
 		fetch(encodeURI(url + query)).then((res) => {
 			return res.json();
