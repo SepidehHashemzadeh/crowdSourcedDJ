@@ -16,7 +16,9 @@ class EventPageLeader extends React.Component {
 			eventIsEnded: false,
 			songID: "",
 			queue: [],
-			hide: false
+			hide: false,
+			modal: false,
+			deleteID: ""
 		};
 		this.render = this.render.bind(this);
 		this.back = this.back.bind(this);
@@ -24,6 +26,9 @@ class EventPageLeader extends React.Component {
 		this.edit = this.edit.bind(this);
 		this.delete = this.delete.bind(this);
 		this.formatDateTime = this.formatDateTime.bind(this);
+		this.refreshQueue = this.refreshQueue.bind(this);
+		this.confirmDelete = this.confirmDelete.bind(this);
+		this.toggle = this.toggle.bind(this);
 	}
 	componentWillMount() {
 		this.setState({
@@ -60,8 +65,24 @@ class EventPageLeader extends React.Component {
 			});
 		});
 	}
+	refreshQueue(){
+		var url = "https://djque.herokuapp.com/?query="; 
+		var songQuery = "SELECT songUrl FROM Event_Song WHERE eventId="+ this.state.eventID + ";";
+		var vidIds = [];
+		fetch(encodeURI(url + songQuery)).then((res) => {
+			return res.json();
+		}).then((res) => {
+			res.map(function(item) {
+				var videoId = item.songUrl.substring(item.songUrl.indexOf('=')+1);
+				vidIds.push(videoId);
+				console.log(videoId);
+			});
+			this.setState({
+				queue: vidIds
+			});
+		});
+	}
 	back(){
-		console.log("back");
 		this.setState({
 			hide: true
 		});
@@ -69,8 +90,6 @@ class EventPageLeader extends React.Component {
 	end(){
 		var url = "https://djque.herokuapp.com/?query="; 
 		var endEventQuery = "UPDATE Events SET isEnded=true WHERE id="+this.state.eventID+";";
-		console.log(endEventQuery);
-		console.log(encodeURI(url + endEventQuery));
 		fetch(encodeURI(url + endEventQuery)).then((res) => {
 			return res.json();
 		}).then((res) => {
@@ -81,8 +100,25 @@ class EventPageLeader extends React.Component {
 	}
 	edit(){
 	}
-	delete(vidID){
-
+	toggle() {
+		this.refreshQueue();
+		this.setState({ 
+			modal: !this.state.modal
+		});
+	}
+	confirmDelete(vidID){
+		this.setState({deleteID:vidID})
+		this.toggle();
+	}
+	delete(videoID){
+		var songURL = "https://www.youtube.com/watch?v="+videoID;
+		var url = "https://djque.herokuapp.com/?query="; 
+		var deleteSongQuery = "DELETE FROM Event_Song WHERE songUrl='"+songURL+"' AND eventId="+this.state.eventID+";";
+		fetch(encodeURI(url + deleteSongQuery)).then((res) => {
+			return res.json();
+		}).then((res) => {
+		});
+		this.toggle();
 	}
 	formatDateTime() {
 		var year = this.state.eventStartTime.toString().substring(0,4);
@@ -153,9 +189,9 @@ class EventPageLeader extends React.Component {
 					</div>
 					<hr/>
 					<div id="queue">
-						<p>Event Queue</p>
+						<p>Music Queue</p>
 						<div id="videos">
-						{ 	this.state.queue.map(function(vidID, i) {
+						{ 	this.state.queue.map((vidID, i) => {
 								return 	<div key={i}>
 											<YouTubePlayer
 								            	height='350'
@@ -163,13 +199,20 @@ class EventPageLeader extends React.Component {
 								            	videoId={vidID}
 								            	width='680'
 								        	/> 
-								        	<Button color="danger" onClick={() => this.delete(vidID)}>Delete</Button>
+								        	<Button color="danger" onClick={() => {this.confirmDelete(vidID)}}>Delete</Button>
 								        	<br/>
 								        </div>
 					       	})
 				    	}
 			    		</div>
 					</div>
+					<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventNestedModal">
+	              		<ModalHeader>Are you sure you want to delete this song from your Music Queue?</ModalHeader>
+	              		<ModalFooter>
+	                		<Button color="warning" onClick={() => {this.delete(this.state.deleteID)}}>Delete</Button>
+	                		<Button color="default" onClick={this.toggle}>Cancel</Button>
+	              		</ModalFooter>
+	            	</Modal>
 				</div>
 			}
 			</div>
