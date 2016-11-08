@@ -100,9 +100,10 @@ class EventPageLeader extends React.Component {
 		return (
 			<div id="eventPageLeader">
 				<h2 className="eventName">{this.state.eventName}</h2>
-				<p className="eventLocation">{this.state.eventLocation}</p>
-				<p>{this.formatDateTime()}</p>
-				<p>{this.state.eventDescription}</p>
+				<p className="eventDetails">{this.state.eventLocation}</p>
+				<p className="eventDetails">{this.formatDateTime()}</p>
+				<br/>
+				<p className="eventDetails">{this.state.eventDescription}</p>
 				<hr/>
 				<div id="addSong">
 					<p>Search</p>
