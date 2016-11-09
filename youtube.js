@@ -3,7 +3,7 @@
 var key = "AIzaSyCDR9t2Gt8C1G7x7Grle-ey2az36JsRfH0";
 var url = "https://www.googleapis.com";
 var path = "/youtube/v3/search";
-var params = "?part=snippet&type=video&videoEmbeddable=true&maxResults=10&key=" + key + "&q=";
+var params = "?part=snippet&type=video&videoEmbeddable=true&maxResults=50&key=" + key + "&q=";
 
 /* search
  *
@@ -21,7 +21,7 @@ var search = function (s, callback) {
     }).then((res) => {
         let ids = [];
 
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 50; i++) {
             ids.push(res["items"][i]["id"]["videoId"]);
         }
 
@@ -35,7 +35,7 @@ var getTitles = function (s, callback) {
     }).then((res) => {
         let ids = [];
 
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 50; i++) {
             ids.push(res["items"][i]["snippet"]["title"]);
         }
 

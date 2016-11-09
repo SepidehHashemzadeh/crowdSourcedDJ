@@ -24,7 +24,7 @@ p, a {
   display: block;
 }
 
-.react-scrollable-list {
+#listDiv {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -32,15 +32,15 @@ p, a {
   width: 400px;
   overflow-y: scroll;
   border: #ddd solid 1px;
+  margin-top: 3em;
 }
 
-.react-scrollable-list-item {
+.listItem {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  height: 50px;
+  height: 80px;
   padding: 5px;
   background-color: #f2f2f2;
   border-bottom: #ddd solid 1px;
-  pointer-events: none;
 }

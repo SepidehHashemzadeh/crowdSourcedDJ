@@ -1,26 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactScrollableList from '../dist/index.js';
+import ReactList from 'react-list';
+import AddSongModal from './addSongModal.jsx';
 
 require('../resources/css/searchSong.css');
 var yt = require('../youtube.js');
 
-var ListEntry = React.createClass({
-    propTypes: {
-      text: React.PropTypes.string.isRequired
-    },
-
-    render: function() {
-        return <div>
-          {this.props.text}
-        </div>;
-    }
-});
-
 var SearchSong = React.createClass({
 
       getInitialState: function() {
-        return {searchValue: ""};
+        return {searchValue: "",
+                results: []};
       },
 
       inputChanged: function(name, e) {
@@ -28,6 +18,26 @@ var SearchSong = React.createClass({
         change[name] = e.target.value;
         this.setState(change);
         this.doSearch(e.target.value);
+      },
+
+      renderItem: function(index, key) {
+        return <div key={key} className="listItem">
+                    <div>{this.state.results[index][1]}</div>
+                    <div><button id={this.state.results[index][0]} onClick={this.handleAdd}>Add to Queue</button></div>
+                </div>;
+      },
+
+      handleAdd: function(event) {
+        var listDiv = document.getElementById('listDiv');
+        var modalDiv = document.getElementById('modalDiv');
+
+        if (modalDiv == null) {
+            modalDiv = document.createElement('div'); 
+            modalDiv.id = 'modalDiv';
+            listDiv.parentNode.insertBefore(modalDiv, listDiv.nextSibling);
+        }
+
+        ReactDOM.render(<AddSongModal id={event.target["id"]}/>, document.getElementById('modalDiv'));
       },
 
       doSearch: function(str) {
@@ -48,32 +58,37 @@ var SearchSong = React.createClass({
         listDiv.id = 'listDiv';
         listDiv.style.overflow = 'auto';
         listDiv.style.maxHeight = 400;
-        listDiv.style.paddingTop = "50px";
         var app = document.getElementById('app');
         app.parentNode.insertBefore(listDiv, app.nextSibling);
 
-        yt.getTitles(str, (res) => {
-          let listItems = [];
+        yt.search(str, (ids) => {
+            yt.getTitles(str, (titles) => {
+                var res = ids.map(function(e, i) {
+                    return [e, titles[i]];
+                });
 
-          for (let i = 0; i < res.length; i++) {
-            listItems.push({id: i, content: <ListEntry text={res[i]}/>});
-          }
+                this.setState({results: res});
 
-          ReactDOM.render(<ReactScrollableList
-          listItems={listItems}
-          />, document.getElementById('listDiv'));
+                var list = <ReactList
+                                itemRenderer={this.renderItem}
+                                length={this.state.results.length}
+                                type='uniform'
+                            />;
+
+                ReactDOM.render(list, listDiv);
+            });
         });
       },
 
       render: function() {
-               return (
-                <div className="box">
-                 <div className="container-1">
-                   <span className="icon"><i className="fa fa-search"></i></span>
-                   <input type="search" id="search" value={this.state.searchValue} onChange={this.inputChanged.bind(this, "searchValue")} placeholder="Search for a Song" />
-                 </div>
-                 </div>
-               );
+           return (
+            <div className="box">
+             <div className="container-1">
+               <span className="icon"><i className="fa fa-search"></i></span>
+               <input type="search" id="search" value={this.state.searchValue} onChange={this.inputChanged.bind(this, "searchValue")} placeholder="Search for a Song" />
+             </div>
+             </div>
+           );
         }
 });
 
