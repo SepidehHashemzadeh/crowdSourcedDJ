@@ -5,6 +5,18 @@ import ReactScrollableList from '../dist/index.js';
 require('../resources/css/searchSong.css');
 var yt = require('../youtube.js');
 
+var ListEntry = React.createClass({
+    propTypes: {
+      text: React.PropTypes.string.isRequired
+    },
+
+    render: function() {
+        return <div>
+          {this.props.text}
+        </div>;
+    }
+});
+
 var SearchSong = React.createClass({
 
       getInitialState: function() {
@@ -44,7 +56,7 @@ var SearchSong = React.createClass({
           let listItems = [];
 
           for (let i = 0; i < res.length; i++) {
-            listItems.push({id: i, content: res[i]});
+            listItems.push({id: i, content: <ListEntry text={res[i]}/>});
           }
 
           ReactDOM.render(<ReactScrollableList
