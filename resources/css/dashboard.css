@@ -138,3 +138,7 @@
   /*background: linear-gradient(to bottom,  #a90329 0%,#8f0222 44%,#6b2c3a 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a90329', endColorstr='#6b2c3a',GradientType=0 ); /* IE6-9 */
 }
+
+#myEventsDivsOuter #otherEventsDivsOuter {
+  transition: all 4s ease;
+}

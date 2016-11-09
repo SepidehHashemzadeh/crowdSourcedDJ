@@ -3,9 +3,6 @@ import Search from './Search.jsx';
 import ControlledTabs from './ControlledTabs.jsx';
 import CreateEventForm from './CreateEventForm.jsx';
 import EventList from './EventList.jsx'
-//import CardStack from './CardStack.jsx';
-//import Card from './Card.jsx';
-//import { CardStack, Card } from 'react-cardstack';
 require("../resources/css/dashboard.css");
 require("../resources/css/eventList.css");
 var url = 'https://djque.herokuapp.com/?query=';
@@ -21,10 +18,12 @@ class Dashboard extends React.Component {
 			otherFuture: [],
 			otherPast: [],
 			myEventsStyle: {
-				display: 'block'
+				display: 'block',
+				opacity: 1
 			},
 			otherEventsStyle: {
-				display: 'none'
+				display: 'none',
+				opacity: 0
 			}
 		};
 		this.refreshEventsList = this.refreshEventsList.bind(this);
@@ -111,20 +110,24 @@ class Dashboard extends React.Component {
 		if(key == 1) {
 			this.setState({
 				myEventsStyle: {
-					display: 'block'
+					display: 'block',
+					opacity: 1
 				},
 				otherEventsStyle: {
-					display: 'none'
+					display: 'none',
+					opacity: 0
 				}
 			})
 		}
 		else {
 			this.setState({
 				myEventsStyle: {
-					display: 'none'
+					display: 'none',
+					opacity: 0
 				},
 				otherEventsStyle: {
-					display: 'block'
+					display: 'block',
+					opacity: 1
 				}
 			})
 		}

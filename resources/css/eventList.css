@@ -29,6 +29,7 @@ ul li div p {
   display: inline-block;
   margin-right: 3px;
   margin-left: 3px;
+  font-family: 'Roboto Condensed', sans-serif;
 }
 
 .loader {
@@ -106,6 +107,7 @@ ul li div p {
 .divHovered {
   height: 70px;
   transition: all 0.5s ease;
+  padding-top: 10px;
 }
 
 .pNotHovered {
@@ -115,4 +117,5 @@ ul li div p {
 .divNotHovered {
   height: 55px;
   transition: all 0.5s ease;
+  padding-top: 16px;
 }
