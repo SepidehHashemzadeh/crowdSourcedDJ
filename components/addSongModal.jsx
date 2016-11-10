@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Modal, ModalBody } from 'reactstrap';
+import { Button, Modal, ModalBody } from 'reactstrap';
+
+var yt = require("../youtube.js");
 
 class AddSongModal extends React.Component {
     constructor(props) {
@@ -10,6 +12,7 @@ class AddSongModal extends React.Component {
             id: props.id
         }
         this.toggle = this.toggle.bind(this);
+        this.addToQueue = this.addToQueue.bind(this);
     }
 
     toggle() {
@@ -20,8 +23,14 @@ class AddSongModal extends React.Component {
     }
 
     addToQueue(event) {
-        // send id to parent component?
-        songId = event.target["id"];
+        var songId = event.target["id"];
+        
+        // TODO: Get dynamic eventId
+        yt.addToPlaylist(22, songId, (res) => {
+            console.log(res);
+        });
+
+        this.toggle();
     }
 
     render() {
@@ -29,8 +38,8 @@ class AddSongModal extends React.Component {
             <ModalBody>
                 Add song to queue?
                 <br/><br/>
-                <button onClick={this.addToQueue} id={this.state.id}>Add</button>
-                <button onClick={this.toggle}>Cancel</button>
+                <Button onClick={this.addToQueue} id={this.state.id}>Add</Button>
+                <Button onClick={this.toggle}>Cancel</Button>
             </ModalBody>
             </Modal>
     }

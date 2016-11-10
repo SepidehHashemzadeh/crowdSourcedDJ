@@ -37,7 +37,7 @@ var SearchSong = React.createClass({
             listDiv.parentNode.insertBefore(modalDiv, listDiv.nextSibling);
         }
 
-        ReactDOM.render(<AddSongModal id={event.target["id"]}/>, document.getElementById('modalDiv'));
+        ReactDOM.render(<AddSongModal id={event.target["id"]} />, document.getElementById('modalDiv'));
       },
 
       doSearch: function(str) {
@@ -63,6 +63,7 @@ var SearchSong = React.createClass({
 
         yt.search(str, (ids) => {
             yt.getTitles(str, (titles) => {
+                // combine ids and titles
                 var res = ids.map(function(e, i) {
                     return [e, titles[i]];
                 });
