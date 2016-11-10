@@ -54,3 +54,7 @@ hr {
 	margin: auto;
 }
 
+#videoremovebutton{
+	display:inline;
+	position:relative;
+}
