@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactList from 'react-list';
+import ReactDOM from 'react-dom';
 
 import DatabaseHelper from '../databaseShortcuts.js';
 
@@ -23,7 +24,6 @@ class Search extends React.Component {
        <div className="container-1">
           <span className="icon"><i className="fa fa-search"></i></span>
           <input type="search" id="search" placeholder="Search existing events" value={this.state.searchStr} onChange={this.handleSearchStr}/>
-          <div id="listDiv"></div>
       </div>
     </div>
     );
@@ -31,29 +31,41 @@ class Search extends React.Component {
 
   searchEvents() {
     var searchStr = this.state.searchStr;
-    var listDiv = document.getElementById('listDiv');
+    var listDiv = document.getElementById('search');
     console.log(searchStr);
     var query = "SELECT * FROM Events WHERE name='" + searchStr + "';";
+
+    listDiv = document.createElement('div');
+    listDiv.id = 'listDiv';
+    listDiv.style.overflow = 'auto';
+    listDiv.style.maxHeight = 400;
+    var app = document.getElementById('app');
+    app.parentNode.insertBefore(listDiv, app.nextSibling);
+
+
     DatabaseHelper(query).then((res) => {
       console.log(res);
-      console.log(res.length);
-      //var ids = [];
-      //for(var k = 0; k < res.length; k++) { ids.push(k)}
-      //var mappedResult = SOMETHING.map(function() {
-      //  return [res[i].id,res[i].name];
-      //});
+      var ids = [];
+      var names = [];
+      for(var k = 0; k < res.length; k++) { ids.push(res[k].id) }
+      for(var j = 0; j < res.length; j++) { names.push(res[j].name) }
 
-      //console.log(mappedResult);
 
-      //this.setState({events: mappedResult});
 
-      //var list = <ReactList
-                               // itemRenderer={this.renderItem}
-                               // length={this.state.mappedResult.length}
-                              //  type='uniform'
-                              //  />;
+      var mappedResult = ids.map(function(e, i) {
+        return [e, names[i]];
+      });
 
-               // ReactDOM.render(list, listDiv);
+      console.log(mappedResult);
+
+      this.setState({events: mappedResult});
+
+      var list = <ReactList
+                               itemRenderer={this.renderItem}
+                               length={res.length}
+                              type='uniform'/>;
+
+                ReactDOM.render(list, listDiv);
     });
 
   }
@@ -64,8 +76,11 @@ class Search extends React.Component {
   }
 
   renderItem(index, key) {
-    return (<div key={key}>{this.state.events[index].name}</div>);
-  }
+        return <div key={key} className="listItem">
+                    <div>{this.state.events[index][1]}</div>
+                    <div><button id={this.state.events[index][0]}>Add</button></div>
+                </div>;
+      }
 
 }
 
