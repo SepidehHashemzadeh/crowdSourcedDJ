@@ -7,6 +7,14 @@ class SearchListItem extends React.Component {
 	}
 
 	getEventDiv() {
+		if(typeof this.props.eventInfo === "undefined")
+		{
+			return (<li>
+						<div>
+						</div>
+					</li>);
+		}
+		else {
 		return(
 			<li>
 				<div>
@@ -14,6 +22,7 @@ class SearchListItem extends React.Component {
 				</div>
 			</li>
 		);
+	}
 	}
 
 	render() {

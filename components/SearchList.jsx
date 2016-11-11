@@ -13,11 +13,9 @@ class SearchList extends React.Component {
 	}
 
 	searchEvents(searchStr) {
-    console.log(searchStr);
     var query = "SELECT * FROM Events WHERE name='" + searchStr + "';";
 
     DatabaseHelper(query).then((res) => {
-      console.log(res);
  				this.setState({events: res});
     });
 
