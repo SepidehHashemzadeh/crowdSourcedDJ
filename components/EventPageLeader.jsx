@@ -195,7 +195,7 @@ class EventPageLeader extends React.Component {
 						<p>Music Queue</p>
 						<div id="videos">
 						{ 	this.state.queue.map((vidID, i) => {
-								return 	<div key={i} id="videoremovebutton">
+								return 	<div key={i}>
 											<YouTubePlayer
 								            	height='350'
 								            	playbackState='paused'
