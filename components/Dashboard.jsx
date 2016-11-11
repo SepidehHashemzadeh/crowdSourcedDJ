@@ -1,5 +1,6 @@
 import React from 'react';
 import Search from './Search.jsx';
+import SearchList from './SearchList.jsx';
 import ControlledTabs from './ControlledTabs.jsx';
 import CreateEventForm from './CreateEventForm.jsx';
 import EventList from './EventList.jsx'
@@ -24,12 +25,14 @@ class Dashboard extends React.Component {
 			otherEventsStyle: {
 				display: 'none',
 				opacity: 0
-			}
+			},
+			searchStr: ""
 		};
 		this.refreshEventsList = this.refreshEventsList.bind(this);
 		this.refreshEventsList();
 		this.eventCreated = this.eventCreated.bind(this);
 		this.selectTab = this.selectTab.bind(this);
+		this.onSearchTermChange = this.onSearchTermChange.bind(this);
 	}
 	timeStampSorter(x,y) {
 		return x.startTime-y.startTime;
@@ -132,6 +135,11 @@ class Dashboard extends React.Component {
 			})
 		}
 	}
+
+	onSearchTermChange(searchStr) {
+		this.setState({searchStr: searchStr})
+	}
+
 	render () {
 		var noEvents = <div className="noEvents">No Events 😔</div>;
 		var eventList = (listOfEvents, title, name) => (
@@ -143,8 +151,9 @@ class Dashboard extends React.Component {
 		);
 		return (
 			<div id="searchAndAdd">
-				<Search />
+				<Search onSearchTermChange={this.onSearchTermChange}/>
 				<CreateEventForm user={this.props.user} eventCreated={this.eventCreated} />
+				<SearchList searchStr={this.state.searchStr}/>
 				<div>
 					<ControlledTabs handleSelect={this.selectTab} />
 				</div>
