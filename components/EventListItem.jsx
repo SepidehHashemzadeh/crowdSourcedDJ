@@ -55,9 +55,10 @@ class EventListItem extends React.Component {
 	getEventDiv(){
 		if(typeof this.state.userInfo === "undefined")
 		{
+			debugger;
 			return (<li>
 						<div className={this.state.divClass}>
-							<div class="loader"></div>
+							<div className="loader"></div>
 						</div>
 					</li>);
 		}
