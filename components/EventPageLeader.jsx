@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input, ButtonToolbar } from 'reactstrap';
 import YouTubePlayer from 'react-youtube-player';
+import SearchSong from './SearchSong.jsx';
 require("./../resources/css/eventPage.css");
 
 class EventPageLeader extends React.Component {
@@ -56,7 +57,7 @@ class EventPageLeader extends React.Component {
 			return res.json();
 		}).then((res) => {
 			res.map(function(item) {
-				var videoId = item.songUrl.substring(item.songUrl.indexOf('=')+1);
+				var videoId = item.songUrl;
 				vidIds.push(videoId);
 				console.log(videoId);
 			});
@@ -187,6 +188,7 @@ class EventPageLeader extends React.Component {
 					<hr/>
 					<div id="addSong">
 						<p>Search</p>
+						<SearchSong />
 					</div>
 					<hr/>
 					<div id="queue">
