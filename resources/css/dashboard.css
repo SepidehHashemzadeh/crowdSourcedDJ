@@ -142,3 +142,7 @@
 #myEventsDivsOuter #otherEventsDivsOuter {
   transition: all 4s ease;
 }
+
+#eventPageLeaderOuterDivId {
+  display:block;
+}

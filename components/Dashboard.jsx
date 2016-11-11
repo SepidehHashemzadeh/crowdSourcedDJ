@@ -1,8 +1,9 @@
 import React from 'react';
 import Search from './Search.jsx';
 import ControlledTabs from './ControlledTabs.jsx';
-import CreateEventForm from './CreateEventForm.jsx';
+import CreateEventForm from './CreateEventForm.jsx'; 
 import EventList from './EventList.jsx'
+import EventPageLeader from './EventPageLeader.jsx';
 require("../resources/css/dashboard.css");
 require("../resources/css/eventList.css");
 var url = 'https://djque.herokuapp.com/?query=';
@@ -24,12 +25,17 @@ class Dashboard extends React.Component {
 			otherEventsStyle: {
 				display: 'none',
 				opacity: 0
+			},
+			eventId: null,
+			eventPageLeaderStyle: {
+				display: 'none'
 			}
 		};
 		this.refreshEventsList = this.refreshEventsList.bind(this);
 		this.refreshEventsList();
 		this.eventCreated = this.eventCreated.bind(this);
 		this.selectTab = this.selectTab.bind(this);
+		this.onEventListItemClick = this.onEventListItemClick.bind(this);
 	}
 	timeStampSorter(x,y) {
 		return x.startTime-y.startTime;
@@ -132,12 +138,20 @@ class Dashboard extends React.Component {
 			})
 		}
 	}
+	onEventListItemClick(eventId){
+		this.setState({
+			eventId:eventId, 
+			eventPageLeaderStyle: {
+				display: 'block'
+			}
+		})
+	}
 	render () {
 		var noEvents = <div className="noEvents">No Events 😔</div>;
 		var eventList = (listOfEvents, title, name) => (
 			<div><h1 className="eventTypeHeading">{title}:</h1>
 			{listOfEvents.length>0?
-				<EventList eventList={listOfEvents} name={name}/>
+				<EventList eventList={listOfEvents} name={name} handleClick={this.onEventListItemClick}/>
 				:noEvents}
 				</div>
 		);
@@ -145,6 +159,9 @@ class Dashboard extends React.Component {
 			<div id="searchAndAdd">
 				<Search />
 				<CreateEventForm user={this.props.user} eventCreated={this.eventCreated} />
+				<div style={this.state.eventPageLeaderStyle}>
+					{this.state.eventId === null ? null : <EventPageLeader eventID={this.state.eventId}/>}
+				</div>
 				<div>
 					<ControlledTabs handleSelect={this.selectTab} />
 				</div>

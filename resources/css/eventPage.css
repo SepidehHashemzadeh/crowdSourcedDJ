@@ -1,0 +1,56 @@
+@import url("./fonts/fonts.css");
+
+#eventPageLeader {
+	position: relative;
+	background: rgba(255, 255, 255, 0.85) ;
+	color: black;
+	width: 75%;
+	margin-top: 40px;
+	padding-top: 5px;
+	padding-right: 50px;
+	padding-left: 50px;
+}
+
+#eventPageLeaderHeader{
+	display: inline-block;
+}
+
+.eventName{
+	font-family: 'Lobster', cursive;
+	font-size: 60px;
+	text-align:center;
+}
+
+.eventDetails{
+	font-size: 20px;
+	text-align:center;
+	margin-top: 10px;
+}
+
+hr {
+    display: block;
+    height: 2px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+#addSong{
+	font-family: 'Lobster', cursive;
+	font-size: 30px;
+	text-align:center;
+}
+
+#queue{
+	overflow-y: scroll;
+	height: 200px;
+	font-family: 'Lobster', cursive;
+	font-size: 30px;
+	text-align:center;
+}
+
+#videos{
+	display: inline-block;
+	margin: auto;
+}

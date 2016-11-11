@@ -35,7 +35,7 @@ class EventListItem extends React.Component {
 		});
 	}
 	handleClick() {
-		console.log(this.props.eventInfo.id);
+		this.props.handleClick(this.props.eventInfo.id);
 	}
 	handleUserInfoResponse(res) {
 		this.setState({ userInfo: res[0] });
@@ -55,7 +55,6 @@ class EventListItem extends React.Component {
 	getEventDiv(){
 		if(typeof this.state.userInfo === "undefined")
 		{
-			debugger;
 			return (<li>
 						<div className={this.state.divClass}>
 							<div className="loader"></div>
