@@ -29,7 +29,7 @@ class SearchSong extends React.Component {
       }
 
       renderItem(index, key) {
-        return <div key={key} className="listItem">
+        return <div key={key} style={{ color: "black" }}className="listItem">
                     <div>{this.state.results[index][1]}</div>
                     <div><button id={this.state.results[index][0]} onClick={this.handleAdd}>Add to Queue</button></div>
                 </div>;

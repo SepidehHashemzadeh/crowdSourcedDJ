@@ -2,10 +2,9 @@
 
 #eventPageLeader {
 	position: relative;
-	background: rgba(255, 255, 255, 0.85) ;
-	color: black;
+	/* background: rgba(255, 255, 255, 0.85) ; */
+	color: white;
 	width: 75%;
-	margin-top: 40px;
 	padding-top: 5px;
 	padding-right: 50px;
 	padding-left: 50px;
@@ -63,6 +62,7 @@ hr {
 
 .videoOuterDiv {
 	height: 350px;
+	margin-bottom: 20px;
 }
 
 .videoInnerDiv {
