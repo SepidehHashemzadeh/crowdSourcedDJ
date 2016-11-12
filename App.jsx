@@ -3,7 +3,6 @@ import FBLogin from './components/FBLogin.jsx'
 import Dashboard from './components/Dashboard.jsx'
 require("./resources/css/homePage.css");
 require("./resources/css/dashboard.css");
-
 class App extends React.Component {
 	constructor(props) {
 		super();

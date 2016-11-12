@@ -9,6 +9,8 @@
 	padding-top: 5px;
 	padding-right: 50px;
 	padding-left: 50px;
+	margin-left: auto;
+    margin-right: auto;
 }
 
 #eventPageLeaderHeader{
@@ -43,7 +45,6 @@ hr {
 }
 
 #queue{
-	overflow-y: scroll;
 	height: 200px;
 	font-family: 'Lobster', cursive;
 	font-size: 30px;

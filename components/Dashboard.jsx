@@ -6,6 +6,7 @@ import EventList from './EventList.jsx'
 import EventPageLeader from './EventPageLeader.jsx';
 require("../resources/css/dashboard.css");
 require("../resources/css/eventList.css");
+require("../resources/css/eventList.css");
 var url = 'https://djque.herokuapp.com/?query=';
 import { Tabs, Tab } from 'reactstrap';
 class Dashboard extends React.Component {
@@ -29,13 +30,17 @@ class Dashboard extends React.Component {
 			eventId: null,
 			eventPageLeaderStyle: {
 				display: 'none'
-			}
+			},
+			hideEventLeaderPage: true,
+			hideEventsLists: false
 		};
 		this.refreshEventsList = this.refreshEventsList.bind(this);
+		this.backFromEventLeaderPage = this.backFromEventLeaderPage.bind(this);
 		this.refreshEventsList();
 		this.eventCreated = this.eventCreated.bind(this);
 		this.selectTab = this.selectTab.bind(this);
 		this.onEventListItemClick = this.onEventListItemClick.bind(this);
+		setTimeout(this.refreshEventsList, 5000);
 	}
 	timeStampSorter(x,y) {
 		return x.startTime-y.startTime;
@@ -107,7 +112,6 @@ class Dashboard extends React.Component {
 				otherPast: otherPast
 			});
 		});
-		//setTimeout(refreshEventsList, 5000);
 	}
 	eventCreated() {
 		 this.refreshEventsList();
@@ -143,11 +147,19 @@ class Dashboard extends React.Component {
 			eventId:eventId, 
 			eventPageLeaderStyle: {
 				display: 'block'
-			}
+			},
+			hideEventLeaderPage: false,
+			hideEventsLists: true
 		})
 	}
+	backFromEventLeaderPage() {
+		this.setState({
+			hideEventLeaderPage: true,
+			hideEventsLists: false
+		});
+	}
 	render () {
-		var noEvents = <div className="noEvents">No Events 😔</div>;
+		var noEvents = <div className="noEvents hvr-back-pulse2">No Events 😔</div>;
 		var eventList = (listOfEvents, title, name) => (
 			<div><h1 className="eventTypeHeading">{title}:</h1>
 			{listOfEvents.length>0?
@@ -160,33 +172,37 @@ class Dashboard extends React.Component {
 				<Search />
 				<CreateEventForm user={this.props.user} eventCreated={this.eventCreated} />
 				<div style={this.state.eventPageLeaderStyle}>
-					{this.state.eventId === null ? null : <EventPageLeader eventID={this.state.eventId}/>}
+					{this.state.hideEventLeaderPage ? null : <EventPageLeader eventID={this.state.eventId} back={this.backFromEventLeaderPage}/>}
 				</div>
+				{ this.state.hideEventsLists ? null : 
 				<div>
-					<ControlledTabs handleSelect={this.selectTab} />
+					<div>
+						<ControlledTabs handleSelect={this.selectTab} />
+					</div>
+					<div id="myEventsDivsOuter" style={this.state.myEventsStyle}>
+						<div id="presentMyEventsDiv" className="eventsDivs">
+							{eventList(this.state.myPresent, "Present", "presentMy")}
+						</div>
+						<div id="futureMyEventsDiv" className="eventsDivs">
+							{eventList(this.state.myFuture, "Future", "futureMy")}
+						</div>
+						<div id="pastMyEventsDiv" className="eventsDivs">
+							{eventList(this.state.myPast, "Past", "pastMy")}
+						</div>
+					</div>
+					<div id="otherEventsDivsOuter" style={this.state.otherEventsStyle}>
+						<div id="presentOtherEventsDiv" className="eventsDivs">
+							{eventList(this.state.otherPresent, "Present", "presentOther")}
+						</div>
+						<div id="futureOtherEventsDiv" className="eventsDivs">
+							{eventList(this.state.otherFuture, "Future", "futureOther")}
+						</div>
+						<div id="pastOtherEventsDiv" className="eventsDivs">
+							{eventList(this.state.otherPast, "Past", "pastOther")}
+						</div>
+					</div>
 				</div>
-				<div id="myEventsDivsOuter" style={this.state.myEventsStyle}>
-					<div id="presentMyEventsDiv" className="eventsDivs">
-						{eventList(this.state.myPresent, "Present", "presentMy")}
-					</div>
-					<div id="futureMyEventsDiv" className="eventsDivs">
-						{eventList(this.state.myFuture, "Future", "futureMy")}
-					</div>
-					<div id="pastMyEventsDiv" className="eventsDivs">
-						{eventList(this.state.myPast, "Past", "pastMy")}
-					</div>
-				</div>
-				<div id="otherEventsDivsOuter" style={this.state.otherEventsStyle}>
-					<div id="presentOtherEventsDiv" className="eventsDivs">
-						{eventList(this.state.otherPresent, "Present", "presentOther")}
-					</div>
-					<div id="futureOtherEventsDiv" className="eventsDivs">
-						{eventList(this.state.otherFuture, "Future", "futureOther")}
-					</div>
-					<div id="pastOtherEventsDiv" className="eventsDivs">
-						{eventList(this.state.otherPast, "Past", "pastOther")}
-					</div>
-				</div>
+				}
 			</div>
 		);
 	}

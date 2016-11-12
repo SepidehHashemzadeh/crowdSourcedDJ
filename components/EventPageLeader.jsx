@@ -16,12 +16,10 @@ class EventPageLeader extends React.Component {
 			eventIsEnded: false,
 			songID: "",
 			queue: [],
-			hide: false,
 			modal: false,
 			deleteID: ""
 		};
 		this.render = this.render.bind(this);
-		this.back = this.back.bind(this);
 		this.end = this.end.bind(this);
 		this.edit = this.edit.bind(this);
 		this.delete = this.delete.bind(this);
@@ -38,36 +36,35 @@ class EventPageLeader extends React.Component {
 
 		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.eventId + ";";
 		console.log(encodeURI(url + eventQuery));
-		fetch(encodeURI(url + eventQuery)).then((res) => {
-			return res.json();
-		}).then((res) => {
-			if(typeof res[0] != "undefined") {
+		fetch(encodeURI(url + eventQuery)).then((result) => {
+			return result.json();
+		}).then((result) => {
+			if(typeof result[0] != "undefined") {
 				this.setState({
-					eventName: res[0].name,
-					eventLocation: res[0].location,
-					eventStartTime: res[0].startTime,
-					eventDescription: res[0].description,
-					eventIsEnded: res[0].isEnded
+					eventName: result[0].name,
+					eventLocation: result[0].location,
+					eventStartTime: result[0].startTime,
+					eventDescription: result[0].description,
+					eventIsEnded: result[0].isEnded
 				});
-			}
-		});
-
-		var songQuery = "SELECT songUrl FROM Event_Song WHERE eventId="+ this.props.eventId + ";";
-		var vidIds = [];
-		console.log(encodeURI(url+songQuery));
-		fetch(encodeURI(url + songQuery)).then((res) => {
-			return res.json();
-		}).then((res) => {
-			if(typeof res != "undefined") {
-				console.log("RES:");
-				console.log(res);
-				res.map(function(item) {
-					var videoId = item.songUrl;
-					vidIds.push(videoId);
-					console.log(videoId);
-				});
-				this.setState({
-					queue: vidIds
+				var songQuery = "SELECT songUrl FROM Event_Song WHERE eventId="+ this.props.eventId + ";";
+				var vidIds = [];
+				console.log(encodeURI(url+songQuery));
+				fetch(encodeURI(url + songQuery)).then((res) => {
+					return res.json();
+				}).then((res) => {
+					if(typeof res != "undefined") {
+						console.log("RES:");
+						console.log(res);
+						res.map(function(item) {
+							var videoId = item.songUrl;
+							vidIds.push(videoId);
+							console.log(videoId);
+						});
+						this.setState({
+							queue: vidIds
+						});
+					}
 				});
 			}
 		});
@@ -89,11 +86,6 @@ class EventPageLeader extends React.Component {
 					queue: vidIds
 				});
 			}
-		});
-	}
-	back(){
-		this.setState({
-			hide: true
 		});
 	}
 	end(){
@@ -178,13 +170,12 @@ class EventPageLeader extends React.Component {
 	}
 	render() {
 		return (
-			<div id="eventPageLeaderOuterDivId">
-			{ this.state.hide ? null : 
+			<div id="eventPageLeaderOuterDivId"> 
 				<div id="eventPageLeader">
 					<div id="eventPageLeaderHeader">
 						<h2 className="eventName">{this.state.eventName}</h2>
 						<ButtonToolbar>
-							<Button color="default" onClick={this.back}>Back</Button>
+							<Button color="default" onClick={this.props.back}>Back</Button>
 							<Button color="danger" onClick={this.end}>End</Button>
 							<Button color="info" onClick={this.edit}>Edit</Button>
 						</ButtonToolbar>
@@ -225,7 +216,6 @@ class EventPageLeader extends React.Component {
 	              		</ModalFooter>
 	            	</Modal>
 				</div>
-			}
 			</div>
 		);
 	}

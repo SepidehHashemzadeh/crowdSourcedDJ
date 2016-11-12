@@ -15,6 +15,7 @@
 .container-2 {
   vertical-align: middle;
   white-space: nowrap;
+  position: relative;
 }
 
 .container-2 input#search{
@@ -28,6 +29,7 @@
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+  padding-left: 45px;
 }
 
 .container-2 input#search::-webkit-input-placeholder {
@@ -47,12 +49,13 @@
 }
 
 .container-2 .icon{
-  top: 50%;
+  top: 5%;
   margin-left: 17px;
   margin-top: 17px;
   z-index: 1;
   color: #404040;
   font-size: 10pt;
+  position: absolute;
 }
 
 #listDiv {

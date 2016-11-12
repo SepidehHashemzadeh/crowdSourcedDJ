@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { Image } from 'reactstrap';
 var url = 'https://djque.herokuapp.com/?query=';
 require("../resources/css/eventList.css");
-
 class EventListItem extends React.Component {
 	constructor(props) {
 		super(props);
@@ -56,14 +55,14 @@ class EventListItem extends React.Component {
 		if(typeof this.state.userInfo === "undefined")
 		{
 			return (<li>
-						<div className={this.state.divClass}>
+						<div className={this.state.divClass+" hvr-back-pulse2"}>
 							<div className="loader"></div>
 						</div>
 					</li>);
 		}
 		else {
 			return (<li>
-						<div onClick={this.handleClick} onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave} className={this.state.divClass}>
+						<div onClick={this.handleClick} onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave} className={this.state.divClass+" hvr-back-pulse2"}>
 							<p className="alwaysShown"> What: {this.props.eventInfo.name} </p>
 							<p className="alwaysShown"> When: {(new Date(this.props.eventInfo.startTime)).toLocaleString()} </p>
 							<p className="alwaysShown"> Where: {this.props.eventInfo.location} </p>

@@ -63,6 +63,7 @@
 	display: inline-block;
 	margin-left: 1vw;
   font-size: 17px;
+  border-radius: 20px;
   position: relative;
 }
 
@@ -133,6 +134,9 @@
   border: 1px solid #d9534f;
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#a90329+0,8f0222+44,6b2c3a+100 */
   background: #d9534f; /* Old browsers */
+  height: 56.8px;
+  padding-top: 10px;
+  border: 0.5px solid white;
   /*background: -moz-linear-gradient(top,  #a90329 0%, #8f0222 44%, #6b2c3a 100%); /* FF3.6-15 */
   /*background: -webkit-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6b2c3a 100%); /* Chrome10-25,Safari5.1-6 */
   /*background: linear-gradient(to bottom,  #a90329 0%,#8f0222 44%,#6b2c3a 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */

@@ -221,6 +221,18 @@
   color: white;
 }
 
+#displayNone {
+  display: none;
+}
+
+#moveLogoUp {
+  padding-top: 0;
+  transition: all 0.7s ease;
+  margin-top: 0px;
+  height: 30ex;
+  margin-bottom: 0px;
+}
+
 @-webkit-keyframes hvr-back-pulse {
   50% {
     background-color: rgba(32, 152, 209, 0.75);
@@ -260,18 +272,5 @@
   -webkit-animation-iteration-count: infinite;
   animation-iteration-count: infinite;
   background-color: #3b5998;
-  background-color: #3b5998;
   color: white;
-}
-
-#displayNone {
-  display: none;
-}
-
-#moveLogoUp {
-  padding-top: 0;
-  transition: all 0.7s ease;
-  margin-top: 0px;
-  height: 30ex;
-  margin-bottom: 0px;
 }
