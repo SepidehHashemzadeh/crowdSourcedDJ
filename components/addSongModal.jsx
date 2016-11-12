@@ -24,9 +24,8 @@ class AddSongModal extends React.Component {
 
     addToQueue(event) {
         var songId = event.target["id"];
-        
-        // TODO: Get dynamic eventId
-        yt.addToPlaylist(22, songId, (res) => {
+        console.log(songId);
+        yt.addToPlaylist(this.props.eventId, songId, (res) => {
             console.log(res);
         });
 

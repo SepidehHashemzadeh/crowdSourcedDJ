@@ -33,8 +33,7 @@ class EventPageLeader extends React.Component {
 			hide: false
 		});
 		var url = "https://djque.herokuapp.com/?query="; 
-
-		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.eventId + ";";
+		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.getEventId() + ";";
 		console.log(encodeURI(url + eventQuery));
 		fetch(encodeURI(url + eventQuery)).then((result) => {
 			return result.json();
@@ -47,7 +46,7 @@ class EventPageLeader extends React.Component {
 					eventDescription: result[0].description,
 					eventIsEnded: result[0].isEnded
 				});
-				var songQuery = "SELECT songUrl FROM Event_Song WHERE eventId="+ this.props.eventId + ";";
+				var songQuery = "SELECT songUrl FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
 				var vidIds = [];
 				console.log(encodeURI(url+songQuery));
 				fetch(encodeURI(url + songQuery)).then((res) => {
@@ -71,7 +70,7 @@ class EventPageLeader extends React.Component {
 	}
 	refreshQueue(){
 		var url = "https://djque.herokuapp.com/?query="; 
-		var songQuery = "SELECT songUrl FROM Event_Song WHERE eventId="+ this.props.eventId + ";";
+		var songQuery = "SELECT songUrl FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
 		var vidIds = [];
 		fetch(encodeURI(url + songQuery)).then((res) => {
 			return res.json();
@@ -90,7 +89,7 @@ class EventPageLeader extends React.Component {
 	}
 	end(){
 		var url = "https://djque.herokuapp.com/?query="; 
-		var endEventQuery = "UPDATE Events SET isEnded=true WHERE id="+this.props.eventId+";";
+		var endEventQuery = "UPDATE Events SET isEnded=true WHERE id="+this.props.getEventId()+";";
 		fetch(encodeURI(url + endEventQuery)).then((res) => {
 			return res.json();
 		}).then((res) => {
@@ -114,7 +113,7 @@ class EventPageLeader extends React.Component {
 	delete(videoID){
 		var songURL = "https://www.youtube.com/watch?v="+videoID;
 		var url = "https://djque.herokuapp.com/?query="; 
-		var deleteSongQuery = "DELETE FROM Event_Song WHERE songUrl='"+songURL+"' AND eventId="+this.props.eventId+";";
+		var deleteSongQuery = "DELETE FROM Event_Song WHERE songUrl='"+songURL+"' AND eventId="+this.props.getEventId()+";";
 		fetch(encodeURI(url + deleteSongQuery)).then((res) => {
 			return res.json();
 		}).then((res) => {
@@ -187,21 +186,23 @@ class EventPageLeader extends React.Component {
 					<hr/>
 					<div id="addSong">
 						<p>Search</p>
-						<SearchSong />
+						<SearchSong eventId={this.props.getEventId()}/>
 					</div>
 					<hr/>
 					<div id="queue">
 						<p>Music Queue</p>
 						<div id="videos">
 						{ 	this.state.queue.map((vidID, i) => {
-								return 	<div key={i}>
-											<YouTubePlayer
-								            	height='350'
-								            	playbackState='paused'
-								            	videoId={vidID}
-								            	width='680'
-								        	/> 
-								        	<Button color="danger" onClick={() => {this.confirmDelete(vidID)}}>Delete</Button>
+								return 	<div key={i} className="videoOuterDiv">
+											<div className="videoInnerDiv">
+												<YouTubePlayer
+									            	height='350'
+									            	playbackState='paused'
+									            	videoId={vidID}
+									            	width='680'
+									        	/>
+								        	</div>
+								        	<span className="videoDeleteButton" onClick={() => {this.confirmDelete(vidID)}}>x</span>
 								        	<br/>
 								        </div>
 					       	})

@@ -34,6 +34,7 @@ class Dashboard extends React.Component {
 			hideEventLeaderPage: true,
 			hideEventsLists: false
 		};
+		this.getCurrEventId = this.getCurrEventId.bind(this);
 		this.refreshEventsList = this.refreshEventsList.bind(this);
 		this.backFromEventLeaderPage = this.backFromEventLeaderPage.bind(this);
 		this.refreshEventsList();
@@ -143,14 +144,20 @@ class Dashboard extends React.Component {
 		}
 	}
 	onEventListItemClick(eventId){
+		console.log(eventId);
 		this.setState({
-			eventId:eventId, 
+			eventId: eventId
+		});
+		this.setState({
 			eventPageLeaderStyle: {
 				display: 'block'
 			},
 			hideEventLeaderPage: false,
 			hideEventsLists: true
 		})
+	}
+	getCurrEventId() {
+		return this.state.eventId;
 	}
 	backFromEventLeaderPage() {
 		this.setState({
@@ -172,7 +179,7 @@ class Dashboard extends React.Component {
 				<Search />
 				<CreateEventForm user={this.props.user} eventCreated={this.eventCreated} />
 				<div style={this.state.eventPageLeaderStyle}>
-					{this.state.hideEventLeaderPage ? null : <EventPageLeader eventID={this.state.eventId} back={this.backFromEventLeaderPage}/>}
+					{this.state.hideEventLeaderPage ? null : <EventPageLeader getEventId={this.getCurrEventId} eventID={this.state.eventId} back={this.backFromEventLeaderPage}/>}
 				</div>
 				{ this.state.hideEventsLists ? null : 
 				<div>

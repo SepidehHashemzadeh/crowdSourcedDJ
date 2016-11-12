@@ -13,6 +13,11 @@
     margin-right: auto;
 }
 
+.videoDeleteButtons {
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
 #eventPageLeaderHeader{
 	display: inline-block;
 }
@@ -54,4 +59,43 @@ hr {
 #videos{
 	display: inline-block;
 	margin: auto;
+}
+
+.videoOuterDiv {
+	height: 350px;
+}
+
+.videoInnerDiv {
+	display: inline-block;
+	margin-left: 72px;
+}
+
+.videoDeleteButton {
+	padding-top: 4px;
+	padding-right: 11px;
+	padding-bottom: 4px;
+	padding-left: 11px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+    margin-bottom: 320px;
+    margin-left: 13px;
+    display: inline-block;
+    position: relative;
 }

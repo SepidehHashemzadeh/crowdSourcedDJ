@@ -6,28 +6,36 @@ import AddSongModal from './addSongModal.jsx';
 require('../resources/css/searchSong.css');
 var yt = require('../youtube.js');
 
-var SearchSong = React.createClass({
+class SearchSong extends React.Component {
 
-      getInitialState: function() {
-        return {searchValue: "",
-                results: []};
-      },
+      constructor(props) {
+        super(props);
+        this.handleAdd = this.handleAdd.bind(this);
+        this.state = {
+          searchValue: "",
+          results: []
+        };
+        this.inputChanged = this.inputChanged.bind(this);
+        this.renderItem = this.renderItem.bind(this);
+        this.handleAdd = this.handleAdd.bind(this);
+        this.doSearch = this.doSearch.bind(this);
+      }
 
-      inputChanged: function(name, e) {
+      inputChanged(name, e) {
         var change = {};
         change[name] = e.target.value;
         this.setState(change);
         this.doSearch(e.target.value);
-      },
+      }
 
-      renderItem: function(index, key) {
+      renderItem(index, key) {
         return <div key={key} className="listItem">
                     <div>{this.state.results[index][1]}</div>
                     <div><button id={this.state.results[index][0]} onClick={this.handleAdd}>Add to Queue</button></div>
                 </div>;
-      },
+      }
 
-      handleAdd: function(event) {
+      handleAdd(event) {
         var listDiv = document.getElementById('listDiv');
         var modalDiv = document.getElementById('modalDiv');
 
@@ -37,10 +45,10 @@ var SearchSong = React.createClass({
             listDiv.parentNode.insertBefore(modalDiv, listDiv.nextSibling);
         }
 
-        ReactDOM.render(<AddSongModal id={event.target["id"]} />, document.getElementById('modalDiv'));
-      },
+        ReactDOM.render(<AddSongModal eventId={this.props.eventId} id={event.target["id"]} />, document.getElementById('modalDiv'));
+      }
 
-      doSearch: function(str) {
+      doSearch(str) {
         var listDiv = document.getElementById('listDiv');
 
         // delete list if currently present
@@ -64,7 +72,6 @@ var SearchSong = React.createClass({
         yt.search(str, (ids) => {
             yt.getTitles(str, (titles) => {
                 // combine ids and titles
-                debugger;
                 var res = ids.map(function(e, i) {
                     return [e, titles[i]];
                 });
@@ -80,9 +87,9 @@ var SearchSong = React.createClass({
                 ReactDOM.render(list, listDiv);
             });
         });
-      },
+      }
 
-      render: function() {
+      render() {
            return (
             <div className="box-2">
              <div className="container-2">
@@ -92,6 +99,6 @@ var SearchSong = React.createClass({
              </div>
            );
         }
-});
+}
 
 export default SearchSong;

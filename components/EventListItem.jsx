@@ -14,7 +14,6 @@ class EventListItem extends React.Component {
 			console.log(response);
 			this.setState({ userInfo: response[0] });
 		});
-		this.handleUserInfoResponse = this.handleUserInfoResponse.bind(this);
 		this.getEventDiv = this.getEventDiv.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 		this.render = this.render.bind(this);
@@ -35,9 +34,6 @@ class EventListItem extends React.Component {
 	}
 	handleClick() {
 		this.props.handleClick(this.props.eventInfo.id);
-	}
-	handleUserInfoResponse(res) {
-		this.setState({ userInfo: res[0] });
 	}
 	timeConverter(UNIX_timestamp){
 		var a = new Date(UNIX_timestamp * 1000);
