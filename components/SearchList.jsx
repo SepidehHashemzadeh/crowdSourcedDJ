@@ -13,31 +13,40 @@ class SearchList extends React.Component {
 	}
 
 	searchEvents(searchStr) {
-    var query = "SELECT * FROM Events WHERE name='" + searchStr + "';";
+		var query = "SELECT * FROM Events WHERE name='" + searchStr + "';";
 
-    DatabaseHelper(query).then((res) => {
- 				this.setState({events: res});
-    });
-
-    var arr = [];
-
-		let key=0;
-		this.state.events.map((item) => {
-			key++;
-			arr.push(
-				<SearchListItem eventInfo={item} key={key} />
-			);
+		DatabaseHelper(query).then((res) => {
+						this.setState({events: res});
 		});
+
+		var arr = [];
+		if(this.state.events.length > 0) {
+			let key=0;
+			this.state.events.map((item) => {
+				key++;
+				arr.push(
+					<SearchListItem eventInfo={item} key={key} />
+				);
+			});
+		}
+		else if(searchStr.length>0) {
+			arr.push(
+				<li className="eventSearchLoadingItem" key={0}>
+					<div className="eventSearchLoadingDiv hvr-back-pulse2">
+						<div className="loader"></div>
+					</div>
+				</li>
+			);
+		}
 		return arr;
+	}
 
-  }
-
-  render() {
-  	return(
+  	render() {
+  		return(
 			<div>
-			    <ul>
-						{this.searchEvents(this.props.searchStr)}
-					</ul>
+			    <ul style={{ width: "300px", paddingRight: "1.4%", marginTop: "7px" }}>
+					{this.searchEvents(this.props.searchStr)}
+				</ul>
 		   </div>
 		);
 	}

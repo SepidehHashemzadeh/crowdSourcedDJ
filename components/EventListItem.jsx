@@ -11,7 +11,6 @@ class EventListItem extends React.Component {
 			divClass: "divNotHovered"
 		};
 		props.userInfo.then((response) => {
-			console.log(response);
 			this.setState({ userInfo: response[0] });
 		});
 		this.getEventDiv = this.getEventDiv.bind(this);

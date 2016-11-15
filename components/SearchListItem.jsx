@@ -17,8 +17,8 @@ class SearchListItem extends React.Component {
 		}
 		else {
 			return(
-				<li>
-					<div>
+				<li className="eventSearchLoadingItem">
+					<div className="eventSearchLoadingDiv hvr-back-pulse2">
 						<p>{this.props.eventInfo.name}</p>
 					</div>
 				</li>
