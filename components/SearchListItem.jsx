@@ -10,18 +10,19 @@ class SearchListItem extends React.Component {
 		if(typeof this.props.eventInfo === "undefined")
 		{
 			return (<li>
-						<div>
-						</div>
-					</li>);
+								<div>
+								</div>
+							</li>
+			);
 		}
 		else {
-		return(
-			<li>
-				<div>
-					<p>{this.props.eventInfo.name}</p>
-				</div>
-			</li>
-		);
+			return(
+				<li>
+					<div>
+						<p>{this.props.eventInfo.name}</p>
+					</div>
+				</li>
+			);
 	}
 	}
 
