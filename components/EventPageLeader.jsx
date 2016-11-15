@@ -27,6 +27,7 @@ class EventPageLeader extends React.Component {
 		this.refreshQueue = this.refreshQueue.bind(this);
 		this.confirmDelete = this.confirmDelete.bind(this);
 		this.toggle = this.toggle.bind(this);
+		this.userIsLeader = this.userIsLeader.bind(this);
 	}
 	componentWillMount() {
 		this.setState({
@@ -167,6 +168,9 @@ class EventPageLeader extends React.Component {
 
 		return formattedDateTime;
 	}
+	userIsLeader() {
+
+	}
 	render() {
 		return (
 			<div id="eventPageLeaderOuterDivId"> 
@@ -175,40 +179,55 @@ class EventPageLeader extends React.Component {
 						<h2 className="eventName">{this.state.eventName}</h2>
 						<ButtonToolbar>
 							<Button color="default" onClick={this.props.back}>Back</Button>
-							<Button color="danger" onClick={this.end}>End</Button>
-							<Button color="info" onClick={this.edit}>Edit</Button>
+							{ this.userIsLeader() ?  
+								<div>
+									<Button color="danger" onClick={this.end}>End</Button>
+									<Button color="info" onClick={this.edit}>Edit</Button>
+								</div>
+							:
+								null 
+							}
 						</ButtonToolbar>
 					</div>
 					<p className="eventDetails">{this.state.eventLocation}</p>
 					<p className="eventDetails">{this.formatDateTime()}</p>
 					<br/>
 					<p className="eventDetails">{this.state.eventDescription}</p>
+					
+					{ this.state.eventIsEnded ? null :
+						<div id="addSong">
+							<hr/>
+							<p>Search</p>
+							<SearchSong eventId={this.props.getEventId()}/>
+						</div>
+					}
 					<hr/>
-					<div id="addSong">
-						<p>Search</p>
-						<SearchSong eventId={this.props.getEventId()}/>
-					</div>
-					<hr/>
-					<div id="queue">
-						<p>Music Queue</p>
-						<div id="videos">
-						{ 	this.state.queue.map((vidID, i) => {
-								return 	<div key={i} className="videoOuterDiv">
-											<div className="videoInnerDiv">
-												<YouTubePlayer
-									            	height='350'
-									            	playbackState='paused'
-									            	videoId={vidID}
-									            	width='680'
-									        	/>
-								        	</div>
-								        	<span className="videoDeleteButton" onClick={() => {this.confirmDelete(vidID)}}>x</span>
-								        	<br/>
-								        </div>
-					       	})
-				    	}
-			    		</div>
-					</div>
+					{ (this.userIsLeader() || this.state.isEnded) ? 
+							<div id="queue">
+								<p>Music Queue</p>
+								<div id="videos">
+								{ 	this.state.queue.map((vidID, i) => {
+										return 	<div key={i} className="videoOuterDiv">
+													<div className="videoInnerDiv">
+														<YouTubePlayer
+											            	height='350'
+											            	playbackState='paused'
+											            	videoId={vidID}
+											            	width='680'
+											        	/>
+										        	</div>
+										        	{ this.state.isEnded ? null :
+										        			<span className="videoDeleteButton" onClick={() => {this.confirmDelete(vidID)}}>x</span>
+										        	}
+										        	<br/>
+										        </div>
+							       	})
+						    	}
+					    		</div>
+							</div>
+						:
+							<div id="attendee-queue"></div>
+					}
 					<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventNestedModal">
 	              		<ModalHeader>Are you sure you want to delete this song from your Music Queue?</ModalHeader>
 	              		<ModalFooter>
