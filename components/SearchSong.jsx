@@ -1,46 +1,79 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactList from 'react-list';
-import AddSongModal from './addSongModal.jsx';
+import Popup from 'react-popup';
 
 require('../resources/css/searchSong.css');
 var yt = require('../youtube.js');
 
-var SearchSong = React.createClass({
+class SearchSong extends React.Component {
 
-      getInitialState: function() {
-        return {searchValue: "",
-                results: []};
-      },
+      constructor(props) {
+        super(props);
 
-      inputChanged: function(name, e) {
+        this.state = {
+          searchValue: "",
+          results: []
+        };
+
+        this.inputChanged = this.inputChanged.bind(this);
+        this.renderItem = this.renderItem.bind(this);
+        this.doSearch = this.doSearch.bind(this);
+        this.render = this.render.bind(this);
+      }
+
+      inputChanged(name, e) {
         var change = {};
         change[name] = e.target.value;
         this.setState(change);
         this.doSearch(e.target.value);
-      },
+      }
 
-      renderItem: function(index, key) {
-        return <div key={key} className="listItem">
-                    <div>{this.state.results[index][1]}</div>
-                    <div><button id={this.state.results[index][0]} onClick={this.handleAdd}>Add to Queue</button></div>
-                </div>;
-      },
-
-      handleAdd: function(event) {
+      showPopup(event) {
+        var id = event.target["id"];
         var listDiv = document.getElementById('listDiv');
-        var modalDiv = document.getElementById('modalDiv');
+        var popupDiv = document.createElement('div');
 
-        if (modalDiv == null) {
-            modalDiv = document.createElement('div'); 
-            modalDiv.id = 'modalDiv';
-            listDiv.parentNode.insertBefore(modalDiv, listDiv.nextSibling);
-        }
+        popupDiv.id = 'popupDiv';
 
-        ReactDOM.render(<AddSongModal id={event.target["id"]} />, document.getElementById('modalDiv'));
-      },
+        listDiv.parentNode.insertBefore(popupDiv, listDiv.nextSibling);
 
-      doSearch: function(str) {
+        ReactDOM.render(<Popup closeBtn={false}/>, document.getElementById('popupDiv'));
+
+        Popup.create({
+          title: null,
+          content: 'Add to queue?',
+          buttons: {
+            left: [{
+              text: 'Ok',
+              action: function (popup) {
+                // TODO: Get dynamic eventId
+                yt.addToPlaylist(22, id, (res) => {
+                    console.log(res);
+                });
+                popup.close();
+                popupDiv.parentNode.removeChild(popupDiv);
+              }
+            }],
+            right: [{
+              text: 'Cancel',
+              action: function (popup) {
+                popup.close();
+                popupDiv.parentNode.removeChild(popupDiv);
+              }
+            }]
+          }
+        });
+      }
+
+      renderItem(index, key) {
+        return <div key={key} className="listItem">
+                    <p>{this.state.results[index][1]}</p>
+                    <p><button onClick={this.showPopup} id={this.state.results[index][0]}>Add to Queue</button></p>
+                </div>;
+      }
+
+      doSearch(str) {
         var listDiv = document.getElementById('listDiv');
 
         // delete list if currently present
@@ -79,9 +112,9 @@ var SearchSong = React.createClass({
                 ReactDOM.render(list, listDiv);
             });
         });
-      },
+      }
 
-      render: function() {
+      render() {
            return (
             <div className="box">
              <div className="container-1">
@@ -91,6 +124,6 @@ var SearchSong = React.createClass({
              </div>
            );
         }
-});
+}
 
 export default SearchSong;

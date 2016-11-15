@@ -29,6 +29,7 @@
     "react-facebook-login": "^3.3.2",
     "react-list": "^0.8.0",
     "react-modal": "^1.5.2",
+    "react-popup": "^0.4.2",
     "react-search-bar": "^1.1.4",
     "react-youtube-player": "^0.3.3",
     "reactstrap": "^3.8.1",
