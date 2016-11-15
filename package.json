@@ -7,6 +7,9 @@
     "start": "webpack-dev-server --hot",
     "test": "jest"
   },
+  "jest": {
+    "scriptPreprocessor": "./node_modules/jest-css-modules"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -53,6 +56,7 @@
     "font-loader": "^0.1.2",
     "image-webpack-loader": "^2.0.0",
     "jest": "^16.0.2",
+    "jest-css-modules": "^1.1.0",
     "react-bootstrap": "^0.30.6",
     "react-test-renderer": "^15.3.2",
     "style-loader": "^0.13.1",
