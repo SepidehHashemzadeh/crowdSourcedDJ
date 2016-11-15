@@ -37,7 +37,7 @@
     "react-youtube-player": "^0.3.3",
     "reactstrap": "^3.8.1",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.2",
+    "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2",
     "whatwg-fetch": "^1.0.0"
   },
