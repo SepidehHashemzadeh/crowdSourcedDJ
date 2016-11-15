@@ -1,5 +1,6 @@
 import React from 'react';
 import Search from './Search.jsx';
+import SearchList from './SearchList.jsx';
 import ControlledTabs from './ControlledTabs.jsx';
 import CreateEventForm from './CreateEventForm.jsx'; 
 import EventList from './EventList.jsx'
@@ -32,7 +33,8 @@ class Dashboard extends React.Component {
 				display: 'none'
 			},
 			hideEventLeaderPage: true,
-			hideEventsLists: false
+			hideEventsLists: false,
+			searchStr: ""
 		};
 		this.getCurrEventId = this.getCurrEventId.bind(this);
 		this.refreshEventsList = this.refreshEventsList.bind(this);
@@ -42,6 +44,7 @@ class Dashboard extends React.Component {
 		this.selectTab = this.selectTab.bind(this);
 		this.onEventListItemClick = this.onEventListItemClick.bind(this);
 		setTimeout(this.refreshEventsList, 5000);
+		this.onSearchTermChange = this.onSearchTermChange.bind(this);
 	}
 	timeStampSorter(x,y) {
 		return x.startTime-y.startTime;
@@ -165,6 +168,11 @@ class Dashboard extends React.Component {
 			hideEventsLists: false
 		});
 	}
+
+	onSearchTermChange(searchStr) {
+		this.setState({searchStr: searchStr})
+	}
+
 	render () {
 		var noEvents = <div className="noEvents hvr-back-pulse2">No Events 😔</div>;
 		var eventList = (listOfEvents, title, name) => (
@@ -176,8 +184,9 @@ class Dashboard extends React.Component {
 		);
 		return (
 			<div id="searchAndAdd">
-				<Search />
+				<Search onSearchTermChange={this.onSearchTermChange}/>
 				<CreateEventForm user={this.props.user} eventCreated={this.eventCreated} />
+				<SearchList searchStr={this.state.searchStr}/>
 				<div style={this.state.eventPageLeaderStyle}>
 					{this.state.hideEventLeaderPage ? null : <EventPageLeader getEventId={this.getCurrEventId} eventID={this.state.eventId} back={this.backFromEventLeaderPage}/>}
 				</div>
