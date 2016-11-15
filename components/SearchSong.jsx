@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactList from 'react-list';
-import AddSongModal from './addSongModal.jsx';
+import Popup from 'react-popup';
 
 require('../resources/css/searchSong.css');
 var yt = require('../youtube.js');
@@ -10,15 +10,18 @@ class SearchSong extends React.Component {
 
       constructor(props) {
         super(props);
-        this.handleAdd = this.handleAdd.bind(this);
+
         this.state = {
           searchValue: "",
           results: []
         };
+
         this.inputChanged = this.inputChanged.bind(this);
+        this.showPopup = this.showPopup.bind(this);
         this.renderItem = this.renderItem.bind(this);
-        this.handleAdd = this.handleAdd.bind(this);
         this.doSearch = this.doSearch.bind(this);
+        this.render = this.render.bind(this);
+
       }
 
       inputChanged(name, e) {
@@ -28,24 +31,51 @@ class SearchSong extends React.Component {
         this.doSearch(e.target.value);
       }
 
-      renderItem(index, key) {
-        return <div key={key} style={{ color: "black" }}className="listItem">
-                    <div>{this.state.results[index][1]}</div>
-                    <div><button id={this.state.results[index][0]} onClick={this.handleAdd}>Add to Queue</button></div>
-                </div>;
+      showPopup(event) {
+        var id = event.target["id"];
+        var listDiv = document.getElementById('listDiv');
+        var popupDiv = document.createElement('div');
+
+        popupDiv.id = 'popupDiv';
+
+        listDiv.parentNode.insertBefore(popupDiv, listDiv.nextSibling);
+
+        ReactDOM.render(<Popup closeBtn={false}/>, document.getElementById('popupDiv'));
+
+        var eventId = this.props.eventId;
+
+        Popup.create({
+          title: null,
+          content: 'Add to queue?',
+          buttons: {
+            left: [{
+              text: 'Ok',
+              action: function (popup) {
+                // TODO: Get dynamic eventId
+                console.log(eventId);
+                yt.addToPlaylist(eventId, id, (res) => {
+                    console.log(res);
+                });
+                popup.close();
+                popupDiv.parentNode.removeChild(popupDiv);
+              }
+            }],
+            right: [{
+              text: 'Cancel',
+              action: function (popup) {
+                popup.close();
+                popupDiv.parentNode.removeChild(popupDiv);
+              }
+            }]
+          }
+        });
       }
 
-      handleAdd(event) {
-        var listDiv = document.getElementById('listDiv');
-        var modalDiv = document.getElementById('modalDiv');
-
-        if (modalDiv == null) {
-            modalDiv = document.createElement('div'); 
-            modalDiv.id = 'modalDiv';
-            listDiv.parentNode.insertBefore(modalDiv, listDiv.nextSibling);
-        }
-
-        ReactDOM.render(<AddSongModal eventId={this.props.eventId} id={event.target["id"]} />, document.getElementById('modalDiv'));
+      renderItem(index, key) {
+        return <div key={key} className="listItem">
+                    <p>{this.state.results[index][1]}</p>
+                    <p><button onClick={this.showPopup} id={this.state.results[index][0]}>Add to Queue</button></p>
+                </div>;
       }
 
       doSearch(str) {
@@ -66,7 +96,9 @@ class SearchSong extends React.Component {
         listDiv.id = 'listDiv';
         listDiv.style.overflow = 'auto';
         listDiv.style.maxHeight = 400;
+
         var app = document.getElementById('addSong');
+
         app.parentNode.insertBefore(listDiv, app.nextSibling);
 
         yt.search(str, (ids) => {

@@ -85,3 +85,4 @@ var addToPlaylist = function (eventID, songURL, callback) {
 exports.search = search;
 exports.getTitles = getTitles;
 exports.addToPlaylist = addToPlaylist;
+
