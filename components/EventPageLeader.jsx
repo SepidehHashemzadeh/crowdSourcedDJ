@@ -183,8 +183,7 @@ class EventPageLeader extends React.Component {
 	userIsLeader() {
 		var currentUser = this.props.currentUserId;
 		var eventLeader = this.props.getEventLeaderId();
-		if (currentUser == eventLeader)	return true;
-		else return false;
+		return (currentUser == eventLeader);
 	}
 	render() {
 		return (

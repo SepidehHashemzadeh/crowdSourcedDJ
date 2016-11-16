@@ -13,8 +13,7 @@ class SearchSong extends React.Component {
 
         this.state = {
           searchValue: "",
-          results: [],
-          exists: false
+          results: []
         };
 
         this.inputChanged = this.inputChanged.bind(this);
@@ -58,7 +57,6 @@ class SearchSong extends React.Component {
                     console.log(res);
                 });
                 popup.close();
-                this.setState({ exists: !this.state.exists });
                 popupDiv.parentNode.removeChild(popupDiv);
               }
             }],
