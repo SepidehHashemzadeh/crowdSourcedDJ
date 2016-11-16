@@ -71,8 +71,8 @@ class SearchSong extends React.Component {
 
       renderItem(index, key) {
         return <div key={key} className="listItem hvr-back-pulse2">
-                    <p className="searchSongListItemP">{this.state.results[index][1]}</p>
-                    <button className="videoDeleteButton searchSongListItemButton" onClick={this.showPopup} id={this.state.results[index][0]}>+</button>
+                    <div className="searchSongListItemP">{this.state.results[index][1]}</div>
+                    <div className="searchSongListItemButton" onClick={this.showPopup} id={this.state.results[index][0]}>+</div>
                 </div>;
       }
 
