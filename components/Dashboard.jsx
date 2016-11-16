@@ -35,7 +35,8 @@ class Dashboard extends React.Component {
 			},
 			hideEventLeaderPage: true,
 			hideEventsLists: false,
-			searchStr: ""
+			searchStr: "",
+			exists: false
 		};
 		this.getCurrEventId = this.getCurrEventId.bind(this);
 		this.getCurrEventLeaderId = this.getCurrEventLeaderId.bind(this);
@@ -170,11 +171,12 @@ class Dashboard extends React.Component {
 			hideEventsLists: false
 		});
 	}
-
 	onSearchTermChange(searchStr) {
 		this.setState({searchStr: searchStr})
 	}
-
+	update() { 
+		this.setState({ exists: !this.state.exists });
+	}
 	render () {
 		var noEvents = <div className="noEvents hvr-back-pulse2">No Events 😔</div>;
 		var eventList = (listOfEvents, title, name) => (
@@ -187,14 +189,15 @@ class Dashboard extends React.Component {
 		return (
 			<div id="searchAndAdd">
 				<Search onSearchTermChange={this.onSearchTermChange}/>
-				<CreateEventForm user={this.props.user} eventCreated={this.eventCreated} />
+				<CreateEventForm user={this.props.user} eventCreated={this.eventCreated} callBack={this.update}/>
 				<SearchList searchStr={this.state.searchStr}/>
 				<div style={this.state.eventPageLeaderStyle}>
 					{this.state.hideEventLeaderPage ? null : <EventPageLeader getEventId={this.getCurrEventId} 
 															getEventLeaderId={this.getCurrEventLeaderId} 
 															currentUserId={this.props.user.id} 
 															eventID={this.state.eventId} 
-															back={this.backFromEventLeaderPage}/>}
+															back={this.backFromEventLeaderPage}
+															callBack={this.update}/>}
 				</div>
 				{ this.state.hideEventsLists ? null : 
 				<div>

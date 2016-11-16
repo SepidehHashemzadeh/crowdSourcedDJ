@@ -99,6 +99,7 @@ class CreateEventForm extends React.Component {
 		this.props.eventCreated();
 		this.toggle();
 		this.toggleNested();
+		this.props.callBack();
 	}
 	render() {
 		return (

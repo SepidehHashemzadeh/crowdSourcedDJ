@@ -21,7 +21,8 @@ class EventPageLeader extends React.Component {
 			songTitles: [],
 			modal: false,
 			deleteID: "",
-			queueState: []
+			queueState: [],
+			exists: false
 		};
 		this.render = this.render.bind(this);
 		this.end = this.end.bind(this);
@@ -41,6 +42,7 @@ class EventPageLeader extends React.Component {
 		this.userIsLeader = this.userIsLeader.bind(this);
 		this.getSongTitle = this.getSongTitle.bind(this);
 		this.updateSongTitles = this.updateSongTitles.bind(this);
+		this.update = this.update.bind(this);
 	}
 	componentWillMount() {
 		this.setState({
@@ -131,6 +133,7 @@ class EventPageLeader extends React.Component {
 			});
 		});
 		this.props.back();
+		this.props.callBack();
 	}
 	edit(){
 	}
@@ -274,6 +277,9 @@ class EventPageLeader extends React.Component {
 		var eventLeader = this.props.getEventLeaderId();
 		return (currentUser == eventLeader);
 	}
+	update() {
+		this.setState({ exists: !this.state.exists });
+	}
 	render() {
 		return (
 			<div id="eventPageLeaderOuterDivId"> 
@@ -301,7 +307,7 @@ class EventPageLeader extends React.Component {
 						<div id="addSong">
 							<hr/>
 							<p>Search</p>
-							<SearchSong onSongAdded={this.onSongAdded} eventId={this.props.getEventId()}/>
+							<SearchSong onSongAdded={this.onSongAdded} eventId={this.props.getEventId()} callBack={this.update}/>
 						</div>
 					}
 					<hr/>
