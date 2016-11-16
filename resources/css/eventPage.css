@@ -99,3 +99,8 @@ hr {
     display: inline-block;
     position: relative;
 }
+
+.attendee-songInnerDiv{
+	border-style: solid;
+	border-color: red;
+}

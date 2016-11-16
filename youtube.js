@@ -43,6 +43,7 @@ var getTitles = function (s, callback) {
     });
 };
 
+
 /* addToPlaylist
  * 
  * Simplified interface to relevant db query to add a song to an event
@@ -83,7 +84,22 @@ var addToPlaylist = function (eventID, songURL, callback, whenSongAdded) {
     });
 };
 
+
+//MDoe's section:
+var getTitleFromId = function (videoId, callback) {
+    var path2 = "/youtube/v3/videos";
+    var params2 = "?id=" + videoId +"&key=" + key + "&fields=items(snippet(title))&part=snippet";
+    fetch(url + path2 + params2).then((res) => {
+        return res.json();
+    }).then((res) => {
+        var title = res["items"][0]["snippet"]["title"];
+        callback(title);
+    });
+};
+
+
 exports.search = search;
 exports.getTitles = getTitles;
 exports.addToPlaylist = addToPlaylist;
+exports.getTitleFromId = getTitleFromId;
 

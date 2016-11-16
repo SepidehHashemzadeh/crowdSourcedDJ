@@ -74,6 +74,7 @@ class SearchSong extends React.Component {
                     <div className="searchSongListItemP">{this.state.results[index][1]}</div>
                     <div className="searchSongListItemButton" onClick={this.showPopup} id={this.state.results[index][0]}>+</div>
                 </div>;
+        this.setState(this.state);
       }
 
       doSearch(str) {
@@ -124,7 +125,7 @@ class SearchSong extends React.Component {
             <div className="box-2">
              <div className="container-2">
                <span className="icon"><i className="fa fa-search"></i></span>
-               <input type="search" id="search" value={this.state.searchValue} onChange={this.inputChanged.bind(this, "searchValue")} placeholder="Search for a Song" />
+               <input type="search" id="search" value={this.state.searchValue} onChange={this.inputChanged.bind(this, "searchValue")} placeholder="Search for a song" />
              </div>
              </div>
            );
