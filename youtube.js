@@ -55,7 +55,7 @@ var getTitles = function (s, callback) {
  * @param callback: gets the JSON result from mySQL
  *
  */
-var addToPlaylist = function (eventID, songURL, callback) {
+var addToPlaylist = function (eventID, songURL, callback, whenSongAdded) {
     var url = "https://djque.herokuapp.com/?query=";
     var query = `SELECT songAmt FROM Events WHERE id=${eventID};`;
 
@@ -78,6 +78,7 @@ var addToPlaylist = function (eventID, songURL, callback) {
 
         fetch(encodeURI(url + query)).then((res) => {
             callback(res);
+            whenSongAdded();
         });
     });
 };

@@ -21,6 +21,7 @@
     "file": "^0.2.2",
     "hover.css": "^2.0.2",
     "json-loader": "^0.5.4",
+    "lodash": "^4.17.1",
     "mysql": "^2.5.4",
     "node-fetch": "^1.6.3",
     "react": "^15.3.2",

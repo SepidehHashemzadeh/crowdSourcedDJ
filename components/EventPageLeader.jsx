@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input, ButtonToolbar } from 'reactstrap';
 import YouTubePlayer from 'react-youtube-player';
 import SearchSong from './SearchSong.jsx';
+import _ from 'lodash';
 require("./../resources/css/eventPage.css");
 
 class EventPageLeader extends React.Component {
@@ -17,7 +18,8 @@ class EventPageLeader extends React.Component {
 			songID: "",
 			queue: [],
 			modal: false,
-			deleteID: ""
+			deleteID: "",
+			queueState: []
 		};
 		this.render = this.render.bind(this);
 		this.end = this.end.bind(this);
@@ -27,6 +29,13 @@ class EventPageLeader extends React.Component {
 		this.refreshQueue = this.refreshQueue.bind(this);
 		this.confirmDelete = this.confirmDelete.bind(this);
 		this.toggle = this.toggle.bind(this);
+		this.onPlay = this.onPlay.bind(this);
+		this.onBuffer = this.onBuffer.bind(this);
+		this.onEnd = this.onEnd.bind(this);
+		this.onError = this.onError.bind(this);
+		this.onPause = this.onPause.bind(this);
+		this.setAll = this.setAll.bind(this);
+		this.onSongAdded = this.onSongAdded.bind(this);
 	}
 	componentWillMount() {
 		this.setState({
@@ -46,8 +55,10 @@ class EventPageLeader extends React.Component {
 					eventDescription: result[0].description,
 					eventIsEnded: result[0].isEnded
 				});
-				var songQuery = "SELECT songUrl FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
+				var songQuery = "SELECT songUrl, sequence FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
 				var vidIds = [];
+				var vidStates = [];
+				var vidSequences = [];
 				console.log(encodeURI(url+songQuery));
 				fetch(encodeURI(url + songQuery)).then((res) => {
 					return res.json();
@@ -57,33 +68,53 @@ class EventPageLeader extends React.Component {
 						console.log(res);
 						res.map(function(item) {
 							var videoId = item.songUrl;
+							var videoSequence = item.sequence;
 							vidIds.push(videoId);
+							vidSequences.push(videoSequence);
+							vidStates.push('unstarted');
 							console.log(videoId);
 						});
 						this.setState({
-							queue: vidIds
+							queue: vidIds,
+							queueState: vidStates,
+							queueSequence: vidSequences
 						});
 					}
 				});
 			}
 		});
 	}
-	refreshQueue(){
+	refreshQueue(isStateRefresh){
 		var url = "https://djque.herokuapp.com/?query="; 
-		var songQuery = "SELECT songUrl FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
+		var songQuery = "SELECT songUrl, sequence FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
 		var vidIds = [];
+		var vidStates = [];	
+		var vidSequences = [];	
 		fetch(encodeURI(url + songQuery)).then((res) => {
 			return res.json();
 		}).then((res) => {
 			if(typeof res != "undefined") {
 				res.map(function(item) {
 					var videoId = item.songUrl.substring(item.songUrl.indexOf('=')+1);
+					var videoSequence = item.sequence;
 					vidIds.push(videoId);
+					vidSequences.push(videoSequence);
+					vidStates.push('unstarted');
 					console.log(videoId);
 				});
-				this.setState({
-					queue: vidIds
-				});
+				if(isStateRefresh) {
+					this.setState({
+						queue: vidIds,
+						queueState: vidStates,
+						queueSequence: vidSequences
+					});
+				}
+				else {
+					this.setState({
+						queue: vidIds,
+						queueSequence: vidSequences
+					});
+				}
 			}
 		});
 	}
@@ -101,23 +132,31 @@ class EventPageLeader extends React.Component {
 	edit(){
 	}
 	toggle() {
-		this.refreshQueue();
+		this.refreshQueue(false);
 		this.setState({ 
 			modal: !this.state.modal
 		});
 	}
-	confirmDelete(vidID){
-		this.setState({deleteID:vidID})
+	confirmDelete(vidID, key, sequence){
+		this.setState({
+			deleteID:vidID,
+			deleteKey: key,
+			deleteSequence: sequence
+		});
 		this.toggle();
 	}
-	delete(videoID){
-		var songURL = "https://www.youtube.com/watch?v="+videoID;
+	delete(videoID, key, sequence){
+		this.state.queueState.splice(key, 1);
 		var url = "https://djque.herokuapp.com/?query="; 
-		var deleteSongQuery = "DELETE FROM Event_Song WHERE songUrl='"+songURL+"' AND eventId="+this.props.getEventId()+";";
+		var deleteSongQuery = "DELETE FROM Event_Song WHERE songUrl='"+videoID+"' AND eventId="+this.props.getEventId()+" AND sequence="+sequence+";";
+		console.log(encodeURI(url + deleteSongQuery));
 		fetch(encodeURI(url + deleteSongQuery)).then((res) => {
 			return res.json();
-		}).then((res) => {
-		});
+		}).then(function(res) {
+			this.refreshQueue(false);
+			console.log("songdeleted");
+			console.log(res);
+		}.bind(this));
 		this.toggle();
 	}
 	formatDateTime() {
@@ -167,6 +206,58 @@ class EventPageLeader extends React.Component {
 
 		return formattedDateTime;
 	}
+	onPlay(key) {
+		return function() {
+			this.setAll('unstarted');
+			this.state.queueState[key] = 'playing';
+			this.refreshQueue(false);
+		}.bind(this);
+	}
+	onBuffer(key) {
+		return function() {
+			this.setAll('unstarted');
+			this.state.queueState[key] = 'buffering';
+			this.refreshQueue(false);
+		}.bind(this);
+	}
+	onEnd(key) {
+		return function() {
+			console.log("onEnd");
+			this.setAll('unstarted');
+			if(key === this.state.queueState.length - 1) {
+				this.state.queueState[0] = 'playing';
+			}
+			else {
+				this.state.queueState[key+1] = 'playing';
+			}
+			this.refreshQueue(false);
+		}.bind(this);
+	}
+	onError(key) {
+		return function() {
+			this.setAll('unstarted');
+			this.state.queueState[key] = 'playing';
+			this.refreshQueue(false);
+		}.bind(this);
+	}
+	onPause(key) {
+		return function() {
+			this.setAll('unstarted');
+			this.state.queueState[key] = 'paused';
+			this.refreshQueue(false);
+		}.bind(this);
+	}
+	onSongAdded() {
+		console.log("Song Added");
+		this.refreshQueue(false);
+		this.state.queueState.push('unstarted');
+	}
+	setAll(v) {
+	    var i, n = this.state.queueState.length;
+	    for (i = 0; i < n; ++i) {
+	        this.state.queueState[i] = v;
+	    }
+	}
 	render() {
 		return (
 			<div id="eventPageLeaderOuterDivId"> 
@@ -186,23 +277,60 @@ class EventPageLeader extends React.Component {
 					<hr/>
 					<div id="addSong">
 						<p>Search</p>
-						<SearchSong eventId={this.props.getEventId()}/>
+						<SearchSong onSongAdded={this.onSongAdded} eventId={this.props.getEventId()}/>
 					</div>
 					<hr/>
 					<div id="queue">
 						<p>Music Queue</p>
 						<div id="videos">
 						{ 	this.state.queue.map((vidID, i) => {
+								console.log(this.state.queueSequence[i]);
 								return 	<div key={i} className="videoOuterDiv">
 											<div className="videoInnerDiv">
-												<YouTubePlayer
-									            	height='350'
-									            	playbackState='paused'
+											{
+							            		i===0 ? 
+							            		<YouTubePlayer
+									            	height='270'
+									            	playbackState='unstarted'
 									            	videoId={vidID}
-									            	width='680'
+									            	width='480'
+									            	//configuration={{autoplay:1}}
+									            	configuration={{
+									            		enablejsapi: 1,
+									            		origin:"http://localhost:8080",
+									            		modestbranding: 1,
+									            		disablekb: 1,
+									            	}}
+									            	onPlay={this.onPlay(i)}
+									            	onBuffer={this.onPlay(i)}
+									            	onEnd={this.onEnd(i)}
+									            	onError={this.onError(i)}
+									            	onPause={this.onPause(i)}
+									            	playbackState= {this.state.queueState[i]}
 									        	/>
+							            		:
+												<YouTubePlayer
+									            	height='270'
+									            	playbackState='unstarted'
+									            	videoId={vidID}
+									            	width='480'
+									            	//configuration={{autoplay:0}}
+									            	configuration={{
+									            		enablejsapi: 1,
+									            		origin:"http://localhost:8080",
+									            		modestbranding: 1,
+									            		disablekb: 1,
+									            	}}
+									            	onPlay={this.onPlay(i)}
+									            	onBuffer={this.onPlay(i)}
+									            	onEnd={this.onEnd(i)}
+									            	onError={this.onError(i)}
+									            	onPause={this.onPause(i)}
+									            	playbackState= {this.state.queueState[i]}
+									        	/>
+									        }
 								        	</div>
-								        	<span className="videoDeleteButton" onClick={() => {this.confirmDelete(vidID)}}>x</span>
+								        	<span className="videoDeleteButton" onClick={() => {this.confirmDelete(vidID, i, this.state.queueSequence[i])}}>x</span>
 								        	<br/>
 								        </div>
 					       	})
@@ -212,7 +340,7 @@ class EventPageLeader extends React.Component {
 					<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventNestedModal">
 	              		<ModalHeader>Are you sure you want to delete this song from your Music Queue?</ModalHeader>
 	              		<ModalFooter>
-	                		<Button color="warning" onClick={() => {this.delete(this.state.deleteID)}}>Delete</Button>
+	                		<Button color="warning" onClick={() => {this.delete(this.state.deleteID, this.state.deleteKey, this.state.deleteSequence)}}>Delete</Button>
 	                		<Button color="default" onClick={this.toggle}>Cancel</Button>
 	              		</ModalFooter>
 	            	</Modal>

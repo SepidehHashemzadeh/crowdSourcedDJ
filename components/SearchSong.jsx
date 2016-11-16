@@ -43,7 +43,7 @@ class SearchSong extends React.Component {
         ReactDOM.render(<Popup closeBtn={false}/>, document.getElementById('popupDiv'));
 
         var eventId = this.props.eventId;
-
+        var callBackFunction = this.props.onSongAdded;
         Popup.create({
           title: null,
           content: 'Add to queue?',
@@ -51,11 +51,10 @@ class SearchSong extends React.Component {
             left: [{
               text: 'Ok',
               action: function (popup) {
-                // TODO: Get dynamic eventId
                 console.log(eventId);
                 yt.addToPlaylist(eventId, id, (res) => {
                     console.log(res);
-                });
+                }, callBackFunction);
                 popup.close();
                 popupDiv.parentNode.removeChild(popupDiv);
               }
