@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input, ButtonToolbar } from 'reactstrap';
 import YouTubePlayer from 'react-youtube-player';
 import SearchSong from './SearchSong.jsx';
+import _ from 'lodash';
 require("./../resources/css/eventPage.css");
+var yt = require('../youtube.js');
 
 class EventPageLeader extends React.Component {
 	constructor(props) {
@@ -16,8 +18,10 @@ class EventPageLeader extends React.Component {
 			eventIsEnded: false,
 			songID: "",
 			queue: [],
+			songTitles: [],
 			modal: false,
-			deleteID: ""
+			deleteID: "",
+			queueState: []
 		};
 		this.render = this.render.bind(this);
 		this.end = this.end.bind(this);
@@ -27,6 +31,16 @@ class EventPageLeader extends React.Component {
 		this.refreshQueue = this.refreshQueue.bind(this);
 		this.confirmDelete = this.confirmDelete.bind(this);
 		this.toggle = this.toggle.bind(this);
+		this.onPlay = this.onPlay.bind(this);
+		this.onBuffer = this.onBuffer.bind(this);
+		this.onEnd = this.onEnd.bind(this);
+		this.onError = this.onError.bind(this);
+		this.onPause = this.onPause.bind(this);
+		this.setAll = this.setAll.bind(this);
+		this.onSongAdded = this.onSongAdded.bind(this);
+		this.userIsLeader = this.userIsLeader.bind(this);
+		this.getSongTitle = this.getSongTitle.bind(this);
+		this.updateSongTitles = this.updateSongTitles.bind(this);
 	}
 	componentWillMount() {
 		this.setState({
@@ -34,7 +48,6 @@ class EventPageLeader extends React.Component {
 		});
 		var url = "https://djque.herokuapp.com/?query="; 
 		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.getEventId() + ";";
-		console.log(encodeURI(url + eventQuery));
 		fetch(encodeURI(url + eventQuery)).then((result) => {
 			return result.json();
 		}).then((result) => {
@@ -46,44 +59,64 @@ class EventPageLeader extends React.Component {
 					eventDescription: result[0].description,
 					eventIsEnded: result[0].isEnded
 				});
-				var songQuery = "SELECT songUrl FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
+				var songQuery = "SELECT songUrl, sequence FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
 				var vidIds = [];
-				console.log(encodeURI(url+songQuery));
+				var vidStates = [];
+				var vidSequences = [];
+
 				fetch(encodeURI(url + songQuery)).then((res) => {
 					return res.json();
 				}).then((res) => {
 					if(typeof res != "undefined") {
-						console.log("RES:");
-						console.log(res);
 						res.map(function(item) {
 							var videoId = item.songUrl;
+							var videoSequence = item.sequence;
 							vidIds.push(videoId);
-							console.log(videoId);
+							vidSequences.push(videoSequence);
+							vidStates.push('unstarted');
 						});
 						this.setState({
-							queue: vidIds
+							queue: vidIds,
+							queueState: vidStates,
+							queueSequence: vidSequences
 						});
+						this.updateSongTitles();
 					}
 				});
 			}
 		});
 	}
-	refreshQueue(){
+	refreshQueue(isStateRefresh){
 		var url = "https://djque.herokuapp.com/?query="; 
-		var songQuery = "SELECT songUrl FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
+		var songQuery = "SELECT songUrl, sequence FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
 		var vidIds = [];
+		var vidStates = [];	
+		var vidSequences = [];	
 		fetch(encodeURI(url + songQuery)).then((res) => {
 			return res.json();
 		}).then((res) => {
 			if(typeof res != "undefined") {
 				res.map(function(item) {
 					var videoId = item.songUrl.substring(item.songUrl.indexOf('=')+1);
+					var videoSequence = item.sequence;
 					vidIds.push(videoId);
-					console.log(videoId);
+					vidSequences.push(videoSequence);
+					vidStates.push('unstarted');
 				});
-				this.setState({
-					queue: vidIds
-				});
+				if(isStateRefresh) {
+					this.setState({
+						queue: vidIds,
+						queueState: vidStates,
+						queueSequence: vidSequences
+					});
+				}
+				else {
+					this.setState({
+						queue: vidIds,
+						queueSequence: vidSequences
+					});
+				}
+				this.updateSongTitles();
 			}
 		});
 	}
@@ -97,27 +130,34 @@ class EventPageLeader extends React.Component {
 				isEnded: true
 			});
 		});
+		this.props.back();
 	}
 	edit(){
 	}
 	toggle() {
-		this.refreshQueue();
+		this.refreshQueue(false);
 		this.setState({ 
 			modal: !this.state.modal
 		});
 	}
-	confirmDelete(vidID){
-		this.setState({deleteID:vidID})
+	confirmDelete(vidID, key, sequence){
+		this.setState({
+			deleteID:vidID,
+			deleteKey: key,
+			deleteSequence: sequence
+		});
 		this.toggle();
 	}
-	delete(videoID){
-		var songURL = "https://www.youtube.com/watch?v="+videoID;
+	delete(videoID, key, sequence){
+		this.state.queueState.splice(key, 1);
 		var url = "https://djque.herokuapp.com/?query="; 
-		var deleteSongQuery = "DELETE FROM Event_Song WHERE songUrl='"+songURL+"' AND eventId="+this.props.getEventId()+";";
+		var deleteSongQuery = "DELETE FROM Event_Song WHERE songUrl='"+videoID+"' AND eventId="+this.props.getEventId()+" AND sequence="+sequence+";";
+
 		fetch(encodeURI(url + deleteSongQuery)).then((res) => {
 			return res.json();
-		}).then((res) => {
-		});
+		}).then(function(res) {
+			this.refreshQueue(false);
+		}.bind(this));
 		this.toggle();
 	}
 	formatDateTime() {
@@ -167,6 +207,73 @@ class EventPageLeader extends React.Component {
 
 		return formattedDateTime;
 	}
+	onPlay(key) {
+		return function() {
+			this.setAll('unstarted');
+			this.state.queueState[key] = 'playing';
+			this.refreshQueue(false);
+		}.bind(this);
+	}
+	onBuffer(key) {
+		return function() {
+			this.setAll('unstarted');
+			this.state.queueState[key] = 'buffering';
+			this.refreshQueue(false);
+		}.bind(this);
+	}
+	onEnd(key) {
+		return function() {
+			this.setAll('unstarted');
+			if(key === this.state.queueState.length - 1) {
+				this.state.queueState[0] = 'playing';
+			}
+			else {
+				this.state.queueState[key+1] = 'playing';
+			}
+			this.refreshQueue(false);
+		}.bind(this);
+	}
+	onError(key) {
+		return function() {
+			this.setAll('unstarted');
+			this.state.queueState[key] = 'playing';
+			this.refreshQueue(false);
+		}.bind(this);
+	}
+	onPause(key) {
+		return function() {
+			this.setAll('unstarted');
+			this.state.queueState[key] = 'paused';
+			this.refreshQueue(false);
+		}.bind(this);
+	}
+	onSongAdded() {
+		this.refreshQueue(false);
+		this.state.queueState.push('unstarted');
+	}
+	setAll(v) {
+	    var i, n = this.state.queueState.length;
+	    for (i = 0; i < n; ++i) {
+	        this.state.queueState[i] = v;
+	    }
+	}
+	getSongTitle(vidID){
+		yt.getTitleFromId(vidID, (title) => {
+			this.setState({
+    			songTitles: this.state.songTitles.concat(title)
+			});
+		});
+	}
+	updateSongTitles() {
+		this.state.queue.map((vidID) => {
+			this.getSongTitle(vidID);
+   		});
+	}
+	userIsLeader() {
+		var currentUser = this.props.currentUserId;
+		var eventLeader = this.props.getEventLeaderId();
+		return (currentUser == eventLeader);
+	}
 	render() {
 		return (
 			<div id="eventPageLeaderOuterDivId"> 
@@ -175,44 +282,108 @@ class EventPageLeader extends React.Component {
 						<h2 className="eventName">{this.state.eventName}</h2>
 						<ButtonToolbar>
 							<Button color="default" onClick={this.props.back}>Back</Button>
-							<Button color="danger" onClick={this.end}>End</Button>
-							<Button color="info" onClick={this.edit}>Edit</Button>
+							{ (this.userIsLeader() && !this.state.eventIsEnded) ?  
+								<div>
+									<Button color="danger" onClick={this.end}>End</Button>
+									<Button color="info" onClick={this.edit}>Edit</Button>
+								</div>
+							:
+								null 
+							}
 						</ButtonToolbar>
 					</div>
 					<p className="eventDetails">{this.state.eventLocation}</p>
 					<p className="eventDetails">{this.formatDateTime()}</p>
 					<br/>
 					<p className="eventDetails">{this.state.eventDescription}</p>
+					
+					{ this.state.eventIsEnded ? null :
+						<div id="addSong">
+							<hr/>
+							<p>Search</p>
+							<SearchSong onSongAdded={this.onSongAdded} eventId={this.props.getEventId()}/>
+						</div>
+					}
 					<hr/>
-					<div id="addSong">
-						<p>Search</p>
-						<SearchSong eventId={this.props.getEventId()}/>
-					</div>
-					<hr/>
-					<div id="queue">
-						<p>Music Queue</p>
-						<div id="videos">
-						{ 	this.state.queue.map((vidID, i) => {
-								return 	<div key={i} className="videoOuterDiv">
-											<div className="videoInnerDiv">
-												<YouTubePlayer
-									            	height='350'
-									            	playbackState='paused'
-									            	videoId={vidID}
-									            	width='680'
-									        	/>
-								        	</div>
-								        	<span className="videoDeleteButton" onClick={() => {this.confirmDelete(vidID)}}>x</span>
-								        	<br/>
-								        </div>
-					       	})
-				    	}
-			    		</div>
-					</div>
+					{ (this.userIsLeader() || this.state.eventIsEnded) ? 
+						<div id="queue">
+							<p>Music Queue</p>
+							<div id="videos">
+							{ 	this.state.queue.map((vidID, i) => {
+									return 	<div key={i} className="videoOuterDiv">
+												<div className="videoInnerDiv">
+												{
+								            		i===0 ? 
+								            		<YouTubePlayer
+										            	height='270'
+										            	playbackState='unstarted'
+										            	videoId={vidID}
+										            	width='480'
+										            	//configuration={{autoplay:1}}
+										            	configuration={{
+										            		enablejsapi: 1,
+										            		origin:"http://localhost:8080",
+										            		modestbranding: 1,
+										            		disablekb: 1,
+										            	}}
+										            	onPlay={this.onPlay(i)}
+										            	onBuffer={this.onPlay(i)}
+										            	onEnd={this.onEnd(i)}
+										            	onError={this.onError(i)}
+										            	onPause={this.onPause(i)}
+										            	playbackState= {this.state.queueState[i]}
+										        	/>
+								            		:
+													<YouTubePlayer
+										            	height='270'
+										            	playbackState='unstarted'
+										            	videoId={vidID}
+										            	width='480'
+										            	//configuration={{autoplay:0}}
+										            	configuration={{
+										            		enablejsapi: 1,
+										            		origin:"http://localhost:8080",
+										            		modestbranding: 1,
+										            		disablekb: 1,
+										            	}}
+										            	onPlay={this.onPlay(i)}
+										            	onBuffer={this.onPlay(i)}
+										            	onEnd={this.onEnd(i)}
+										            	onError={this.onError(i)}
+										            	onPause={this.onPause(i)}
+										            	playbackState= {this.state.queueState[i]}
+										        	/>
+										        }
+									        	</div>
+									        	{ this.state.eventIsEnded ? null :
+									        		<span className="videoDeleteButton" onClick={() => {this.confirmDelete(vidID, i, this.state.queueSequence[i])}}>x</span>
+									        	}
+									        	<br/>
+									        </div>
+						       	})
+					    	}
+				    		</div>
+						</div>
+						:
+							<div id="attendee-queue">
+								<p>Music Queue</p>
+								<div id="attendee-videos">
+								{ 	this.state.songTitles.map((title, i) => {
+										return 	<div key={i} className="attendee-songOuterDiv">
+													<div className="attendee-songInnerDiv">
+														<p>{title}</p>
+										        	</div>
+										        	<br/>
+										        </div>
+							       	})
+						    	}
+					    		</div>
+							</div>
+					}
 					<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventNestedModal">
 	              		<ModalHeader>Are you sure you want to delete this song from your Music Queue?</ModalHeader>
 	              		<ModalFooter>
-	                		<Button color="warning" onClick={() => {this.delete(this.state.deleteID)}}>Delete</Button>
+	                		<Button color="warning" onClick={() => {this.delete(this.state.deleteID, this.state.deleteKey, this.state.deleteSequence)}}>Delete</Button>
 	                		<Button color="default" onClick={this.toggle}>Cancel</Button>
 	              		</ModalFooter>
 	            	</Modal>

@@ -44,9 +44,11 @@ class SearchList extends React.Component {
   	render() {
   		return(
 			<div>
+				{this.props.searchStr.length>0?
 			    <ul style={{ width: "300px", paddingRight: "1.4%", marginTop: "7px" }}>
 					{this.searchEvents(this.props.searchStr)}
 				</ul>
+				: null}
 		   </div>
 		);
 	}

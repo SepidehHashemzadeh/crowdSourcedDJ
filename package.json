@@ -24,6 +24,7 @@
     "file": "^0.2.2",
     "hover.css": "^2.0.2",
     "json-loader": "^0.5.4",
+    "lodash": "^4.17.1",
     "mysql": "^2.5.4",
     "node-fetch": "^1.6.3",
     "react": "^15.3.2",
@@ -40,7 +41,7 @@
     "react-youtube-player": "^0.3.3",
     "reactstrap": "^3.8.1",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.2",
+    "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2",
     "whatwg-fetch": "^1.0.0"
   },

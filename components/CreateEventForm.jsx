@@ -90,13 +90,11 @@ class CreateEventForm extends React.Component {
 		query += eventDescription + "', '" 
 		query += eventLocation + "','";
 		query += this.props.user.id + "', 0, 0); ";
-		console.log(encodeURI(url + query));
-		console.log(query);
 
 		fetch(encodeURI(url + query)).then((res) => {
 			return res.json();
 		}).then((res) => {
-			console.log(res);
+			//console.log(res);
 		});
 		this.props.eventCreated();
 		this.toggle();

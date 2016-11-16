@@ -43,6 +43,7 @@ var getTitles = function (s, callback) {
     });
 };
 
+
 /* addToPlaylist
  * 
  * Simplified interface to relevant db query to add a song to an event
@@ -55,7 +56,7 @@ var getTitles = function (s, callback) {
  * @param callback: gets the JSON result from mySQL
  *
  */
-var addToPlaylist = function (eventID, songURL, callback) {
+var addToPlaylist = function (eventID, songURL, callback, whenSongAdded) {
     var url = "https://djque.herokuapp.com/?query=";
     var query = `SELECT songAmt FROM Events WHERE id=${eventID};`;
 
@@ -78,11 +79,27 @@ var addToPlaylist = function (eventID, songURL, callback) {
 
         fetch(encodeURI(url + query)).then((res) => {
             callback(res);
+            whenSongAdded();
         });
     });
 };
 
+
+//MDoe's section:
+var getTitleFromId = function (videoId, callback) {
+    var path2 = "/youtube/v3/videos";
+    var params2 = "?id=" + videoId +"&key=" + key + "&fields=items(snippet(title))&part=snippet";
+    fetch(url + path2 + params2).then((res) => {
+        return res.json();
+    }).then((res) => {
+        var title = res["items"][0]["snippet"]["title"];
+        callback(title);
+    });
+};
+
+
 exports.search = search;
 exports.getTitles = getTitles;
 exports.addToPlaylist = addToPlaylist;
+exports.getTitleFromId = getTitleFromId;
 

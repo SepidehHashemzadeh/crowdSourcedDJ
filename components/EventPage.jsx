@@ -19,7 +19,7 @@ class EventPage extends React.Component {
 
     handleSubmit(event) {
         yt.search(this.state.value, (res) => {
-            console.log(res[0]);
+            //console.log(res[0]);
         });
     }
 

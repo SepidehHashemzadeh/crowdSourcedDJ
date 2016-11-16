@@ -43,7 +43,7 @@ class SearchSong extends React.Component {
         ReactDOM.render(<Popup closeBtn={false}/>, document.getElementById('popupDiv'));
 
         var eventId = this.props.eventId;
-
+        var callBackFunction = this.props.onSongAdded;
         Popup.create({
           title: null,
           content: 'Add to queue?',
@@ -51,11 +51,9 @@ class SearchSong extends React.Component {
             left: [{
               text: 'Ok',
               action: function (popup) {
-                // TODO: Get dynamic eventId
-                console.log(eventId);
                 yt.addToPlaylist(eventId, id, (res) => {
-                    console.log(res);
-                });
+                    //console.log(res);
+                }, callBackFunction);
                 popup.close();
                 popupDiv.parentNode.removeChild(popupDiv);
               }
@@ -72,10 +70,11 @@ class SearchSong extends React.Component {
       }
 
       renderItem(index, key) {
-        return <div key={key} className="listItem">
-                    <p>{this.state.results[index][1]}</p>
-                    <p><button onClick={this.showPopup} id={this.state.results[index][0]}>Add to Queue</button></p>
+        return <div key={key} className="listItem hvr-back-pulse2">
+                    <div className="searchSongListItemP">{this.state.results[index][1]}</div>
+                    <div className="searchSongListItemButton" onClick={this.showPopup} id={this.state.results[index][0]}>+</div>
                 </div>;
+        this.setState(this.state);
       }
 
       doSearch(str) {
@@ -126,7 +125,7 @@ class SearchSong extends React.Component {
             <div className="box-2">
              <div className="container-2">
                <span className="icon"><i className="fa fa-search"></i></span>
-               <input type="search" id="search" value={this.state.searchValue} onChange={this.inputChanged.bind(this, "searchValue")} placeholder="Search for a Song" />
+               <input type="search" id="search" value={this.state.searchValue} onChange={this.inputChanged.bind(this, "searchValue")} placeholder="Search for a song" />
              </div>
              </div>
            );
