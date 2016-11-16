@@ -43,7 +43,6 @@ class EventPageLeader extends React.Component {
 		});
 		var url = "https://djque.herokuapp.com/?query="; 
 		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.getEventId() + ";";
-		console.log(encodeURI(url + eventQuery));
 		fetch(encodeURI(url + eventQuery)).then((result) => {
 			return result.json();
 		}).then((result) => {
@@ -59,20 +58,16 @@ class EventPageLeader extends React.Component {
 				var vidIds = [];
 				var vidStates = [];
 				var vidSequences = [];
-				console.log(encodeURI(url+songQuery));
 				fetch(encodeURI(url + songQuery)).then((res) => {
 					return res.json();
 				}).then((res) => {
 					if(typeof res != "undefined") {
-						console.log("RES:");
-						console.log(res);
 						res.map(function(item) {
 							var videoId = item.songUrl;
 							var videoSequence = item.sequence;
 							vidIds.push(videoId);
 							vidSequences.push(videoSequence);
 							vidStates.push('unstarted');
-							console.log(videoId);
 						});
 						this.setState({
 							queue: vidIds,
@@ -100,7 +95,6 @@ class EventPageLeader extends React.Component {
 					vidIds.push(videoId);
 					vidSequences.push(videoSequence);
 					vidStates.push('unstarted');
-					console.log(videoId);
 				});
 				if(isStateRefresh) {
 					this.setState({
@@ -149,13 +143,10 @@ class EventPageLeader extends React.Component {
 		this.state.queueState.splice(key, 1);
 		var url = "https://djque.herokuapp.com/?query="; 
 		var deleteSongQuery = "DELETE FROM Event_Song WHERE songUrl='"+videoID+"' AND eventId="+this.props.getEventId()+" AND sequence="+sequence+";";
-		console.log(encodeURI(url + deleteSongQuery));
 		fetch(encodeURI(url + deleteSongQuery)).then((res) => {
 			return res.json();
 		}).then(function(res) {
 			this.refreshQueue(false);
-			console.log("songdeleted");
-			console.log(res);
 		}.bind(this));
 		this.toggle();
 	}
@@ -222,7 +213,6 @@ class EventPageLeader extends React.Component {
 	}
 	onEnd(key) {
 		return function() {
-			console.log("onEnd");
 			this.setAll('unstarted');
 			if(key === this.state.queueState.length - 1) {
 				this.state.queueState[0] = 'playing';
@@ -248,7 +238,6 @@ class EventPageLeader extends React.Component {
 		}.bind(this);
 	}
 	onSongAdded() {
-		console.log("Song Added");
 		this.refreshQueue(false);
 		this.state.queueState.push('unstarted');
 	}
@@ -284,7 +273,6 @@ class EventPageLeader extends React.Component {
 						<p>Music Queue</p>
 						<div id="videos">
 						{ 	this.state.queue.map((vidID, i) => {
-								console.log(this.state.queueSequence[i]);
 								return 	<div key={i} className="videoOuterDiv">
 											<div className="videoInnerDiv">
 											{

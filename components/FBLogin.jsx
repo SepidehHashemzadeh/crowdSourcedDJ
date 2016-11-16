@@ -9,7 +9,6 @@ class FBLogin extends React.Component {
 		this.responseFacebook = this.responseFacebook.bind(this);
 	}
 	responseFacebook(response) {
-		console.log(response);
 		if(!(typeof response.id === "undefined")) {
 			var name = response.name;
 			var email = response.email;
@@ -27,7 +26,6 @@ class FBLogin extends React.Component {
 			query += id + "', '";
 			query += name + "', '";
 			query += email + "');";
-			console.log(encodeURI(url + query));
 			fetch(encodeURI(url + query)).then((res) => {
 			    return res.json();
 			}).then((res) => {

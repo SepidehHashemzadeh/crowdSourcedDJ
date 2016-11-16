@@ -52,8 +52,6 @@ class Dashboard extends React.Component {
 	refreshEventsList() {
 		var query = "SELECT * FROM Events WHERE userId='"+this.props.user.id+"';";
 		var query1 = 'SELECT * FROM Events;';
-		console.log(encodeURI(url + query));
-		console.log(encodeURI(url + query1));
 		fetch(encodeURI(url + query)).then((res) => {
 		    return res.json();
 		}).then((res) => {
@@ -85,7 +83,6 @@ class Dashboard extends React.Component {
 			});
 		});
 		var query2 = "SELECT * FROM Events WHERE id IN (SELECT eventId FROM Event_User WHERE userId='"+this.props.user.id+"');";
-		console.log(encodeURI(url + query2));
 		fetch(encodeURI(url + query2)).then((res) => {
 		    return res.json();
 		}).then((res) => {
@@ -147,7 +144,6 @@ class Dashboard extends React.Component {
 		}
 	}
 	onEventListItemClick(eventId){
-		console.log(eventId);
 		this.setState({
 			eventId: eventId
 		});

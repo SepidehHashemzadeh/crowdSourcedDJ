@@ -51,9 +51,8 @@ class SearchSong extends React.Component {
             left: [{
               text: 'Ok',
               action: function (popup) {
-                console.log(eventId);
                 yt.addToPlaylist(eventId, id, (res) => {
-                    console.log(res);
+                    //console.log(res);
                 }, callBackFunction);
                 popup.close();
                 popupDiv.parentNode.removeChild(popupDiv);
@@ -71,9 +70,9 @@ class SearchSong extends React.Component {
       }
 
       renderItem(index, key) {
-        return <div key={key} className="listItem">
-                    <p>{this.state.results[index][1]}</p>
-                    <p><button onClick={this.showPopup} id={this.state.results[index][0]}>Add to Queue</button></p>
+        return <div key={key} className="listItem hvr-back-pulse2">
+                    <p className="searchSongListItemP">{this.state.results[index][1]}</p>
+                    <button className="videoDeleteButton searchSongListItemButton" onClick={this.showPopup} id={this.state.results[index][0]}>+</button>
                 </div>;
       }
 
