@@ -32,7 +32,7 @@ class EventListItem extends React.Component {
 		});
 	}
 	handleClick() {
-		this.props.handleClick(this.props.eventInfo.id);
+		this.props.handleClick(this.props.eventInfo.id, this.state.userInfo.id);
 	}
 	timeConverter(UNIX_timestamp){
 		var a = new Date(UNIX_timestamp * 1000);

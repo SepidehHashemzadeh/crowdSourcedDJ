@@ -98,6 +98,7 @@ class EventPageLeader extends React.Component {
 				isEnded: true
 			});
 		});
+		this.props.back();
 	}
 	edit(){
 	}
@@ -112,9 +113,8 @@ class EventPageLeader extends React.Component {
 		this.toggle();
 	}
 	delete(videoID){
-		var songURL = "https://www.youtube.com/watch?v="+videoID;
 		var url = "https://djque.herokuapp.com/?query="; 
-		var deleteSongQuery = "DELETE FROM Event_Song WHERE songUrl='"+songURL+"' AND eventId="+this.props.getEventId()+";";
+		var deleteSongQuery = "DELETE FROM Event_Song WHERE songUrl='"+videoID+"' AND eventId="+this.props.getEventId()+";";
 		fetch(encodeURI(url + deleteSongQuery)).then((res) => {
 			return res.json();
 		}).then((res) => {
@@ -169,7 +169,13 @@ class EventPageLeader extends React.Component {
 		return formattedDateTime;
 	}
 	userIsLeader() {
-
+		var currentUser = this.props.currentUserId;
+		var eventLeader = this.props.getEventLeaderId();
+		console.log("currentUser");
+		console.log(currentUser);
+		console.log(eventLeader);
+		if (currentUser == eventLeader)	return true;
+		else return false;
 	}
 	render() {
 		return (
@@ -180,9 +186,13 @@ class EventPageLeader extends React.Component {
 						<ButtonToolbar>
 							<Button color="default" onClick={this.props.back}>Back</Button>
 							{ this.userIsLeader() ?  
-								<div>
-									<Button color="danger" onClick={this.end}>End</Button>
-									<Button color="info" onClick={this.edit}>Edit</Button>
+								<div id="eventPageLeaderHeader">
+									{ this.state.eventIsEnded ? null :
+										<div>
+											<Button color="danger" onClick={this.end}>End</Button>
+											<Button color="info" onClick={this.edit}>Edit</Button>
+										</div>
+									}
 								</div>
 							:
 								null 
@@ -202,7 +212,7 @@ class EventPageLeader extends React.Component {
 						</div>
 					}
 					<hr/>
-					{ (this.userIsLeader() || this.state.isEnded) ? 
+					{ (this.userIsLeader() || this.state.eventIsEnded) ? 
 							<div id="queue">
 								<p>Music Queue</p>
 								<div id="videos">
@@ -216,7 +226,7 @@ class EventPageLeader extends React.Component {
 											            	width='680'
 											        	/>
 										        	</div>
-										        	{ this.state.isEnded ? null :
+										        	{ this.state.eventIsEnded ? null :
 										        			<span className="videoDeleteButton" onClick={() => {this.confirmDelete(vidID)}}>x</span>
 										        	}
 										        	<br/>
