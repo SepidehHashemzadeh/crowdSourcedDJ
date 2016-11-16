@@ -4,6 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input, Button
 import YouTubePlayer from 'react-youtube-player';
 import SearchSong from './SearchSong.jsx';
 require("./../resources/css/eventPage.css");
+var yt = require('../youtube.js');
 
 class EventPageLeader extends React.Component {
 	constructor(props) {
@@ -16,6 +17,7 @@ class EventPageLeader extends React.Component {
 			eventIsEnded: false,
 			songID: "",
 			queue: [],
+			songTitles: [],
 			modal: false,
 			deleteID: ""
 		};
@@ -28,6 +30,8 @@ class EventPageLeader extends React.Component {
 		this.confirmDelete = this.confirmDelete.bind(this);
 		this.toggle = this.toggle.bind(this);
 		this.userIsLeader = this.userIsLeader.bind(this);
+		this.getSongTitle = this.getSongTitle.bind(this);
+		this.updateSongTitles = this.updateSongTitles.bind(this);
 	}
 	componentWillMount() {
 		this.setState({
@@ -35,7 +39,6 @@ class EventPageLeader extends React.Component {
 		});
 		var url = "https://djque.herokuapp.com/?query="; 
 		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.getEventId() + ";";
-		console.log(encodeURI(url + eventQuery));
 		fetch(encodeURI(url + eventQuery)).then((result) => {
 			return result.json();
 		}).then((result) => {
@@ -49,21 +52,18 @@ class EventPageLeader extends React.Component {
 				});
 				var songQuery = "SELECT songUrl FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
 				var vidIds = [];
-				console.log(encodeURI(url+songQuery));
 				fetch(encodeURI(url + songQuery)).then((res) => {
 					return res.json();
 				}).then((res) => {
 					if(typeof res != "undefined") {
-						console.log("RES:");
-						console.log(res);
 						res.map(function(item) {
 							var videoId = item.songUrl;
 							vidIds.push(videoId);
-							console.log(videoId);
 						});
 						this.setState({
 							queue: vidIds
 						});
+						this.updateSongTitles();
 					}
 				});
 			}
@@ -80,11 +80,11 @@ class EventPageLeader extends React.Component {
 				res.map(function(item) {
 					var videoId = item.songUrl.substring(item.songUrl.indexOf('=')+1);
 					vidIds.push(videoId);
-					console.log(videoId);
 				});
 				this.setState({
 					queue: vidIds
 				});
+				this.updateSongTitles();
 			}
 		});
 	}
@@ -169,7 +169,18 @@ class EventPageLeader extends React.Component {
 		return formattedDateTime;
 	}
 	userIsLeader() {
-
+	}
+	getSongTitle(vidID){
+		yt.getTitleFromId(vidID, (title) => {
+			this.setState({
+    			songTitles: this.state.songTitles.concat(title)
+			});
+		});
+	}
+	updateSongTitles() {
+		this.state.queue.map((vidID) => {
+			this.getSongTitle(vidID);
+   		});
 	}
 	render() {
 		return (
@@ -179,7 +190,7 @@ class EventPageLeader extends React.Component {
 						<h2 className="eventName">{this.state.eventName}</h2>
 						<ButtonToolbar>
 							<Button color="default" onClick={this.props.back}>Back</Button>
-							{ this.userIsLeader() ?  
+							{ (this.userIsLeader() && !this.state.isEnded) ?  
 								<div>
 									<Button color="danger" onClick={this.end}>End</Button>
 									<Button color="info" onClick={this.edit}>Edit</Button>
@@ -202,7 +213,7 @@ class EventPageLeader extends React.Component {
 						</div>
 					}
 					<hr/>
-					{ (this.userIsLeader() || this.state.isEnded) ? 
+					{ (this.userIsLeader() || this.state.eventIsEnded) ? 
 							<div id="queue">
 								<p>Music Queue</p>
 								<div id="videos">
@@ -226,8 +237,23 @@ class EventPageLeader extends React.Component {
 					    		</div>
 							</div>
 						:
-							<div id="attendee-queue"></div>
+							<div id="attendee-queue">
+								<p>Music Queue</p>
+								<div id="attendee-videos">
+								{ 	this.state.songTitles.map((title, i) => {
+										return 	<div key={i} className="attendee-songOuterDiv">
+													<div className="attendee-songInnerDiv">
+														<p>{title}</p>
+										        	</div>
+										        	<br/>
+										        </div>
+							       	})
+						    	}
+					    		</div>
+							</div>
 					}
+
+
 					<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventNestedModal">
 	              		<ModalHeader>Are you sure you want to delete this song from your Music Queue?</ModalHeader>
 	              		<ModalFooter>
