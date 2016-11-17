@@ -6,7 +6,7 @@ import SearchSong from './SearchSong.jsx';
 import _ from 'lodash';
 import Database from '../databaseShortcuts.js';
 import { formatDateTime } from '../timeConverter.js';
-import EditForm from './EditForm.jsx';
+
 require("./../resources/css/eventPage.css");
 var yt = require('../youtube.js');
 
@@ -257,7 +257,7 @@ class EventPageLeader extends React.Component {
 							{ (this.userIsLeader() && !this.state.eventIsEnded) ?  
 								<div>
 									<Button color="danger" onClick={this.end}>End</Button>
-									<EditForm eventId={this.props.getEventId()} />
+									<Button color="info" onClick={this.end}>End</Button>
 								</div>
 							:
 								null 
