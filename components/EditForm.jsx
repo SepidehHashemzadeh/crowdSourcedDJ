@@ -68,7 +68,28 @@ class EditForm extends React.Component {
 		this.setState({ eventDescription: e.target.value});
 	}
 	editForm() {
-  
+  	          var url = "https://djque.herokuapp.com/?query="; 
+		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.eventId + ";";
+        console.log("check query here:");
+        console.log(encodeURI(url + eventQuery));
+		fetch(encodeURI(url + eventQuery)).then((result) => {
+			return result.json();
+		}).then((result) => {
+			if(typeof result[0] != "undefined") {
+                var eventTime =result[0].startTime;
+                eventTime = eventTime.replace(' ','T');
+                eventTime = eventTime.substring(0,(eventTime.length)-3);
+				this.setState({
+					eventName: result[0].name,
+					eventLocation: result[0].location,
+					eventStartTime: eventTime,
+					eventDescription: result[0].description,
+					eventIsEnded: result[0].isEnded
+				});
+            }
+        
+		});
+        this.toggle();
 	}
 	submitForm() {
 
