@@ -35,7 +35,7 @@ class SearchList extends React.Component {
 			matchedEvents.map((item) => {
 				key++;
 				arr.push(
-					<SearchListItem eventInfo={item} key={key} />
+					<SearchListItem eventInfo={item} key={key} user={this.props.user}/>
 				);
 			});
 		}
