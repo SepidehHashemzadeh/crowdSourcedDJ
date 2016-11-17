@@ -56,7 +56,6 @@ class SearchSong extends React.Component {
                 }, callBackFunction);
                 popup.close();
                 popupDiv.parentNode.removeChild(popupDiv);
-                this.props.callBack();
               }
             }],
             right: [{
