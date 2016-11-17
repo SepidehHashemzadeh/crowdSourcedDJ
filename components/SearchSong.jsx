@@ -111,7 +111,8 @@ class SearchSong extends React.Component {
                 var list = <ReactList
                                 itemRenderer={this.renderItem}
                                 length={this.state.results.length}
-                                type='uniform'
+                                type='variable'
+                                pageSize={5}
                             />;
 
                 ReactDOM.render(list, listDiv);

@@ -184,7 +184,7 @@ class Dashboard extends React.Component {
 				<CreateEventForm user={this.props.user} eventCreated={this.eventCreated} />
 				<SearchList searchStr={this.state.searchStr}/>
 				<div style={this.state.eventPageLeaderStyle}>
-					{this.state.hideEventLeaderPage ? null : <EventPageLeader getEventId={this.getCurrEventId} eventID={this.state.eventId} back={this.backFromEventLeaderPage}/>}
+					{this.state.hideEventLeaderPage ? null : <EventPageLeader getEventId={this.getCurrEventId} userId={this.props.user.id} back={this.backFromEventLeaderPage}/>}
 				</div>
 				{ this.state.hideEventsLists ? null : 
 				<div>

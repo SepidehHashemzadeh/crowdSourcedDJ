@@ -10,14 +10,16 @@ class EventListItem extends React.Component {
 			pClass: "pNotHovered",
 			divClass: "divNotHovered"
 		};
-		props.userInfo.then((response) => {
-			this.setState({ userInfo: response[0] });
-		});
 		this.getEventDiv = this.getEventDiv.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 		this.render = this.render.bind(this);
 		this.handleOnMouseEnter = this.handleOnMouseEnter.bind(this);
 		this.handleOnMouseLeave = this.handleOnMouseLeave.bind(this);
+	}
+	componentWillMount() {
+		this.props.userInfo.then((response) => {
+			this.setState({ userInfo: response[0] });
+		});
 	}
 	handleOnMouseEnter() {
 		this.setState({
