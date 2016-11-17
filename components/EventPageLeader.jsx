@@ -257,7 +257,7 @@ class EventPageLeader extends React.Component {
 							{ (this.userIsLeader() && !this.state.eventIsEnded) ?  
 								<div>
 									<Button color="danger" onClick={this.end}>End</Button>
-									<Button color="info" onClick={this.end}>Edit</Button>
+									<Button color="info" onClick={this.edit}>Edit</Button>
 								</div>
 							:
 								null 
