@@ -196,7 +196,7 @@ class EditForm extends React.Component {
                 		<Button color="primary" onClick={this.toggleNested}>Done</Button>
               		</ModalFooter>
             	</Modal>
-			</div>
+			</div>   
 		);
 	}
 }
