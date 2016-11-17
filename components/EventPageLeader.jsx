@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input, ButtonToolbar } from 'reactstrap';
 import YouTubePlayer from 'react-youtube-player';
 import SearchSong from './SearchSong.jsx';
+import EditForm from './EditForm.jsx';
 require("./../resources/css/eventPage.css");
 
 class EventPageLeader extends React.Component {
@@ -176,7 +177,7 @@ class EventPageLeader extends React.Component {
 						<ButtonToolbar>
 							<Button color="default" onClick={this.props.back}>Back</Button>
 							<Button color="danger" onClick={this.end}>End</Button>
-							<Button color="info" onClick={this.edit}>Edit</Button>
+							 <EditForm eventId={this.props.getEventId()} />
 						</ButtonToolbar>
 					</div>
 					<p className="eventDetails">{this.state.eventLocation}</p>
