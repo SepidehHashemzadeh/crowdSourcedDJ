@@ -121,13 +121,13 @@ class EditForm extends React.Component {
 	render() {
 		return (
 			<div id="createEventFormOuterDiv" className="createEventFormButton">
-<!-- 				<Button color="info" onClick={this.editForm}>Edit</Button> -->
+				<Button color="info" onClick={this.editForm}>Edit</Button>
 				<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventModal">
 					<ModalBody>
 						<div>
 							<Form>
 								<header>
-<!-- 									<h2 className="formTitle">Edit Event</h2> -->
+									<h2 className="formTitle">Edit Event</h2>
 							  	</header>
 							  
 							  	<div>
@@ -183,14 +183,14 @@ class EditForm extends React.Component {
             			<br />
           			</ModalBody>
           			<ModalFooter>
-<!--             			<Button disabled={!this.validateForm} color="primary" onClick={this.submitForm}>Edit</Button> -->
+            			<Button disabled={!this.validateForm} color="primary" onClick={this.submitForm}>Edit</Button>
            				{' '}
             			<Button color="secondary" onClick={this.toggle}>Cancel</Button>
           			</ModalFooter>
         		</Modal>
         		<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested} className="createEventNestedModal">
               		<ModalHeader>Success!</ModalHeader>
-<!--               		<ModalBody>Your event has been updated.</ModalBody> -->
+              		<ModalBody>Your event has been updated.</ModalBody>
               		<ModalFooter>
                 		<Button color="primary" onClick={this.toggleNested}>Done</Button>
               		</ModalFooter>
