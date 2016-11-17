@@ -92,7 +92,31 @@ class EditForm extends React.Component {
         this.toggle();
 	}
 	submitForm() {
+			var url = "https://djque.herokuapp.com/?query="; 
+		var eventName = this.state.eventName;
+		var eventLocation = this.state.eventLocation;
+		var eventTime = this.state.eventStartTime;
+		eventTime = eventTime.replace('T', ' ');
+		eventTime += ':00';
+		var eventDescription = this.state.eventDescription;
+		var query =  "UPDATE Events SET "; 
+		query +=  "name= '"+ eventName + "', ";
+		query +=  "startTime= '"+ eventTime + "', ";
+		query +=  "description= '"+ eventDescription + "', ";
+		query +=  "location= '"+ eventLocation+ "' "; 
+		query += "WHERE id="+this.props.eventId+";";
+        console.log("check this:");
 
+		console.log(query);
+
+		fetch(encodeURI(url + query)).then((res) => {
+			return res.json();
+		}).then((res) => {
+			console.log(res);
+		});
+
+		this.toggle();
+		this.toggleNested();
 	}
 	render() {
 		return (
