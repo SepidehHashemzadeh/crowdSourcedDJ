@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import ReactList from 'react-list';
+import ReactList from 'react-list';
 import AddSongModal from './addSongModal.jsx';
 
 require('../resources/css/searchSong.css');
