@@ -276,11 +276,10 @@ class EventPageLeader extends React.Component {
    		});
 	}
 	userIsLeader() {
-		/*
+		
 		var currentUser = this.props.currentUserId;
 		var eventLeader = this.props.getEventLeaderId();
-		return (currentUser == eventLeader);*/
-		return false;
+		return (currentUser == eventLeader);
 	}
 	handleHoverQueue(i){
 		this.setState({hoverQueueId:i});
