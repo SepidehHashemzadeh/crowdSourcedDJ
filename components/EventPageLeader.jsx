@@ -4,6 +4,8 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input, Button
 import YouTubePlayer from 'react-youtube-player';
 import SearchSong from './SearchSong.jsx';
 import _ from 'lodash';
+import Database from '../databaseShortcuts.js';
+import { formatDateTime } from '../timeConverter.js';
 require("./../resources/css/eventPage.css");
 var yt = require('../youtube.js');
 
@@ -28,7 +30,6 @@ class EventPageLeader extends React.Component {
 		this.end = this.end.bind(this);
 		this.edit = this.edit.bind(this);
 		this.delete = this.delete.bind(this);
-		this.formatDateTime = this.formatDateTime.bind(this);
 		this.refreshQueue = this.refreshQueue.bind(this);
 		this.confirmDelete = this.confirmDelete.bind(this);
 		this.toggle = this.toggle.bind(this);
@@ -135,7 +136,14 @@ class EventPageLeader extends React.Component {
 				isEnded: true
 			});
 		});
+
+		var query = "UPDATE Events SET currSongSeq = -1 WHERE id = '" + this.props.getEventId() + "'; ";		
+		Database(query).then(function(response) {
+			console.log("Changed currSongSeq to -1");
+		}.bind(this));
+
 		this.props.back();
+		this.props.eventCreated();
 	}
 	edit(){
 	}
@@ -165,59 +173,22 @@ class EventPageLeader extends React.Component {
 		}.bind(this));
 		this.toggle();
 	}
-	formatDateTime() {
-		var year = this.state.eventStartTime.toString().substring(0,4);
-		var month = this.state.eventStartTime.toString().substring(5,7);
-		var date = this.state.eventStartTime.toString().substring(8,10);
-
-		var hour = this.state.eventStartTime.toString().substring(11,13);
-		var minute = this.state.eventStartTime.toString().substring(14,16);
-		var period = "AM";
-
-		if (hour == "13" | hour == "14" | hour == "15" | hour == "16" | hour == "17" | hour == "18" | hour == "19" | hour == "20" | hour == "21" | hour == "22" | hour == "23")
-			period = "PM";
-
-		if (month == "1") month = "January";
-		else if (month == "2") month = "February";
-		else if (month == "3") month = "March";
-		else if (month == "4") month = "April";
-		else if (month == "5") month = "May";
-		else if (month == "6") month = "June";
-		else if (month == "7") month = "July";
-		else if (month == "8") month = "August";
-		else if (month == "9") month = "September";
-		else if (month == "10") month = "October";
-		else if (month == "11") month = "November";
-		else if (month == "12") month = "December";
-
-		if (date == "01" | date == "02" | date == "03" | date == "04" | date == "05" | date == "06" | date == "07" | date == "08" | date == "09")
-			date = date.substring(1,2);
-
-		if (hour == "01" | hour == "02" | hour == "03" | hour == "04" | hour == "05" | hour == "06" | hour == "07" | hour == "08" | hour == "09")
-			hour = hour.substring(1,2);
-		else if (hour == "13")	hour = "1";
-		else if (hour == "14")	hour = "2";
-		else if (hour == "15")	hour = "3";
-		else if (hour == "16")	hour = "4";
-		else if (hour == "17")	hour = "5";
-		else if (hour == "18")	hour = "6";
-		else if (hour == "19")	hour = "7";
-		else if (hour == "20")	hour = "8";
-		else if (hour == "21")	hour = "9";
-		else if (hour == "22")	hour = "10";
-		else if (hour == "23")	hour = "11";
-		else if (hour == "00")	hour = "12";
-
-		var formattedDateTime = month.concat(" ", date, ", ", year, " at ", hour, ":", minute, " ", period);
-
-		return formattedDateTime;
-	}
 	onPlay(key) {
 		return function() {
 			this.setAll('unstarted');
 			this.state.queueState[key] = 'playing';
 			this.refreshQueue(false);
+
+			var eventId = this.props.getEventId();
+			var query = "UPDATE Events SET currSongSeq ='";
+			query += this.state.queueSequence[key] + "' WHERE id = '";
+			query += eventId + "'; ";
+			
+			Database(query).then(function(response) {
+				console.log("Changed currSongSeq to current song");
+			}.bind(this));
 		}.bind(this);
+
 	}
 	onBuffer(key) {
 		return function() {
@@ -312,7 +283,7 @@ class EventPageLeader extends React.Component {
 						</ButtonToolbar>
 					</div>
 					<p className="eventDetails">{this.state.eventLocation}</p>
-					<p className="eventDetails">{this.formatDateTime()}</p>
+					<p className="eventDetails">{ formatDateTime(this.state.eventStartTime.toString()) }</p>
 					<br/>
 					<p className="eventDetails">{this.state.eventDescription}</p>
 					
