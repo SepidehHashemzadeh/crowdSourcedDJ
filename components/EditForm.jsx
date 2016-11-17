@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input } from 'reactstrap';
 require("./../resources/css/createEventForm.css");
 
-class CreateEventForm extends React.Component {
+class EditForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { 
@@ -92,28 +92,7 @@ class CreateEventForm extends React.Component {
         this.toggle();
 	}
 	submitForm() {
-//		var url = "https://djque.herokuapp.com/?query="; 
-//		var eventName = this.state.eventName;
-//		var eventLocation = this.state.eventLocation;
-//		var eventTime = this.state.eventStartTime;
-//		eventTime = eventTime.replace('T', ' ');
-//		eventTime += ':00';
-//		var eventDescription = this.state.eventDescription;
-//		var query = "INSERT INTO Events (name, startTime, description, location, userId, isEnded, songAmt) VALUES ('"; 
-//		query +=  eventName + "', '";
-//		query += eventTime + "', '" 
-//		query += eventDescription + "', '" 
-//		query += eventLocation + "','";
-//		query += this.props.user.id + "', 0, 0); ";
-//
-//		fetch(encodeURI(url + query)).then((res) => {
-//			return res.json();
-//		}).then((res) => {
-//			//console.log(res);
-//		});
-//		this.props.eventCreated();
-//		this.toggle();
-//		this.toggleNested();
+
 		var url = "https://djque.herokuapp.com/?query="; 
 		var eventName = this.state.eventName;
 		var eventLocation = this.state.eventLocation;
@@ -128,7 +107,7 @@ class CreateEventForm extends React.Component {
 		query +=  "location= '"+ eventLocation+ "' "; 
 		query += "WHERE id="+this.props.eventId+";";
         console.log("check this:");
-		//console.log(encodeURI(url + query));
+	
 		console.log(query);
 
 		fetch(encodeURI(url + query)).then((res) => {
@@ -136,7 +115,7 @@ class CreateEventForm extends React.Component {
 		}).then((res) => {
 			console.log(res);
 		});
-//		this.props.eventCreated();
+
 		this.toggle();
 		this.toggleNested();
 	}
@@ -222,4 +201,4 @@ class CreateEventForm extends React.Component {
 	}
 }
 
-export default CreateEventForm; 
+export default EditForm; 
