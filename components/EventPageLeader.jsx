@@ -6,7 +6,7 @@ import SearchSong from './SearchSong.jsx';
 import _ from 'lodash';
 import Database from '../databaseShortcuts.js';
 import { formatDateTime } from '../timeConverter.js';
-import EditForm from './Edit.jsx';
+
 require("./../resources/css/eventPage.css");
 var yt = require('../youtube.js');
 
