@@ -5,7 +5,7 @@
 	/* background: rgba(255, 255, 255, 0.85) ; */
 	color: white;
 	width: 75%;
-	padding-top: 5px;
+	padding-top: 20px;
 	padding-right: 50px;
 	padding-left: 50px;
 	margin-left: auto;
@@ -17,18 +17,25 @@
 	margin-bottom: auto;
 }
 
-#eventPageLeaderHeader{
+#buttonToolbar {
+	margin-left: auto;
+	margin-right: auto;
+	display: inline-block;
+}
+
+#hiddenButtons {
 	display: inline-block;
 }
 
 .eventName{
 	font-family: 'Lobster', cursive;
-	font-size: 60px;
+	font-size: 50px;
 	text-align:center;
 }
 
 .eventDetails{
 	font-size: 20px;
+	font-family: Arial, Helvetica, sans-serif;
 	text-align:center;
 	margin-top: 10px;
 }
@@ -46,6 +53,7 @@ hr {
 	font-family: 'Lobster', cursive;
 	font-size: 30px;
 	text-align:center;
+	padding-bottom: 20px;
 }
 
 #queue{
@@ -58,6 +66,7 @@ hr {
 #videos{
 	display: inline-block;
 	margin: auto;
+	padding-top: 20px;
 }
 
 .videoOuterDiv {
@@ -71,6 +80,7 @@ hr {
 }
 
 .videoDeleteButton {
+	font-family: Arial, Helvetica, sans-serif;
 	padding-top: 4px;
 	padding-right: 11px;
 	padding-bottom: 4px;

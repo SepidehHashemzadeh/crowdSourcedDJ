@@ -43,7 +43,7 @@ class CreateEventForm extends React.Component {
 	}
 	validateStartTime(){
 		var now = new Date();
-		now.setHours(now.getHours() - 7);
+		now.setHours(now.getHours() - 8);
 		now = now.toJSON();
 		var startTimeInFuture = (now < this.state.eventStartTime);
 		return (!this.state.eventStartTime || startTimeInFuture);

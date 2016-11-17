@@ -23,7 +23,8 @@ class EventPageLeader extends React.Component {
 			songTitles: [],
 			modal: false,
 			deleteID: "",
-			queueState: []
+			queueState: [],
+			hoverQueueId: -1
 		};
 		this.render = this.render.bind(this);
 		this.end = this.end.bind(this);
@@ -42,6 +43,10 @@ class EventPageLeader extends React.Component {
 		this.userIsLeader = this.userIsLeader.bind(this);
 		this.getSongTitle = this.getSongTitle.bind(this);
 		this.updateSongTitles = this.updateSongTitles.bind(this);
+		this.handleHoverQueue = this.handleHoverQueue.bind(this);
+		this.handleUnhoverQueue = this.handleUnhoverQueue.bind(this);
+		this.handleHoverSearch = this.handleHoverSearch.bind(this);
+		this.handleUnhoverSearch = this.handleUnhoverSearch.bind(this);
 	}
 	componentWillMount() {
 		this.setState({
@@ -236,32 +241,48 @@ class EventPageLeader extends React.Component {
 		});
 	}
 	updateSongTitles() {
+		this.setState({songTitles:[]});
 		this.state.queue.map((vidID) => {
 			this.getSongTitle(vidID);
    		});
 	}
 	userIsLeader() {
+		
 		var currentUser = this.props.currentUserId;
 		var eventLeader = this.props.getEventLeaderId();
 		return (currentUser == eventLeader);
+	}
+	handleHoverQueue(i){
+		this.setState({hoverQueueId:i});
+	}
+	handleUnhoverQueue(){
+		this.setState({hoverQueueId: -1});
+	}
+	handleHoverSearch(i){
+
+	}
+	handleUnhoverSearch(){
+
 	}
 	render() {
 		return (
 			<div id="eventPageLeaderOuterDivId"> 
 				<div id="eventPageLeader">
-					<div id="eventPageLeaderHeader">
+					<div>
 						<h2 className="eventName">{this.state.eventName}</h2>
-						<ButtonToolbar>
+						<div id="buttonToolbar">
 							<Button color="default" onClick={this.props.back}>Back</Button>
+							{' '}
 							{ (this.userIsLeader() && !this.state.eventIsEnded) ?  
-								<div>
-									<Button color="danger" onClick={this.end}>End</Button>
+								<div id = "hiddenButtons">
+									<Button color="danger" onClick={this.end}>End Event</Button>
+									{' '}
 									<Button color="info" onClick={this.edit}>Edit</Button>
 								</div>
 							:
 								null 
 							}
-						</ButtonToolbar>
+						</div>
 					</div>
 					<p className="eventDetails">{this.state.eventLocation}</p>
 					<p className="eventDetails">{ formatDateTime(this.state.eventStartTime.toString()) }</p>
@@ -271,14 +292,14 @@ class EventPageLeader extends React.Component {
 					{ this.state.eventIsEnded ? null :
 						<div id="addSong">
 							<hr/>
-							<p>Search</p>
+							<div>Search</div>
 							<SearchSong onSongAdded={this.onSongAdded} eventId={this.props.getEventId()}/>
 						</div>
 					}
 					<hr/>
 					{ (this.userIsLeader() || this.state.eventIsEnded) ? 
 						<div id="queue">
-							<p>Music Queue</p>
+							<div>Music Queue</div>
 							<div id="videos">
 							{ 	this.state.queue.map((vidID, i) => {
 									return 	<div key={i} className="videoOuterDiv">
@@ -341,8 +362,14 @@ class EventPageLeader extends React.Component {
 								<div id="attendee-videos">
 								{ 	this.state.songTitles.map((title, i) => {
 										return 	<div key={i} className="attendee-songOuterDiv">
-													<div className="attendee-songInnerDiv">
-														<p>{title}</p>
+													<div className="attendee-songInnerDiv"
+														 onMouseEnter={() => this.handleHoverQueue(i)}
+														 onMouseLeave={() => this.handleUnhoverQueue()}>
+														{(this.state.hoverQueueId == i) ? 
+															<a target="_blank" href={"https://www.youtube.com/watch?v="+this.state.queue[i]}>{title}</a>
+														:
+															<p>{title}</p>
+														}
 										        	</div>
 										        	<br/>
 										        </div>
