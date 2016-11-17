@@ -21,7 +21,8 @@ class EventPageLeader extends React.Component {
 			songTitles: [],
 			modal: false,
 			deleteID: "",
-			queueState: []
+			queueState: [],
+			hoverQueueId: -1
 		};
 		this.render = this.render.bind(this);
 		this.end = this.end.bind(this);
@@ -41,6 +42,10 @@ class EventPageLeader extends React.Component {
 		this.userIsLeader = this.userIsLeader.bind(this);
 		this.getSongTitle = this.getSongTitle.bind(this);
 		this.updateSongTitles = this.updateSongTitles.bind(this);
+		this.handleHoverQueue = this.handleHoverQueue.bind(this);
+		this.handleUnhoverQueue = this.handleUnhoverQueue.bind(this);
+		this.handleHoverSearch = this.handleHoverSearch.bind(this);
+		this.handleUnhoverSearch = this.handleUnhoverSearch.bind(this);
 	}
 	componentWillMount() {
 		this.setState({
@@ -265,14 +270,29 @@ class EventPageLeader extends React.Component {
 		});
 	}
 	updateSongTitles() {
+		this.setState({songTitles:[]});
 		this.state.queue.map((vidID) => {
 			this.getSongTitle(vidID);
    		});
 	}
 	userIsLeader() {
+		/*
 		var currentUser = this.props.currentUserId;
 		var eventLeader = this.props.getEventLeaderId();
-		return (currentUser == eventLeader);
+		return (currentUser == eventLeader);*/
+		return false;
+	}
+	handleHoverQueue(i){
+		this.setState({hoverQueueId:i});
+	}
+	handleUnhoverQueue(){
+		this.setState({hoverQueueId: -1});
+	}
+	handleHoverSearch(i){
+
+	}
+	handleUnhoverSearch(){
+
 	}
 	render() {
 		return (
@@ -370,8 +390,14 @@ class EventPageLeader extends React.Component {
 								<div id="attendee-videos">
 								{ 	this.state.songTitles.map((title, i) => {
 										return 	<div key={i} className="attendee-songOuterDiv">
-													<div className="attendee-songInnerDiv">
-														<p>{title}</p>
+													<div className="attendee-songInnerDiv"
+														 onMouseEnter={() => this.handleHoverQueue(i)}
+														 onMouseLeave={() => this.handleUnhoverQueue()}>
+														{(this.state.hoverQueueId == i) ? 
+															<a target="_blank" href={"https://www.youtube.com/watch?v="+this.state.queue[i]}>{title}</a>
+														:
+															<p>{title}</p>
+														}
 										        	</div>
 										        	<br/>
 										        </div>
