@@ -7,6 +7,7 @@ import _ from 'lodash';
 import Database from '../databaseShortcuts.js';
 import { formatDateTime } from '../timeConverter.js';
 require("./../resources/css/eventPage.css");
+require("../resources/css/eventList.css");
 var yt = require('../youtube.js');
 
 class EventPageLeader extends React.Component {
@@ -19,11 +20,13 @@ class EventPageLeader extends React.Component {
 			eventDescription: "",
 			eventIsEnded: false,
 			songID: "",
+			currSongSeq: -1,
 			queue: [],
 			songTitles: [],
 			modal: false,
 			deleteID: "",
 			queueState: [],
+			queueSequence: [],
 			hoverQueueId: -1
 		};
 		this.render = this.render.bind(this);
@@ -45,8 +48,7 @@ class EventPageLeader extends React.Component {
 		this.updateSongTitles = this.updateSongTitles.bind(this);
 		this.handleHoverQueue = this.handleHoverQueue.bind(this);
 		this.handleUnhoverQueue = this.handleUnhoverQueue.bind(this);
-		this.handleHoverSearch = this.handleHoverSearch.bind(this);
-		this.handleUnhoverSearch = this.handleUnhoverSearch.bind(this);
+		this.getDivClass = this.getDivClass.bind(this);
 	}
 	componentWillMount() {
 		this.setState({
@@ -247,10 +249,11 @@ class EventPageLeader extends React.Component {
    		});
 	}
 	userIsLeader() {
-		
+		/*
 		var currentUser = this.props.currentUserId;
 		var eventLeader = this.props.getEventLeaderId();
-		return (currentUser == eventLeader);
+		return (currentUser == eventLeader);*/
+		return false;
 	}
 	handleHoverQueue(i){
 		this.setState({hoverQueueId:i});
@@ -258,11 +261,19 @@ class EventPageLeader extends React.Component {
 	handleUnhoverQueue(){
 		this.setState({hoverQueueId: -1});
 	}
-	handleHoverSearch(i){
-
-	}
-	handleUnhoverSearch(){
-
+	getDivClass(i){
+		var url = "https://djque.herokuapp.com/?query=";
+		var currSongQuery = "SELECT currSongSeq FROM Events WHERE id="+ this.props.getEventId() + ";";
+		fetch(encodeURI(url + currSongQuery)).then((res) => {
+			return res.json();
+		}).then((res) => {
+			this.setState({currSongSeq: res[0].currSongSeq});
+			
+		});
+		if ((this.state.queueSequence[i]-1)==this.state.currSongSeq) 	
+			return "divHovered";
+		else
+			return "divNotHovered";
 	}
 	render() {
 		return (
@@ -359,22 +370,25 @@ class EventPageLeader extends React.Component {
 						:
 							<div id="attendee-queue">
 								<p>Music Queue</p>
-								<div id="attendee-videos">
+								<div id="attendee-queue">
+								<ul id="attendee-queue-list">
 								{ 	this.state.songTitles.map((title, i) => {
-										return 	<div key={i} className="attendee-songOuterDiv">
-													<div className="attendee-songInnerDiv"
-														 onMouseEnter={() => this.handleHoverQueue(i)}
-														 onMouseLeave={() => this.handleUnhoverQueue()}>
-														{(this.state.hoverQueueId == i) ? 
-															<a target="_blank" href={"https://www.youtube.com/watch?v="+this.state.queue[i]}>{title}</a>
-														:
-															<p>{title}</p>
-														}
-										        	</div>
-										        	<br/>
-										        </div>
+										return 	<li key={i}>
+													<div className={this.getDivClass(i) + " attendee-songOuterDiv songPlaying hvr-back-pulse2"}>
+														<div className="attendee-songInnerDiv"
+															 onMouseEnter={() => this.handleHoverQueue(i)}
+															 onMouseLeave={() => this.handleUnhoverQueue()}>
+															{(this.state.hoverQueueId == i) ? 
+																<a target="_blank" href={"https://www.youtube.com/watch?v="+this.state.queue[i]}>{title}</a>
+															:
+																<p>{title}</p>
+															}
+											        	</div>
+											        </div>
+											    </li>
 							       	})
 						    	}
+						    	</ul>
 					    		</div>
 							</div>
 					}
