@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input } from 'reactstrap';
 require("./../resources/css/createEventForm.css");
 
+
 class EditForm extends React.Component {
 	constructor(props) {
 		super(props);
