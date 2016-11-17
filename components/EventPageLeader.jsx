@@ -6,7 +6,7 @@ import SearchSong from './SearchSong.jsx';
 import _ from 'lodash';
 import Database from '../databaseShortcuts.js';
 import { formatDateTime } from '../timeConverter.js';
-
+import EventPageLeaderInviteNotificationStack from './EventPageLeaderInviteNotificationStack.jsx';
 require("./../resources/css/eventPage.css");
 var yt = require('../youtube.js');
 
@@ -48,11 +48,15 @@ class EventPageLeader extends React.Component {
 		this.handleUnhoverQueue = this.handleUnhoverQueue.bind(this);
 		this.handleHoverSearch = this.handleHoverSearch.bind(this);
 		this.handleUnhoverSearch = this.handleUnhoverSearch.bind(this);
+		this.startPolling = this.startPolling.bind(this);
+		this.refreshInvites = this.refreshInvites.bind(this);
+		this.poll = this.poll.bind(this);
 	}
 	componentWillMount() {
 		this.setState({
 			hide: false
 		});
+		this._isMounted = true;
 		var url = "https://djque.herokuapp.com/?query="; 
 		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.getEventId() + ";";
 		fetch(encodeURI(url + eventQuery)).then((result) => {
@@ -92,6 +96,77 @@ class EventPageLeader extends React.Component {
 				});
 			}
 		});
+		this.refreshInvites();
+	}
+	componentWillUnmount() {
+		if(this._timer) {
+			clearInterval(this._timer);
+			this._timer = null;
+		}
+		this._isMounted = false;
+	}
+	startPolling() {
+		setTimeout(function(){
+			if(!this._isMounted) {
+				return; //abandon
+			}
+			this.poll();
+			this._timer = setInterval(this.poll.bind(this), 7000);
+		}.bind(this), 1000);
+	}
+	poll() {
+		//console.log("Poll");
+		if(this.userIsLeader()) {
+			this.refreshInvites();
+		}
+		/*if(!this._isMounted) {
+			return; //abandon
+		}
+		this.setState({
+			pendingInvites: [
+				{
+					id: 1,
+					fromId: "10208856888673232",
+					toId: "10154230939168043",
+					eventId: 25,
+					isRequest: 1,
+					isPending: 1
+				},
+				{
+					id: 2,
+					fromId: "755826817888438",
+					toId: "10154230939168043",
+					eventId: 25,
+					isRequest: 1,
+					isPending: 1
+				}
+			]
+		});*/
+	}
+	refreshInvites() {
+		if(!this._isMounted) {
+			return; //abandon
+		}
+		var url = "https://djque.herokuapp.com/?query=";
+		var inviteQuery = "SELECT * FROM Invites WHERE toId='"+this.props.currentUserId+"' AND eventId="+this.props.getEventId()+";"
+		fetch(encodeURI(url + inviteQuery)).then(function(result) {
+			return result.json();
+		}.bind(this)).then(function(result) {
+			if(typeof result != "undefined") {
+				var pendingInvites = [];
+				if(result.length>0) {
+					result.map(function(item) {
+						if(item.isPending) {
+							pendingInvites.push(item);
+						}
+					}.bind(this));	
+				}
+				this.setState({
+					pendingInvites: pendingInvites
+				});
+			}
+			this.startPolling();
+		}.bind(this));
 	}
 	refreshQueue(isStateRefresh){
 		var url = "https://djque.herokuapp.com/?query="; 
@@ -268,6 +343,7 @@ class EventPageLeader extends React.Component {
 	render() {
 		return (
 			<div id="eventPageLeaderOuterDivId"> 
+				{ (this.userIsLeader())?<EventPageLeaderInviteNotificationStack eventId={this.props.getEventId()} inviteList={this.state.pendingInvites}/>:null}
 				<div id="eventPageLeader">
 					<div>
 						<h2 className="eventName">{this.state.eventName}</h2>

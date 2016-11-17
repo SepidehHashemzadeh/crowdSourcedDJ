@@ -65,18 +65,35 @@ hr {
 
 #videos{
 	display: inline-block;
+	/*
 	margin: auto;
 	padding-top: 20px;
+	*/
+	margin-left: 0vw;
+	position: relative;
+}
+
+/* responsive neccessity */
+@media only screen and (max-width: 862px) {
+    #videos {
+    	margin-left: -10vw;
+    }
 }
 
 .videoOuterDiv {
 	height: 270px;
 	margin-bottom: 20px;
+	width: 542px;
+    text-align: left;
 }
 
 .videoInnerDiv {
 	display: inline-block;
-	margin-left: 72px;
+}
+
+.videoInnerDiv {
+	height: 9em;
+	width: 16em;
 }
 
 .videoDeleteButton {

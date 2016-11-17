@@ -82,6 +82,18 @@ p, a {
   display: block;
 }
 
+/* responsive neccessity */
+@media only screen and (max-width: 718px) {
+    #listDiv {
+      position: relative;
+      left: -12%;
+    }
+    .box-2 {
+      position: relative;
+      left: -12%;
+    }
+}
+
 /* list styling */
 #listDiv {
   -webkit-box-sizing: border-box;
