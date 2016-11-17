@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input } from 'reactstrap';
 require("./../resources/css/createEventForm.css");
 
-class CreateEventForm extends React.Component {
+class EditForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { 
@@ -222,4 +222,4 @@ class CreateEventForm extends React.Component {
 	}
 }
 
-export default CreateEventForm; 
+export default EditForm; 
