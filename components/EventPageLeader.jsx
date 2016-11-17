@@ -268,19 +268,21 @@ class EventPageLeader extends React.Component {
 		return (
 			<div id="eventPageLeaderOuterDivId"> 
 				<div id="eventPageLeader">
-					<div id="eventPageLeaderHeader">
+					<div>
 						<h2 className="eventName">{this.state.eventName}</h2>
-						<ButtonToolbar>
+						<div id="buttonToolbar">
 							<Button color="default" onClick={this.props.back}>Back</Button>
+							{' '}
 							{ (this.userIsLeader() && !this.state.eventIsEnded) ?  
-								<div>
-									<Button color="danger" onClick={this.end}>End</Button>
+								<div id = "hiddenButtons">
+									<Button color="danger" onClick={this.end}>End Event</Button>
+									{' '}
 									<Button color="info" onClick={this.edit}>Edit</Button>
 								</div>
 							:
 								null 
 							}
-						</ButtonToolbar>
+						</div>
 					</div>
 					<p className="eventDetails">{this.state.eventLocation}</p>
 					<p className="eventDetails">{ formatDateTime(this.state.eventStartTime.toString()) }</p>
@@ -290,14 +292,14 @@ class EventPageLeader extends React.Component {
 					{ this.state.eventIsEnded ? null :
 						<div id="addSong">
 							<hr/>
-							<p>Search</p>
+							<div>Search</div>
 							<SearchSong onSongAdded={this.onSongAdded} eventId={this.props.getEventId()}/>
 						</div>
 					}
 					<hr/>
 					{ (this.userIsLeader() || this.state.eventIsEnded) ? 
 						<div id="queue">
-							<p>Music Queue</p>
+							<div>Music Queue</div>
 							<div id="videos">
 							{ 	this.state.queue.map((vidID, i) => {
 									return 	<div key={i} className="videoOuterDiv">
