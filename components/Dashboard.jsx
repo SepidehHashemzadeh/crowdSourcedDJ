@@ -186,7 +186,7 @@ class Dashboard extends React.Component {
 			<div id="searchAndAdd">
 				<Search onSearchTermChange={this.onSearchTermChange}/>
 				<CreateEventForm user={this.props.user} eventCreated={this.eventCreated}/>
-				<SearchList searchStr={this.state.searchStr}/>
+				<SearchList searchStr={this.state.searchStr} user={this.props.user}/>
 				<div style={this.state.eventPageLeaderStyle}>
 					{this.state.hideEventLeaderPage ? null : <EventPageLeader getEventId={this.getCurrEventId} 
 															getEventLeaderId={this.getCurrEventLeaderId} 

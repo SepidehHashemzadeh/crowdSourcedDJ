@@ -13,19 +13,29 @@ class SearchList extends React.Component {
 	}
 
 	searchEvents(searchStr) {
-		var query = "SELECT * FROM Events WHERE name='" + searchStr + "';";
+		var query = "SELECT * FROM Events;";
 
 		DatabaseHelper(query).then((res) => {
 						this.setState({events: res});
 		});
 
 		var arr = [];
+
 		if(this.state.events.length > 0) {
+
+			var matchedEvents = [];
+
+			for (var i = 0; i < this.state.events.length; i++) {
+				if(~this.state.events[i].name.indexOf(searchStr)) {
+					matchedEvents.push(this.state.events[i]);
+				}
+			};
+
 			let key=0;
-			this.state.events.map((item) => {
+			matchedEvents.map((item) => {
 				key++;
 				arr.push(
-					<SearchListItem eventInfo={item} key={key} />
+					<SearchListItem eventInfo={item} key={key} user={this.props.user}/>
 				);
 			});
 		}
