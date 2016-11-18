@@ -37,6 +37,7 @@ class Dashboard extends React.Component {
 			hideEventsLists: false,
 			searchStr: ""
 		};
+		this._isMounted = false;
 		this.getCurrEventId = this.getCurrEventId.bind(this);
 		this.getCurrEventLeaderId = this.getCurrEventLeaderId.bind(this);
 		this.refreshEventsList = this.refreshEventsList.bind(this);
@@ -45,8 +46,15 @@ class Dashboard extends React.Component {
 		this.eventCreated = this.eventCreated.bind(this);
 		this.selectTab = this.selectTab.bind(this);
 		this.onEventListItemClick = this.onEventListItemClick.bind(this);
-		setTimeout(this.refreshEventsList, 5000);
+		this.startPolling = this.startPolling.bind(this);
+		this.poll = this.poll.bind(this);
 		this.onSearchTermChange = this.onSearchTermChange.bind(this);
+	}
+	componentWillMount() {
+		this._isMounted = true;
+	}
+	componentWillUnmount() {
+		this._isMounted = false;
 	}
 	timeStampSorter(x,y) {
 		return x.startTime-y.startTime;
@@ -114,6 +122,7 @@ class Dashboard extends React.Component {
 				otherFuture: otherFuture,
 				otherPast: otherPast
 			});
+			this.startPolling();
 		});
 	}
 	eventCreated() {
@@ -173,6 +182,18 @@ class Dashboard extends React.Component {
 	onSearchTermChange(searchStr) {
 		this.setState({searchStr: searchStr})
 	}
+	startPolling() {
+		setTimeout(function(){
+			if(!this._isMounted) {
+				return; //abandon
+			}
+			this.poll();
+			this._timer = setInterval(this.poll.bind(this), 7000);
+		}.bind(this), 1000);
+	}
+	poll() {
+		this.refreshEventsList();
+	}
 	render () {
 		var noEvents = <div className="noEvents hvr-back-pulse2">No Events 😔</div>;
 		var eventList = (listOfEvents, title, name) => (
@@ -228,71 +249,5 @@ class Dashboard extends React.Component {
 		);
 	}
 }
-const Picture = ({ imgSrc, borderColor }) => (
-	<img
-		style={{
-			width: '60px',
-			height: '60px',
-			borderRadius: '100%',
-			border: `3px solid ${borderColor}`,
-		}}
-		src={imgSrc}
-	/>
-);
-
-const DetailsRow = ({ icon, title, summary }) => {
-	const renderSummary = () => {
-		if (summary)	return (
-			<p style={{ fontWeight: 300, lineHeight: 1.45 }}>
-				{summary}
-			</p>
-		);
-		return null;
-	};
-
-	return (
-		<div style={styles.detailsRow.row}>
-			<span
-			className={`icon ${icon}`}
-			style={{ /*...styles.detailsRow.icon,*/ alignSelf: 'flex-start' }}
-			/>
-			<div style={{ width: '80%' }}>
-				<h2 style={styles.detailsRow.title}>
-					{title}
-				</h2>
-				{renderSummary()}
-			</div>
-		</div>
-	);
-};
-const Event = (props) => (
-	<div style={{ position: 'absolute', top: 0 }} onClick={props.onClick}>
-		<header style={styles.cardHeader} className='card-header-details'>
-			<Picture imgSrc={props.imgSrc} borderColor={props.imgBorderColor} />
-			<div>
-				<h1 style={styles.headerName}>{props.name}</h1>
-				<h3 style={styles.headerTitle} className='icon ion-ios-arrow-down'>{props.title}</h3>
-			</div>
-		</header>
-
-		<div style={{color: '#fff'}}>
-			<DetailsRow
-				icon='ion-ios-telephone-outline'
-				title={props.mobileNo}
-			/>
-
-			<DetailsRow
-				icon='ion-ios-location-outline'
-				title={props.location}
-			/>
-
-			<DetailsRow
-				icon='icon ion-ios-paper-outline'
-				title='Main Role'
-				summary={props.role}
-			/>
-		</div>
-  </div>
-);
 
 export default Dashboard;

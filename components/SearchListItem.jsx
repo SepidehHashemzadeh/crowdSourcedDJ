@@ -48,7 +48,7 @@ class SearchListItem extends React.Component {
 		query += "1'); ";
 
 		DatabaseHelper(query).then((res) => {
-			console.log(res);
+			//console.log(res);
 		});
 
 	}

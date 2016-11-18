@@ -119,33 +119,9 @@ class EventPageLeader extends React.Component {
 		}.bind(this), 1000);
 	}
 	poll() {
-		//console.log("Poll");
 		if(this.userIsLeader()) {
 			this.refreshInvites();
 		}
-		/*if(!this._isMounted) {
-			return; //abandon
-		}
-		this.setState({
-			pendingInvites: [
-				{
-					id: 1,
-					fromId: "10208856888673232",
-					toId: "10154230939168043",
-					eventId: 25,
-					isRequest: 1,
-					isPending: 1
-				},
-				{
-					id: 2,
-					fromId: "755826817888438",
-					toId: "10154230939168043",
-					eventId: 25,
-					isRequest: 1,
-					isPending: 1
-				}
-			]
-		});*/
 	}
 	refreshInvites() {
 		if(!this._isMounted) {
@@ -219,7 +195,7 @@ class EventPageLeader extends React.Component {
 
 		var query = "UPDATE Events SET currSongSeq = -1 WHERE id = '" + this.props.getEventId() + "'; ";		
 		Database(query).then(function(response) {
-			console.log("Changed currSongSeq to -1");
+			//console.log("Changed currSongSeq to -1");
 		}.bind(this));
 
 		this.props.back();
@@ -265,7 +241,7 @@ class EventPageLeader extends React.Component {
 			query += eventId + "'; ";
 			
 			Database(query).then(function(response) {
-				console.log("Changed currSongSeq to current song");
+				//console.log("Changed currSongSeq to current song");
 			}.bind(this));
 		}.bind(this);
 
