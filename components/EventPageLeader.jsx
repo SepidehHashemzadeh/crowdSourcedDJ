@@ -50,8 +50,6 @@ class EventPageLeader extends React.Component {
 		this.updateSongTitles = this.updateSongTitles.bind(this);
 		this.handleHoverQueue = this.handleHoverQueue.bind(this);
 		this.handleUnhoverQueue = this.handleUnhoverQueue.bind(this);
-		this.handleHoverSearch = this.handleHoverSearch.bind(this);
-		this.handleUnhoverSearch = this.handleUnhoverSearch.bind(this);
 		this.startPolling = this.startPolling.bind(this);
 		this.refreshInvites = this.refreshInvites.bind(this);
 		this.poll = this.poll.bind(this);
