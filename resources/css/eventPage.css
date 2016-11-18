@@ -126,7 +126,12 @@ hr {
     position: relative;
 }
 
-.attendee-songInnerDiv{
+
+.attendee-songOuterDiv{
 	border-style: solid;
-	border-color: red;
+	border-color: white;
+}
+
+#attendee-queue-list li{
+	list-style-type: none;
 }
