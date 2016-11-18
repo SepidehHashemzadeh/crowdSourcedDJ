@@ -111,7 +111,12 @@ class EditForm extends React.Component {
 		fetch(encodeURI(url + query)).then((res) => {
 			return res.json();
 		}).then((res) => {
-			console.log(res);
+			this.props.onSuccess({
+				eventName: eventName,
+				eventLocation: eventLocation,
+				eventTime: eventTime,
+				eventDescription: eventDescription
+			});
 		});
 
 		this.toggle();

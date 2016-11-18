@@ -52,6 +52,7 @@ class EventPageLeader extends React.Component {
 		this.startPolling = this.startPolling.bind(this);
 		this.refreshInvites = this.refreshInvites.bind(this);
 		this.poll = this.poll.bind(this);
+		this.onEventEditSuccess = this.onEventEditSuccess.bind(this);
 	}
 	componentWillMount() {
 		this.setState({
@@ -341,6 +342,10 @@ class EventPageLeader extends React.Component {
 	handleUnhoverSearch(){
 
 	}
+	onEventEditSuccess(newState) {
+		this.setState(newState);
+		this.forceUpdate();
+	}
 	render() {
 		return (
 			<div id="eventPageLeaderOuterDivId"> 
@@ -355,7 +360,7 @@ class EventPageLeader extends React.Component {
 								<div id = "hiddenButtons">
 									<Button color="danger" onClick={this.end}>End Event</Button>
 									{' '}
-									<EditForm eventId={this.props.getEventId()} />
+									<EditForm eventId={this.props.getEventId()} onSuccess={this.onEventEditSuccess}/>
 								</div>
 							:
 								null 
