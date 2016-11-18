@@ -7,6 +7,7 @@ import _ from 'lodash';
 import Database from '../databaseShortcuts.js';
 import { formatDateTime } from '../timeConverter.js';
 import EventPageLeaderInviteNotificationStack from './EventPageLeaderInviteNotificationStack.jsx';
+import EditForm from './EditForm.jsx';
 require("./../resources/css/eventPage.css");
 var yt = require('../youtube.js');
 
@@ -354,7 +355,7 @@ class EventPageLeader extends React.Component {
 								<div id = "hiddenButtons">
 									<Button color="danger" onClick={this.end}>End Event</Button>
 									{' '}
-									<Button color="info" onClick={this.edit}>Edit</Button>
+									<EditForm eventId={this.props.getEventId()} />
 								</div>
 							:
 								null 
