@@ -122,6 +122,7 @@ class EventPageLeader extends React.Component {
 		if(this.userIsLeader()) {
 			this.refreshInvites();
 		}
+		this.refreshQueue(false);
 	}
 	refreshInvites() {
 		if(!this._isMounted) {
