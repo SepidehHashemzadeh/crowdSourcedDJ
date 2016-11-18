@@ -249,11 +249,9 @@ class EventPageLeader extends React.Component {
    		});
 	}
 	userIsLeader() {
-		/*
 		var currentUser = this.props.currentUserId;
 		var eventLeader = this.props.getEventLeaderId();
-		return (currentUser == eventLeader);*/
-		return false;
+		return (currentUser == eventLeader);
 	}
 	handleHoverQueue(i){
 		this.setState({hoverQueueId:i});
@@ -262,6 +260,7 @@ class EventPageLeader extends React.Component {
 		this.setState({hoverQueueId: -1});
 	}
 	getDivClass(i){
+		/*
 		var url = "https://djque.herokuapp.com/?query=";
 		var currSongQuery = "SELECT currSongSeq FROM Events WHERE id="+ this.props.getEventId() + ";";
 		fetch(encodeURI(url + currSongQuery)).then((res) => {
@@ -274,6 +273,8 @@ class EventPageLeader extends React.Component {
 			return "divHovered";
 		else
 			return "divNotHovered";
+		*/
+		return "divNotHovered";
 	}
 	render() {
 		return (
