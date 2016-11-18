@@ -76,7 +76,6 @@ class EventPageLeaderInviteNotificationStack extends React.Component {
 						<span className="eventNotifListItemMessage">Add {item.name}?</span>
 						<span className="notifButton eventNotifListItemAccept" onClick={() => {
 							var query = "INSERT INTO Event_User VALUES ("+this.props.eventId+",'"+item.id+"');";
-							debugger;
 							DatabaseHelper(query).then((response) => {
 								this.state.notificationList.splice(index, 1);
 								var query2 = "UPDATE Invites SET isPending=0 WHERE id="+this.state.inviteList[index].id+";";
