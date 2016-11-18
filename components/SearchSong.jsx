@@ -71,7 +71,11 @@ class SearchSong extends React.Component {
 
       renderItem(index, key) {
         return <div key={key} className="listItem hvr-back-pulse2">
-                    <div className="searchSongListItemP">{this.state.results[index][1]}</div>
+                    <a className="searchSongListItemP" 
+                    target="_blank" 
+                    href={"https://www.youtube.com/watch?v="+this.state.results[index][0]}>
+                      <div color="white">{this.state.results[index][1]}</div>
+                    </a>
                     <div className="searchSongListItemButton" onClick={this.showPopup} id={this.state.results[index][0]}>+</div>
                 </div>;
         this.setState(this.state);
@@ -112,7 +116,8 @@ class SearchSong extends React.Component {
                 var list = <ReactList
                                 itemRenderer={this.renderItem}
                                 length={this.state.results.length}
-                                type='uniform'
+                                type='variable'
+                                pageSize={5}
                             />;
 
                 ReactDOM.render(list, listDiv);

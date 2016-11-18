@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Image } from 'reactstrap';
+import { formatDateTime } from '../timeConverter.js';
 var url = 'https://djque.herokuapp.com/?query=';
 require("../resources/css/eventList.css");
 class EventListItem extends React.Component {
@@ -10,14 +11,16 @@ class EventListItem extends React.Component {
 			pClass: "pNotHovered",
 			divClass: "divNotHovered"
 		};
-		props.userInfo.then((response) => {
-			this.setState({ userInfo: response[0] });
-		});
 		this.getEventDiv = this.getEventDiv.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 		this.render = this.render.bind(this);
 		this.handleOnMouseEnter = this.handleOnMouseEnter.bind(this);
 		this.handleOnMouseLeave = this.handleOnMouseLeave.bind(this);
+	}
+	componentWillMount() {
+		this.props.userInfo.then((response) => {
+			this.setState({ userInfo: response[0] });
+		});
 	}
 	handleOnMouseEnter() {
 		this.setState({
@@ -34,18 +37,6 @@ class EventListItem extends React.Component {
 	handleClick() {
 		this.props.handleClick(this.props.eventInfo.id, this.state.userInfo.id);
 	}
-	timeConverter(UNIX_timestamp){
-		var a = new Date(UNIX_timestamp * 1000);
-		var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-		var year = a.getFullYear();
-		var month = months[a.getMonth()];
-		var date = a.getDate();
-		var hour = a.getHours();
-		var min = a.getMinutes();
-		var sec = a.getSeconds();
-		var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
-		return time;
-	}
 	getEventDiv(){
 		if(typeof this.state.userInfo === "undefined")
 		{
@@ -53,13 +44,13 @@ class EventListItem extends React.Component {
 						<div className={this.state.divClass+" hvr-back-pulse2"}>
 							<div className="loader"></div>
 						</div>
-					</li>);
+					</li>);					
 		}
 		else {
 			return (<li>
 						<div onClick={this.handleClick} onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave} className={this.state.divClass+" hvr-back-pulse2"}>
 							<p className="alwaysShown"> What: {this.props.eventInfo.name} </p>
-							<p className="alwaysShown"> When: {(new Date(this.props.eventInfo.startTime)).toLocaleString()} </p>
+							<p className="alwaysShown"> When: { formatDateTime(this.props.eventInfo.startTime.toString()) } </p>
 							<p className="alwaysShown"> Where: {this.props.eventInfo.location} </p>
 							<br/>
 							<div className={this.state.pClass}>

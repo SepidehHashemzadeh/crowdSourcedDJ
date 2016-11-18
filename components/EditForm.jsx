@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input } from 'reactstrap';
 require("./../resources/css/createEventForm.css");
 
-class CreateEventForm extends React.Component {
+class EditForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { 
@@ -25,7 +25,7 @@ class CreateEventForm extends React.Component {
 		this.handleEventLocation = this.handleEventLocation.bind(this);
 		this.handleEventStartTime = this.handleEventStartTime.bind(this);
 		this.handleEventDescription = this.handleEventDescription.bind(this);
-		this.createForm = this.createForm.bind(this);
+		this.editForm = this.editForm.bind(this);
 		this.submitForm = this.submitForm.bind(this);
 		this.render = this.render.bind(this);
 	}
@@ -43,7 +43,7 @@ class CreateEventForm extends React.Component {
 	}
 	validateStartTime(){
 		var now = new Date();
-		now.setHours(now.getHours() - 8);
+		now.setHours(now.getHours() - 7);
 		now = now.toJSON();
 		var startTimeInFuture = (now < this.state.eventStartTime);
 		return (!this.state.eventStartTime || startTimeInFuture);
@@ -67,14 +67,29 @@ class CreateEventForm extends React.Component {
 	handleEventDescription(e){
 		this.setState({ eventDescription: e.target.value});
 	}
-	createForm() {
-		this.setState({
-			eventName: "",
-			eventLocation: "",
-			eventStartTime: "",
-			eventDescription: "",
+	editForm() {
+  	    var url = "https://djque.herokuapp.com/?query="; 
+		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.eventId + ";";
+        console.log("check query here:");
+        console.log(encodeURI(url + eventQuery));
+		fetch(encodeURI(url + eventQuery)).then((result) => {
+			return result.json();
+		}).then((result) => {
+			if(typeof result[0] != "undefined") {
+                var eventTime =result[0].startTime;
+                eventTime = eventTime.replace(' ','T');
+                eventTime = eventTime.substring(0,(eventTime.length)-3);
+				this.setState({
+					eventName: result[0].name,
+					eventLocation: result[0].location,
+					eventStartTime: eventTime,
+					eventDescription: result[0].description,
+					eventIsEnded: result[0].isEnded
+				});
+            }
+        
 		});
-		this.toggle();
+        this.toggle();
 	}
 	submitForm() {
 		var url = "https://djque.herokuapp.com/?query="; 
@@ -84,32 +99,39 @@ class CreateEventForm extends React.Component {
 		eventTime = eventTime.replace('T', ' ');
 		eventTime += ':00';
 		var eventDescription = this.state.eventDescription;
-		var query = "INSERT INTO Events (name, startTime, description, location, userId, isEnded, songAmt) VALUES ('"; 
-		query +=  eventName + "', '";
-		query += eventTime + "', '" 
-		query += eventDescription + "', '" 
-		query += eventLocation + "','";
-		query += this.props.user.id + "', 0, 0); ";
+		var query =  "UPDATE Events SET "; 
+		query +=  "name= '"+ eventName + "', ";
+		query +=  "startTime= '"+ eventTime + "', ";
+		query +=  "description= '"+ eventDescription + "', ";
+		query +=  "location= '"+ eventLocation+ "' "; 
+		query += "WHERE id="+this.props.eventId+";";
+        console.log("check this:");
+		console.log(query);
 
 		fetch(encodeURI(url + query)).then((res) => {
 			return res.json();
 		}).then((res) => {
-			//console.log(res);
+			this.props.onSuccess({
+				eventName: eventName,
+				eventLocation: eventLocation,
+				eventTime: eventTime,
+				eventDescription: eventDescription
+			});
 		});
-		this.props.eventCreated();
+
 		this.toggle();
 		this.toggleNested();
 	}
 	render() {
 		return (
 			<div id="createEventFormOuterDiv" className="createEventFormButton">
-				<Button color="danger" onClick={this.createForm} className="button-create" id="addEventButton">+</Button>
+				<Button color="info" onClick={this.editForm}>Edit</Button>
 				<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventModal">
 					<ModalBody>
 						<div>
 							<Form>
 								<header>
-									<h2 className="formTitle">Create New Event</h2>
+									<h2 className="formTitle">Edit Event</h2>
 							  	</header>
 							  
 							  	<div>
@@ -165,14 +187,14 @@ class CreateEventForm extends React.Component {
             			<br />
           			</ModalBody>
           			<ModalFooter>
-            			<Button disabled={!this.validateForm} color="primary" onClick={this.submitForm}>Submit</Button>
+            			<Button disabled={!this.validateForm} color="primary" onClick={this.submitForm}>Edit</Button>
            				{' '}
             			<Button color="secondary" onClick={this.toggle}>Cancel</Button>
           			</ModalFooter>
         		</Modal>
         		<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested} className="createEventNestedModal">
               		<ModalHeader>Success!</ModalHeader>
-              		<ModalBody>Your event has been created.</ModalBody>
+              		<ModalBody>Your event has been updated.</ModalBody>
               		<ModalFooter>
                 		<Button color="primary" onClick={this.toggleNested}>Done</Button>
               		</ModalFooter>
@@ -182,4 +204,4 @@ class CreateEventForm extends React.Component {
 	}
 }
 
-export default CreateEventForm; 
+export default EditForm; 

@@ -4,7 +4,12 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input, Button
 import YouTubePlayer from 'react-youtube-player';
 import SearchSong from './SearchSong.jsx';
 import _ from 'lodash';
+import Database from '../databaseShortcuts.js';
+import { formatDateTime } from '../timeConverter.js';
+import EventPageLeaderInviteNotificationStack from './EventPageLeaderInviteNotificationStack.jsx';
+import EditForm from './EditForm.jsx';
 require("./../resources/css/eventPage.css");
+require("../resources/css/eventList.css");
 var yt = require('../youtube.js');
 
 class EventPageLeader extends React.Component {
@@ -17,17 +22,19 @@ class EventPageLeader extends React.Component {
 			eventDescription: "",
 			eventIsEnded: false,
 			songID: "",
+			currSongSeq: -1,
 			queue: [],
 			songTitles: [],
 			modal: false,
 			deleteID: "",
-			queueState: []
+			queueState: [],
+			queueSequence: [],
+			hoverQueueId: -1
 		};
 		this.render = this.render.bind(this);
 		this.end = this.end.bind(this);
 		this.edit = this.edit.bind(this);
 		this.delete = this.delete.bind(this);
-		this.formatDateTime = this.formatDateTime.bind(this);
 		this.refreshQueue = this.refreshQueue.bind(this);
 		this.confirmDelete = this.confirmDelete.bind(this);
 		this.toggle = this.toggle.bind(this);
@@ -41,11 +48,19 @@ class EventPageLeader extends React.Component {
 		this.userIsLeader = this.userIsLeader.bind(this);
 		this.getSongTitle = this.getSongTitle.bind(this);
 		this.updateSongTitles = this.updateSongTitles.bind(this);
+		this.handleHoverQueue = this.handleHoverQueue.bind(this);
+		this.handleUnhoverQueue = this.handleUnhoverQueue.bind(this);
+		this.startPolling = this.startPolling.bind(this);
+		this.refreshInvites = this.refreshInvites.bind(this);
+		this.poll = this.poll.bind(this);
+		this.onEventEditSuccess = this.onEventEditSuccess.bind(this);
+		this.getDivClass = this.getDivClass.bind(this);
 	}
 	componentWillMount() {
 		this.setState({
 			hide: false
 		});
+		this._isMounted = true;
 		var url = "https://djque.herokuapp.com/?query="; 
 		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.getEventId() + ";";
 		fetch(encodeURI(url + eventQuery)).then((result) => {
@@ -85,6 +100,77 @@ class EventPageLeader extends React.Component {
 				});
 			}
 		});
+		this.refreshInvites();
+	}
+	componentWillUnmount() {
+		if(this._timer) {
+			clearInterval(this._timer);
+			this._timer = null;
+		}
+		this._isMounted = false;
+	}
+	startPolling() {
+		setTimeout(function(){
+			if(!this._isMounted) {
+				return; //abandon
+			}
+			this.poll();
+			this._timer = setInterval(this.poll.bind(this), 7000);
+		}.bind(this), 1000);
+	}
+	poll() {
+		//console.log("Poll");
+		if(this.userIsLeader()) {
+			this.refreshInvites();
+		}
+		/*if(!this._isMounted) {
+			return; //abandon
+		}
+		this.setState({
+			pendingInvites: [
+				{
+					id: 1,
+					fromId: "10208856888673232",
+					toId: "10154230939168043",
+					eventId: 25,
+					isRequest: 1,
+					isPending: 1
+				},
+				{
+					id: 2,
+					fromId: "755826817888438",
+					toId: "10154230939168043",
+					eventId: 25,
+					isRequest: 1,
+					isPending: 1
+				}
+			]
+		});*/
+	}
+	refreshInvites() {
+		if(!this._isMounted) {
+			return; //abandon
+		}
+		var url = "https://djque.herokuapp.com/?query=";
+		var inviteQuery = "SELECT * FROM Invites WHERE toId='"+this.props.currentUserId+"' AND eventId="+this.props.getEventId()+";"
+		fetch(encodeURI(url + inviteQuery)).then(function(result) {
+			return result.json();
+		}.bind(this)).then(function(result) {
+			if(typeof result != "undefined") {
+				var pendingInvites = [];
+				if(result.length>0) {
+					result.map(function(item) {
+						if(item.isPending) {
+							pendingInvites.push(item);
+						}
+					}.bind(this));	
+				}
+				this.setState({
+					pendingInvites: pendingInvites
+				});
+			}
+			this.startPolling();
+		}.bind(this));
 	}
 	refreshQueue(isStateRefresh){
 		var url = "https://djque.herokuapp.com/?query="; 
@@ -130,7 +216,14 @@ class EventPageLeader extends React.Component {
 				isEnded: true
 			});
 		});
+
+		var query = "UPDATE Events SET currSongSeq = -1 WHERE id = '" + this.props.getEventId() + "'; ";		
+		Database(query).then(function(response) {
+			console.log("Changed currSongSeq to -1");
+		}.bind(this));
+
 		this.props.back();
+		this.props.eventCreated();
 	}
 	edit(){
 	}
@@ -160,59 +253,22 @@ class EventPageLeader extends React.Component {
 		}.bind(this));
 		this.toggle();
 	}
-	formatDateTime() {
-		var year = this.state.eventStartTime.toString().substring(0,4);
-		var month = this.state.eventStartTime.toString().substring(5,7);
-		var date = this.state.eventStartTime.toString().substring(8,10);
-
-		var hour = this.state.eventStartTime.toString().substring(11,13);
-		var minute = this.state.eventStartTime.toString().substring(14,16);
-		var period = "AM";
-
-		if (hour == "13" | hour == "14" | hour == "15" | hour == "16" | hour == "17" | hour == "18" | hour == "19" | hour == "20" | hour == "21" | hour == "22" | hour == "23")
-			period = "PM";
-
-		if (month == "1") month = "January";
-		else if (month == "2") month = "February";
-		else if (month == "3") month = "March";
-		else if (month == "4") month = "April";
-		else if (month == "5") month = "May";
-		else if (month == "6") month = "June";
-		else if (month == "7") month = "July";
-		else if (month == "8") month = "August";
-		else if (month == "9") month = "September";
-		else if (month == "10") month = "October";
-		else if (month == "11") month = "November";
-		else if (month == "12") month = "December";
-
-		if (date == "01" | date == "02" | date == "03" | date == "04" | date == "05" | date == "06" | date == "07" | date == "08" | date == "09")
-			date = date.substring(1,2);
-
-		if (hour == "01" | hour == "02" | hour == "03" | hour == "04" | hour == "05" | hour == "06" | hour == "07" | hour == "08" | hour == "09")
-			hour = hour.substring(1,2);
-		else if (hour == "13")	hour = "1";
-		else if (hour == "14")	hour = "2";
-		else if (hour == "15")	hour = "3";
-		else if (hour == "16")	hour = "4";
-		else if (hour == "17")	hour = "5";
-		else if (hour == "18")	hour = "6";
-		else if (hour == "19")	hour = "7";
-		else if (hour == "20")	hour = "8";
-		else if (hour == "21")	hour = "9";
-		else if (hour == "22")	hour = "10";
-		else if (hour == "23")	hour = "11";
-		else if (hour == "00")	hour = "12";
-
-		var formattedDateTime = month.concat(" ", date, ", ", year, " at ", hour, ":", minute, " ", period);
-
-		return formattedDateTime;
-	}
 	onPlay(key) {
 		return function() {
 			this.setAll('unstarted');
 			this.state.queueState[key] = 'playing';
 			this.refreshQueue(false);
+
+			var eventId = this.props.getEventId();
+			var query = "UPDATE Events SET currSongSeq ='";
+			query += this.state.queueSequence[key] + "' WHERE id = '";
+			query += eventId + "'; ";
+			
+			Database(query).then(function(response) {
+				console.log("Changed currSongSeq to current song");
+			}.bind(this));
 		}.bind(this);
+
 	}
 	onBuffer(key) {
 		return function() {
@@ -265,6 +321,7 @@ class EventPageLeader extends React.Component {
 		});
 	}
 	updateSongTitles() {
+		this.setState({songTitles:[]});
 		this.state.queue.map((vidID) => {
 			this.getSongTitle(vidID);
    		});
@@ -274,40 +331,70 @@ class EventPageLeader extends React.Component {
 		var eventLeader = this.props.getEventLeaderId();
 		return (currentUser == eventLeader);
 	}
+	handleHoverQueue(i){
+		this.setState({hoverQueueId:i});
+	}
+	handleUnhoverQueue(){
+		this.setState({hoverQueueId: -1});
+	}
+	getDivClass(i){
+		/*
+		var url = "https://djque.herokuapp.com/?query=";
+		var currSongQuery = "SELECT currSongSeq FROM Events WHERE id="+ this.props.getEventId() + ";";
+		fetch(encodeURI(url + currSongQuery)).then((res) => {
+			return res.json();
+		}).then((res) => {
+			this.setState({currSongSeq: res[0].currSongSeq});
+			
+		});
+		if ((this.state.queueSequence[i]-1)==this.state.currSongSeq) 	
+			return "divHovered";
+		else
+			return "divNotHovered";
+		*/
+		return "divNotHovered";
+	}
+	onEventEditSuccess(newState) {
+		this.setState(newState);
+		this.forceUpdate();
+	}
 	render() {
 		return (
 			<div id="eventPageLeaderOuterDivId"> 
+				{ (this.userIsLeader())?<EventPageLeaderInviteNotificationStack eventId={this.props.getEventId()} inviteList={this.state.pendingInvites}/>:null}
 				<div id="eventPageLeader">
-					<div id="eventPageLeaderHeader">
+					<div>
 						<h2 className="eventName">{this.state.eventName}</h2>
-						<ButtonToolbar>
+						<div id="buttonToolbar">
 							<Button color="default" onClick={this.props.back}>Back</Button>
+							{' '}
 							{ (this.userIsLeader() && !this.state.eventIsEnded) ?  
-								<div>
-									<Button color="danger" onClick={this.end}>End</Button>
-									<Button color="info" onClick={this.edit}>Edit</Button>
+								<div id = "hiddenButtons">
+									<Button color="danger" onClick={this.end}>End Event</Button>
+									{' '}
+									<EditForm eventId={this.props.getEventId()} onSuccess={this.onEventEditSuccess}/>
 								</div>
 							:
 								null 
 							}
-						</ButtonToolbar>
+						</div>
 					</div>
 					<p className="eventDetails">{this.state.eventLocation}</p>
-					<p className="eventDetails">{this.formatDateTime()}</p>
+					<p className="eventDetails">{ formatDateTime(this.state.eventStartTime.toString()) }</p>
 					<br/>
 					<p className="eventDetails">{this.state.eventDescription}</p>
 					
 					{ this.state.eventIsEnded ? null :
 						<div id="addSong">
 							<hr/>
-							<p>Search</p>
+							<div>Search</div>
 							<SearchSong onSongAdded={this.onSongAdded} eventId={this.props.getEventId()}/>
 						</div>
 					}
 					<hr/>
 					{ (this.userIsLeader() || this.state.eventIsEnded) ? 
 						<div id="queue">
-							<p>Music Queue</p>
+							<div>Music Queue</div>
 							<div id="videos">
 							{ 	this.state.queue.map((vidID, i) => {
 									return 	<div key={i} className="videoOuterDiv">
@@ -367,16 +454,25 @@ class EventPageLeader extends React.Component {
 						:
 							<div id="attendee-queue">
 								<p>Music Queue</p>
-								<div id="attendee-videos">
+								<div id="attendee-queue">
+								<ul id="attendee-queue-list">
 								{ 	this.state.songTitles.map((title, i) => {
-										return 	<div key={i} className="attendee-songOuterDiv">
-													<div className="attendee-songInnerDiv">
-														<p>{title}</p>
-										        	</div>
-										        	<br/>
-										        </div>
+										return 	<li key={i}>
+													<div className={this.getDivClass(i) + " attendee-songOuterDiv songPlaying hvr-back-pulse2"}>
+														<div className="attendee-songInnerDiv"
+															 onMouseEnter={() => this.handleHoverQueue(i)}
+															 onMouseLeave={() => this.handleUnhoverQueue()}>
+															{(this.state.hoverQueueId == i) ? 
+																<a target="_blank" href={"https://www.youtube.com/watch?v="+this.state.queue[i]}>{title}</a>
+															:
+																<p>{title}</p>
+															}
+											        	</div>
+											        </div>
+											    </li>
 							       	})
 						    	}
+						    	</ul>
 					    		</div>
 							</div>
 					}
