@@ -51,11 +51,11 @@ class EventListItem extends React.Component {
 			return (<li>
 						<div onClick={this.handleClick} onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave} className={this.state.divClass+" hvr-back-pulse2"}>
 							<p className="alwaysShown"> What: {this.props.eventInfo.name} </p>
-							<p className="alwaysShown"> When: { formatDateTime(this.props.eventInfo.startTime.toString()) } </p>
+							<p className="alwaysShown"> Who: {this.state.userInfo.name} </p>
 							<p className="alwaysShown"> Where: {this.props.eventInfo.location} </p>
 							<br/>
 							<div className={this.state.pClass}>
-								<p> Who: {this.state.userInfo.name} </p>
+								<p> When: { formatDateTime(this.props.eventInfo.startTime.toString()) } </p>
 								<p> Why: {this.props.eventInfo.description} </p>
 							</div>
 						</div>
