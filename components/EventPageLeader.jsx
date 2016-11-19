@@ -67,15 +67,13 @@ class EventPageLeader extends React.Component {
 					eventDescription: result[0].description,
 					eventIsEnded: result[0].isEnded
 				});
-				this.refreshQueue(true);
 			}
 		});
-		this.refreshInvites();
 	}
 	componentWillMount() {
 		this._isMounted = true;
-	}
-	componentDidMount() {
+		this.refreshQueue(true);
+		this.refreshInvites();
 		this.startPolling();
 	}
 	componentWillUnmount() {

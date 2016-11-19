@@ -35,7 +35,8 @@ class Dashboard extends React.Component {
 			},
 			hideEventLeaderPage: true,
 			hideEventsLists: false,
-			searchStr: ""
+			searchStr: "",
+			tabCurrKey: 1
 		};
 		this._isMounted = false;
 		this.getCurrEventId = this.getCurrEventId.bind(this);
@@ -52,8 +53,13 @@ class Dashboard extends React.Component {
 	}
 	componentWillMount() {
 		this._isMounted = true;
+		this.startPolling();
 	}
 	componentWillUnmount() {
+		if(this._timer) {
+			clearInterval(this._timer);
+			this._timer = null;
+		}
 		this._isMounted = false;
 	}
 	timeStampSorter(x,y) {
@@ -122,7 +128,6 @@ class Dashboard extends React.Component {
 				otherFuture: otherFuture,
 				otherPast: otherPast
 			});
-			this.startPolling();
 		});
 	}
 	eventCreated() {
@@ -138,7 +143,8 @@ class Dashboard extends React.Component {
 				otherEventsStyle: {
 					display: 'none',
 					opacity: 0
-				}
+				},
+				tabCurrKey: 1
 			})
 		}
 		else {
@@ -150,7 +156,8 @@ class Dashboard extends React.Component {
 				otherEventsStyle: {
 					display: 'block',
 					opacity: 1
-				}
+				},
+				tabCurrKey: 2
 			})
 		}
 	}
@@ -165,7 +172,7 @@ class Dashboard extends React.Component {
 			},
 			hideEventLeaderPage: false,
 			hideEventsLists: true
-		})
+		});
 	}
 	getCurrEventId() {
 		return this.state.eventId;
@@ -178,6 +185,12 @@ class Dashboard extends React.Component {
 			hideEventLeaderPage: true,
 			hideEventsLists: false
 		});
+		if(this.state.eventLeaderId === this.props.user.id) {
+			this.selectTab(1);
+		}
+		else {
+			this.selectTab(2);
+		}
 	}
 	onSearchTermChange(searchStr) {
 		this.setState({searchStr: searchStr})
@@ -199,7 +212,7 @@ class Dashboard extends React.Component {
 		var eventList = (listOfEvents, title, name) => (
 			<div><h1 className="eventTypeHeading">{title}:</h1>
 			{listOfEvents.length>0?
-				<EventList eventList={listOfEvents} name={name} handleClick={this.onEventListItemClick}/>
+				<EventList eventList={listOfEvents} name={name} currUserInfo={this.props.user} handleClick={this.onEventListItemClick}/>
 				:noEvents}
 				</div>
 		);
@@ -219,7 +232,7 @@ class Dashboard extends React.Component {
 				{ this.state.hideEventsLists ? null : 
 				<div>
 					<div>
-						<ControlledTabs handleSelect={this.selectTab} />
+						<ControlledTabs handleSelect={this.selectTab} tabCurrKey={this.state.tabCurrKey}/>
 					</div>
 					<div id="myEventsDivsOuter" style={this.state.myEventsStyle}>
 						<div id="presentMyEventsDiv" className="eventsDivs">

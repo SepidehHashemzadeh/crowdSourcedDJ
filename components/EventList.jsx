@@ -19,7 +19,7 @@ class EventList extends React.Component {
 			var user = getUserInfo(item.userId);
 			key++;
 			arr.push(
-				<EventListItem name={this.props.name} eventInfo={item} key={key} userInfo={user} handleClick={this.props.handleClick} />
+				<EventListItem name={this.props.name} eventInfo={item} key={key} currUserInfo={this.props.currUserInfo} userInfo={user} handleClick={this.props.handleClick} />
 			);
 		});
 		return arr;
