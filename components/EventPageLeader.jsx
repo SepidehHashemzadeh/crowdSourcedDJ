@@ -26,6 +26,7 @@ class EventPageLeader extends React.Component {
 			queue: [],
 			songTitles: [],
 			modal: false,
+			endEventModal: false,
 			deleteID: "",
 			queueState: [],
 			queueSequence: [],
@@ -34,11 +35,12 @@ class EventPageLeader extends React.Component {
 		};
 		this.render = this.render.bind(this);
 		this.end = this.end.bind(this);
-		this.edit = this.edit.bind(this);
+		this.back = this.back.bind(this);
 		this.delete = this.delete.bind(this);
 		this.refreshQueue = this.refreshQueue.bind(this);
 		this.confirmDelete = this.confirmDelete.bind(this);
 		this.toggle = this.toggle.bind(this);
+		this.toggleEnd = this.toggleEnd.bind(this);
 		this.onPlay = this.onPlay.bind(this);
 		this.onBuffer = this.onBuffer.bind(this);
 		this.onEnd = this.onEnd.bind(this);
@@ -165,15 +167,22 @@ class EventPageLeader extends React.Component {
 			//console.log("Changed currSongSeq to -1");
 		}.bind(this));
 
+		this.toggleEnd();
 		this.props.back();
 		this.props.eventCreated();
 	}
-	edit(){
+	back(){
+		
 	}
 	toggle() {
 		this.refreshQueue(false);
 		this.setState({ 
 			modal: !this.state.modal
+		});
+	}
+	toggleEnd() {
+		this.setState({ 
+			endEventModal: !this.state.endEventModal
 		});
 	}
 	confirmDelete(vidID, key, sequence){
@@ -303,26 +312,57 @@ class EventPageLeader extends React.Component {
 				<div id="eventPageLeader">
 					<div>
 						<h2 className="eventName">{this.state.eventName}</h2>
-						<div id="buttonToolbar">
-							<Button color="default" onClick={this.props.back}>Back</Button>
-							{' '}
+						<div>
+							<div id="backButton">
+								<Button color="default" onClick={this.props.back}>Back</Button>
+							</div>
 							{ (this.userIsLeader() && !this.state.eventIsEnded) ?  
-								<div id = "hiddenButtons">
-									<Button color="danger" onClick={this.end}>End Event</Button>
-									{' '}
-									<EditForm eventId={this.props.getEventId()} onSuccess={this.onEventEditSuccess}/>
+								<div> 
+									<div id="endButton">
+										<Button color="danger" onClick={this.toggleEnd}>End Event</Button>
+										<Modal isOpen={this.state.endEventModal} toggle={this.toggleEnd} className={this.props.className}>
+								          	<ModalHeader>
+								          		End Event
+								          	</ModalHeader>
+								          	<ModalBody>
+								          		Are you sure you want to end this event? Videos cannot be added to the queue once an event has ended.
+								          	</ModalBody>
+								          	<ModalFooter>
+								            	<Button color="danger" onClick={this.end}>End</Button>
+								            	<Button color="secondary" onClick={this.toggleEnd}>Cancel</Button>
+								          	</ModalFooter>
+								        </Modal>
+									</div>
+									<div id="editButton">
+										<EditForm eventId={this.props.getEventId()} onSuccess={this.onEventEditSuccess}/>
+									</div>
 								</div>
 							:
 								null 
 							}
 						</div>
 					</div>
-					<p className="eventDetails">{this.state.eventLocation}</p>
-					<p className="eventDetails">{ formatDateTime(this.state.eventStartTime.toString()) }</p>
-					<br/>
-					<p className="eventDetails">{this.state.eventDescription}</p>
+					<div className="eventDetails">
+						{ (this.userIsLeader() && !this.state.eventIsEnded) ?
+							null
+						:
+							<br/>
+						}
+
+						{this.state.eventLocation}
+						<br/>
+						{ formatDateTime(this.state.eventStartTime.toString()) }
+						<br/>
+						<br/>
+						{this.state.eventDescription}
+					</div>
 					
-					{ this.state.eventIsEnded ? null :
+					{ this.state.eventIsEnded ? 
+						<div className="eventDetails">
+							<hr/>
+							This event has ended.
+						</div>
+					 :
 						<div id="addSong">
 							<hr/>
 							<div>Search</div>
@@ -391,8 +431,8 @@ class EventPageLeader extends React.Component {
 						</div>
 						:
 							<div id="attendee-queue">
-								<p>Music Queue</p>
-								<div id="attendee-queue">
+								<div>Music Queue</div>
+								<div>
 								<ul id="attendee-queue-list">
 								{ 	this.state.songTitles.map((title, i) => {
 										return 	<li key={i}>

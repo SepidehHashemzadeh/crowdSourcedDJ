@@ -43,7 +43,7 @@ class EditForm extends React.Component {
 	}
 	validateStartTime(){
 		var now = new Date();
-		now.setHours(now.getHours() - 7);
+		now.setHours(now.getHours() - 8);
 		now = now.toJSON();
 		var startTimeInFuture = (now < this.state.eventStartTime);
 		return (!this.state.eventStartTime || startTimeInFuture);
@@ -182,7 +182,7 @@ class EditForm extends React.Component {
             			<br />
           			</ModalBody>
           			<ModalFooter>
-            			<Button disabled={!this.validateForm} color="primary" onClick={this.submitForm}>Edit</Button>
+            			<Button disabled={!this.validateForm} color="primary" onClick={this.submitForm}>Submit</Button>
            				{' '}
             			<Button color="secondary" onClick={this.toggle}>Cancel</Button>
           			</ModalFooter>

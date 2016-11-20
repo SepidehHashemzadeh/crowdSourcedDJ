@@ -17,27 +17,32 @@
 	margin-bottom: auto;
 }
 
-#buttonToolbar {
-	margin-left: auto;
-	margin-right: auto;
+#backButton {
+	float: left;
 	display: inline-block;
 }
 
-#hiddenButtons {
+#endButton {
+	float: right;
 	display: inline-block;
+}
+
+#editButton {
+	padding-left: 90px;
 }
 
 .eventName{
 	font-family: 'Lobster', cursive;
 	font-size: 50px;
-	text-align:center;
+	text-align: center;
+	display: inline-block;
 }
 
 .eventDetails{
 	font-size: 20px;
-	font-family: Arial, Helvetica, sans-serif;
 	text-align:center;
 	margin-top: 10px;
+	font-family: 'Roboto Condensed', sans-serif;
 }
 
 hr {
@@ -126,10 +131,15 @@ hr {
     position: relative;
 }
 
-
 .attendee-songOuterDiv{
 	border-style: solid;
 	border-color: white;
+}
+
+#attendee-queue {
+	font-family: 'Lobster', cursive;
+	font-size: 30px;
+	text-align:center;
 }
 
 #attendee-queue-list li{

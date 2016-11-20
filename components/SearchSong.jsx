@@ -46,11 +46,12 @@ class SearchSong extends React.Component {
         var callBackFunction = this.props.onSongAdded;
         var emptySearch = this;
         Popup.create({
-          title: null,
-          content: 'Add to queue?',
+          title: 'Add Song',
+          content: 'Add song to Music Queue?',
           buttons: {
-            left: [{
+            right: [{
               text: 'Ok',
+              className: 'ok-button',
               action: function (popup) {
                 yt.addToPlaylist(eventId, id, (res) => {
                     //console.log(res);
@@ -61,8 +62,9 @@ class SearchSong extends React.Component {
                 popupDiv.parentNode.removeChild(popupDiv);
               }
             }],
-            right: [{
+            left: [{
               text: 'Cancel',
+              className: 'cancel-button',
               action: function (popup) {
                 popup.close();
                 popupDiv.parentNode.removeChild(popupDiv);
