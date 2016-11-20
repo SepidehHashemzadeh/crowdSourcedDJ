@@ -44,6 +44,7 @@ class SearchSong extends React.Component {
 
         var eventId = this.props.eventId;
         var callBackFunction = this.props.onSongAdded;
+        var emptySearch = this;
         Popup.create({
           title: null,
           content: 'Add to queue?',
@@ -54,6 +55,8 @@ class SearchSong extends React.Component {
                 yt.addToPlaylist(eventId, id, (res) => {
                     //console.log(res);
                 }, callBackFunction);
+                emptySearch.setState({ searchValue: "" });
+                emptySearch.doSearch("");
                 popup.close();
                 popupDiv.parentNode.removeChild(popupDiv);
               }

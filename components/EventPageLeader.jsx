@@ -29,7 +29,8 @@ class EventPageLeader extends React.Component {
 			deleteID: "",
 			queueState: [],
 			queueSequence: [],
-			hoverQueueId: -1
+			hoverQueueId: -1,
+			hide: false
 		};
 		this.render = this.render.bind(this);
 		this.end = this.end.bind(this);
@@ -55,17 +56,9 @@ class EventPageLeader extends React.Component {
 		this.poll = this.poll.bind(this);
 		this.onEventEditSuccess = this.onEventEditSuccess.bind(this);
 		this.getDivClass = this.getDivClass.bind(this);
-	}
-	componentWillMount() {
-		this.setState({
-			hide: false
-		});
-		this._isMounted = true;
-		var url = "https://djque.herokuapp.com/?query="; 
+
 		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.getEventId() + ";";
-		fetch(encodeURI(url + eventQuery)).then((result) => {
-			return result.json();
-		}).then((result) => {
+		Database(eventQuery).then((result) => {
 			if(typeof result[0] != "undefined") {
 				this.setState({
 					eventName: result[0].name,
@@ -74,33 +67,14 @@ class EventPageLeader extends React.Component {
 					eventDescription: result[0].description,
 					eventIsEnded: result[0].isEnded
 				});
-				var songQuery = "SELECT songUrl, sequence FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
-				var vidIds = [];
-				var vidStates = [];
-				var vidSequences = [];
-
-				fetch(encodeURI(url + songQuery)).then((res) => {
-					return res.json();
-				}).then((res) => {
-					if(typeof res != "undefined") {
-						res.map(function(item) {
-							var videoId = item.songUrl;
-							var videoSequence = item.sequence;
-							vidIds.push(videoId);
-							vidSequences.push(videoSequence);
-							vidStates.push('unstarted');
-						});
-						this.setState({
-							queue: vidIds,
-							queueState: vidStates,
-							queueSequence: vidSequences
-						});
-						this.updateSongTitles();
-					}
-				});
 			}
 		});
+	}
+	componentWillMount() {
+		this._isMounted = true;
+		this.refreshQueue(true);
 		this.refreshInvites();
+		this.startPolling();
 	}
 	componentWillUnmount() {
 		if(this._timer) {
@@ -110,52 +84,28 @@ class EventPageLeader extends React.Component {
 		this._isMounted = false;
 	}
 	startPolling() {
-		setTimeout(function(){
-			if(!this._isMounted) {
-				return; //abandon
-			}
-			this.poll();
-			this._timer = setInterval(this.poll.bind(this), 7000);
-		}.bind(this), 1000);
+		if(!this.state.eventIsEnded) {
+			setTimeout(() => {
+				if(!this._isMounted) {
+					return; //abandon
+				}
+				this.poll();
+				this._timer = setInterval(this.poll.bind(this), 7000);
+			}, 1000);
+		}
 	}
 	poll() {
-		//console.log("Poll");
 		if(this.userIsLeader()) {
 			this.refreshInvites();
 		}
-		/*if(!this._isMounted) {
-			return; //abandon
-		}
-		this.setState({
-			pendingInvites: [
-				{
-					id: 1,
-					fromId: "10208856888673232",
-					toId: "10154230939168043",
-					eventId: 25,
-					isRequest: 1,
-					isPending: 1
-				},
-				{
-					id: 2,
-					fromId: "755826817888438",
-					toId: "10154230939168043",
-					eventId: 25,
-					isRequest: 1,
-					isPending: 1
-				}
-			]
-		});*/
+		this.refreshQueue(false);
 	}
 	refreshInvites() {
 		if(!this._isMounted) {
 			return; //abandon
 		}
-		var url = "https://djque.herokuapp.com/?query=";
 		var inviteQuery = "SELECT * FROM Invites WHERE toId='"+this.props.currentUserId+"' AND eventId="+this.props.getEventId()+";"
-		fetch(encodeURI(url + inviteQuery)).then(function(result) {
-			return result.json();
-		}.bind(this)).then(function(result) {
+		Database(inviteQuery).then(function(result) {
 			if(typeof result != "undefined") {
 				var pendingInvites = [];
 				if(result.length>0) {
@@ -169,18 +119,14 @@ class EventPageLeader extends React.Component {
 					pendingInvites: pendingInvites
 				});
 			}
-			this.startPolling();
 		}.bind(this));
 	}
 	refreshQueue(isStateRefresh){
-		var url = "https://djque.herokuapp.com/?query="; 
 		var songQuery = "SELECT songUrl, sequence FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
 		var vidIds = [];
 		var vidStates = [];	
 		var vidSequences = [];	
-		fetch(encodeURI(url + songQuery)).then((res) => {
-			return res.json();
-		}).then((res) => {
+		Database(songQuery).then((res) => {
 			if(typeof res != "undefined") {
 				res.map(function(item) {
 					var videoId = item.songUrl.substring(item.songUrl.indexOf('=')+1);
@@ -207,19 +153,16 @@ class EventPageLeader extends React.Component {
 		});
 	}
 	end(){
-		var url = "https://djque.herokuapp.com/?query="; 
 		var endEventQuery = "UPDATE Events SET isEnded=true WHERE id="+this.props.getEventId()+";";
-		fetch(encodeURI(url + endEventQuery)).then((res) => {
-			return res.json();
-		}).then((res) => {
+		Database(endEventQuery).then((res) => {
 			this.setState({
-				isEnded: true
+				eventIsEnded: true
 			});
 		});
 
 		var query = "UPDATE Events SET currSongSeq = -1 WHERE id = '" + this.props.getEventId() + "'; ";		
 		Database(query).then(function(response) {
-			console.log("Changed currSongSeq to -1");
+			//console.log("Changed currSongSeq to -1");
 		}.bind(this));
 
 		this.props.back();
@@ -243,12 +186,9 @@ class EventPageLeader extends React.Component {
 	}
 	delete(videoID, key, sequence){
 		this.state.queueState.splice(key, 1);
-		var url = "https://djque.herokuapp.com/?query="; 
 		var deleteSongQuery = "DELETE FROM Event_Song WHERE songUrl='"+videoID+"' AND eventId="+this.props.getEventId()+" AND sequence="+sequence+";";
 
-		fetch(encodeURI(url + deleteSongQuery)).then((res) => {
-			return res.json();
-		}).then(function(res) {
+		Database(deleteSongQuery).then(function(res) {
 			this.refreshQueue(false);
 		}.bind(this));
 		this.toggle();
@@ -265,7 +205,6 @@ class EventPageLeader extends React.Component {
 			query += eventId + "'; ";
 			
 			Database(query).then(function(response) {
-				console.log("Changed currSongSeq to current song");
 			}.bind(this));
 		}.bind(this);
 
@@ -305,7 +244,6 @@ class EventPageLeader extends React.Component {
 	}
 	onSongAdded() {
 		this.refreshQueue(false);
-		this.state.queueState.push('unstarted');
 	}
 	setAll(v) {
 	    var i, n = this.state.queueState.length;

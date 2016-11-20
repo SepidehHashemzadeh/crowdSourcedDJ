@@ -104,7 +104,7 @@ ul li div p {
   display: block;
 }
 .divHovered {
-  height: 70px;
+  height: auto;
   transition: all 0.5s ease;
   padding-top: 10px;
   background-color: #900C3F;
@@ -116,7 +116,7 @@ ul li div p {
 }
 
 .divNotHovered {
-  height: 55px;
+  height: auto;
   transition: all 0.5s ease;
   padding-top: 16px;
   background-color: #d9534f;

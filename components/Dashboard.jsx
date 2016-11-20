@@ -35,8 +35,10 @@ class Dashboard extends React.Component {
 			},
 			hideEventLeaderPage: true,
 			hideEventsLists: false,
-			searchStr: ""
+			searchStr: "",
+			tabCurrKey: 1
 		};
+		this._isMounted = false;
 		this.getCurrEventId = this.getCurrEventId.bind(this);
 		this.getCurrEventLeaderId = this.getCurrEventLeaderId.bind(this);
 		this.refreshEventsList = this.refreshEventsList.bind(this);
@@ -45,8 +47,20 @@ class Dashboard extends React.Component {
 		this.eventCreated = this.eventCreated.bind(this);
 		this.selectTab = this.selectTab.bind(this);
 		this.onEventListItemClick = this.onEventListItemClick.bind(this);
-		setTimeout(this.refreshEventsList, 5000);
+		this.startPolling = this.startPolling.bind(this);
+		this.poll = this.poll.bind(this);
 		this.onSearchTermChange = this.onSearchTermChange.bind(this);
+	}
+	componentWillMount() {
+		this._isMounted = true;
+		this.startPolling();
+	}
+	componentWillUnmount() {
+		if(this._timer) {
+			clearInterval(this._timer);
+			this._timer = null;
+		}
+		this._isMounted = false;
 	}
 	timeStampSorter(x,y) {
 		return x.startTime-y.startTime;
@@ -129,7 +143,8 @@ class Dashboard extends React.Component {
 				otherEventsStyle: {
 					display: 'none',
 					opacity: 0
-				}
+				},
+				tabCurrKey: 1
 			})
 		}
 		else {
@@ -141,7 +156,8 @@ class Dashboard extends React.Component {
 				otherEventsStyle: {
 					display: 'block',
 					opacity: 1
-				}
+				},
+				tabCurrKey: 2
 			})
 		}
 	}
@@ -156,7 +172,7 @@ class Dashboard extends React.Component {
 			},
 			hideEventLeaderPage: false,
 			hideEventsLists: true
-		})
+		});
 	}
 	getCurrEventId() {
 		return this.state.eventId;
@@ -169,16 +185,34 @@ class Dashboard extends React.Component {
 			hideEventLeaderPage: true,
 			hideEventsLists: false
 		});
+		if(this.state.eventLeaderId === this.props.user.id) {
+			this.selectTab(1);
+		}
+		else {
+			this.selectTab(2);
+		}
 	}
 	onSearchTermChange(searchStr) {
 		this.setState({searchStr: searchStr})
+	}
+	startPolling() {
+		setTimeout(function(){
+			if(!this._isMounted) {
+				return; //abandon
+			}
+			this.poll();
+			this._timer = setInterval(this.poll.bind(this), 7000);
+		}.bind(this), 1000);
+	}
+	poll() {
+		this.refreshEventsList();
 	}
 	render () {
 		var noEvents = <div className="noEvents hvr-back-pulse2">No Events 😔</div>;
 		var eventList = (listOfEvents, title, name) => (
 			<div><h1 className="eventTypeHeading">{title}:</h1>
 			{listOfEvents.length>0?
-				<EventList eventList={listOfEvents} name={name} handleClick={this.onEventListItemClick}/>
+				<EventList eventList={listOfEvents} name={name} currUserInfo={this.props.user} handleClick={this.onEventListItemClick}/>
 				:noEvents}
 				</div>
 		);
@@ -186,7 +220,7 @@ class Dashboard extends React.Component {
 			<div id="searchAndAdd">
 				<Search onSearchTermChange={this.onSearchTermChange}/>
 				<CreateEventForm user={this.props.user} eventCreated={this.eventCreated}/>
-				<SearchList searchStr={this.state.searchStr}/>
+				<SearchList searchStr={this.state.searchStr} user={this.props.user}/>
 				<div style={this.state.eventPageLeaderStyle}>
 					{this.state.hideEventLeaderPage ? null : <EventPageLeader getEventId={this.getCurrEventId} 
 															getEventLeaderId={this.getCurrEventLeaderId} 
@@ -198,7 +232,7 @@ class Dashboard extends React.Component {
 				{ this.state.hideEventsLists ? null : 
 				<div>
 					<div>
-						<ControlledTabs handleSelect={this.selectTab} />
+						<ControlledTabs handleSelect={this.selectTab} tabCurrKey={this.state.tabCurrKey}/>
 					</div>
 					<div id="myEventsDivsOuter" style={this.state.myEventsStyle}>
 						<div id="presentMyEventsDiv" className="eventsDivs">
@@ -228,71 +262,5 @@ class Dashboard extends React.Component {
 		);
 	}
 }
-const Picture = ({ imgSrc, borderColor }) => (
-	<img
-		style={{
-			width: '60px',
-			height: '60px',
-			borderRadius: '100%',
-			border: `3px solid ${borderColor}`,
-		}}
-		src={imgSrc}
-	/>
-);
-
-const DetailsRow = ({ icon, title, summary }) => {
-	const renderSummary = () => {
-		if (summary)	return (
-			<p style={{ fontWeight: 300, lineHeight: 1.45 }}>
-				{summary}
-			</p>
-		);
-		return null;
-	};
-
-	return (
-		<div style={styles.detailsRow.row}>
-			<span
-			className={`icon ${icon}`}
-			style={{ /*...styles.detailsRow.icon,*/ alignSelf: 'flex-start' }}
-			/>
-			<div style={{ width: '80%' }}>
-				<h2 style={styles.detailsRow.title}>
-					{title}
-				</h2>
-				{renderSummary()}
-			</div>
-		</div>
-	);
-};
-const Event = (props) => (
-	<div style={{ position: 'absolute', top: 0 }} onClick={props.onClick}>
-		<header style={styles.cardHeader} className='card-header-details'>
-			<Picture imgSrc={props.imgSrc} borderColor={props.imgBorderColor} />
-			<div>
-				<h1 style={styles.headerName}>{props.name}</h1>
-				<h3 style={styles.headerTitle} className='icon ion-ios-arrow-down'>{props.title}</h3>
-			</div>
-		</header>
-
-		<div style={{color: '#fff'}}>
-			<DetailsRow
-				icon='ion-ios-telephone-outline'
-				title={props.mobileNo}
-			/>
-
-			<DetailsRow
-				icon='ion-ios-location-outline'
-				title={props.location}
-			/>
-
-			<DetailsRow
-				icon='icon ion-ios-paper-outline'
-				title='Main Role'
-				summary={props.role}
-			/>
-		</div>
-  </div>
-);
 
 export default Dashboard;

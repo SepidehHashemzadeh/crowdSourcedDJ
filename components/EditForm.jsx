@@ -70,8 +70,6 @@ class EditForm extends React.Component {
 	editForm() {
   	    var url = "https://djque.herokuapp.com/?query="; 
 		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.eventId + ";";
-        console.log("check query here:");
-        console.log(encodeURI(url + eventQuery));
 		fetch(encodeURI(url + eventQuery)).then((result) => {
 			return result.json();
 		}).then((result) => {
@@ -105,9 +103,6 @@ class EditForm extends React.Component {
 		query +=  "description= '"+ eventDescription + "', ";
 		query +=  "location= '"+ eventLocation+ "' "; 
 		query += "WHERE id="+this.props.eventId+";";
-        console.log("check this:");
-		console.log(query);
-
 		fetch(encodeURI(url + query)).then((res) => {
 			return res.json();
 		}).then((res) => {
