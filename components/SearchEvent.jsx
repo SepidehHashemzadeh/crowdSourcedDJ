@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class Search extends React.Component {
+class SearchEvent extends React.Component {
 
   constructor(props) {
     super(props);
@@ -29,4 +29,4 @@ class Search extends React.Component {
 
 }
 
-export default Search;
+export default SearchEvent;

@@ -119,6 +119,24 @@ p, a {
   position:relative;
   text-align: left;
   vertical-align: middle;
+  text-decoration: none;
+  color: white;
+  border: 0.5px solid white;
+}
+
+.searchSongListItemP:visited {
+  text-decoration: none;
+  color: white;
+}
+
+.searchSongListItemP:active {
+  text-decoration: none;
+  color: white;
+}
+
+.searchSongListItemP:hover {
+  text-decoration: none;
+  color: white;
 }
 
 /* popup styling */
@@ -167,9 +185,6 @@ p, a {
 }
 
 .searchSongListItemButton {
-  margin-left: 5px;
-  margin-bottom: auto;
-  margin-top: auto;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.42857143;
@@ -191,12 +206,19 @@ p, a {
   border-color: #d43f3a;
   display: inline-block;
   position: absolute;
-  top: 16%;
+  top: 19%;
+  right: 2%;
   padding-top: 0px;
   padding-bottom: 0px;
   padding-right: 4px;
   border-radius: 23px;
   padding-left: 4px;
+}
+
+.searchSongListItemButton:hover {
+  color: #fff;
+  background-color: #d2322d;
+  border-color: #ac2925;
 }
 
 .searchSongListItemP {

@@ -1,6 +1,6 @@
 import React from 'react';
-import Search from './Search.jsx';
-import SearchList from './SearchList.jsx';
+import SearchEvent from './SearchEvent.jsx';
+import SearchEventList from './SearchEventList.jsx';
 import ControlledTabs from './ControlledTabs.jsx';
 import CreateEventForm from './CreateEventForm.jsx'; 
 import EventList from './EventList.jsx'
@@ -209,18 +209,18 @@ class Dashboard extends React.Component {
 	}
 	render () {
 		var noEvents = <div className="noEvents hvr-back-pulse2">No Events 😔</div>;
-		var eventList = (listOfEvents, title, name) => (
+		var eventList = (listOfEvents, title, name, isMyEvent) => (
 			<div><h1 className="eventTypeHeading">{title}:</h1>
 			{listOfEvents.length>0?
-				<EventList eventList={listOfEvents} name={name} currUserInfo={this.props.user} handleClick={this.onEventListItemClick}/>
+				<EventList isMyEvent={isMyEvent} eventList={listOfEvents} name={name} currUserInfo={this.props.user} handleClick={this.onEventListItemClick}/>
 				:noEvents}
 				</div>
 		);
 		return (
 			<div id="searchAndAdd">
-				<Search onSearchTermChange={this.onSearchTermChange}/>
+				<SearchEvent onSearchTermChange={this.onSearchTermChange}/>
 				<CreateEventForm user={this.props.user} eventCreated={this.eventCreated}/>
-				<SearchList searchStr={this.state.searchStr} user={this.props.user}/>
+				<SearchEventList searchStr={this.state.searchStr} user={this.props.user}/>
 				<div style={this.state.eventPageLeaderStyle}>
 					{this.state.hideEventLeaderPage ? null : <EventPageLeader getEventId={this.getCurrEventId} 
 															getEventLeaderId={this.getCurrEventLeaderId} 
@@ -236,24 +236,24 @@ class Dashboard extends React.Component {
 					</div>
 					<div id="myEventsDivsOuter" style={this.state.myEventsStyle}>
 						<div id="presentMyEventsDiv" className="eventsDivs">
-							{eventList(this.state.myPresent, "Present", "presentMy")}
+							{eventList(this.state.myPresent, "Present", "presentMy", true)}
 						</div>
 						<div id="futureMyEventsDiv" className="eventsDivs">
-							{eventList(this.state.myFuture, "Future", "futureMy")}
+							{eventList(this.state.myFuture, "Future", "futureMy", true)}
 						</div>
 						<div id="pastMyEventsDiv" className="eventsDivs">
-							{eventList(this.state.myPast, "Past", "pastMy")}
+							{eventList(this.state.myPast, "Past", "pastMy", true)}
 						</div>
 					</div>
 					<div id="otherEventsDivsOuter" style={this.state.otherEventsStyle}>
 						<div id="presentOtherEventsDiv" className="eventsDivs">
-							{eventList(this.state.otherPresent, "Present", "presentOther")}
+							{eventList(this.state.otherPresent, "Present", "presentOther", false)}
 						</div>
 						<div id="futureOtherEventsDiv" className="eventsDivs">
-							{eventList(this.state.otherFuture, "Future", "futureOther")}
+							{eventList(this.state.otherFuture, "Future", "futureOther", false)}
 						</div>
 						<div id="pastOtherEventsDiv" className="eventsDivs">
-							{eventList(this.state.otherPast, "Past", "pastOther")}
+							{eventList(this.state.otherPast, "Past", "pastOther", false)}
 						</div>
 					</div>
 				</div>
