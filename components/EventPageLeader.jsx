@@ -35,9 +35,9 @@ class EventPageLeader extends React.Component {
 		};
 		this.render = this.render.bind(this);
 		this.end = this.end.bind(this);
-		this.back = this.back.bind(this);
 		this.delete = this.delete.bind(this);
 		this.refreshQueue = this.refreshQueue.bind(this);
+		this.refreshInvites = this.refreshInvites.bind(this);
 		this.confirmDelete = this.confirmDelete.bind(this);
 		this.toggle = this.toggle.bind(this);
 		this.toggleEnd = this.toggleEnd.bind(this);
@@ -123,6 +123,23 @@ class EventPageLeader extends React.Component {
 			}
 		}.bind(this));
 	}
+	refreshEventInfo() {
+		if(!this._isMounted) {
+			return; //abandon
+		}
+		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.getEventId() + ";";
+		Database(eventQuery).then((result) => {
+			if(typeof result[0] != "undefined") {
+				this.setState({
+					eventName: result[0].name,
+					eventLocation: result[0].location,
+					eventStartTime: result[0].startTime,
+					eventDescription: result[0].description,
+					eventIsEnded: result[0].isEnded
+				});
+			}
+		});
+	}
 	refreshQueue(isStateRefresh){
 		var songQuery = "SELECT songUrl, sequence FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
 		var vidIds = [];
@@ -170,9 +187,6 @@ class EventPageLeader extends React.Component {
 		this.toggleEnd();
 		this.props.back();
 		this.props.eventCreated();
-	}
-	back(){
-		
 	}
 	toggle() {
 		this.refreshQueue(false);
@@ -334,7 +348,7 @@ class EventPageLeader extends React.Component {
 								        </Modal>
 									</div>
 									<div id="editButton">
-										<EditForm eventId={this.props.getEventId()} onSuccess={this.onEventEditSuccess}/>
+										<EditForm eventId={this.props.getEventId()} refreshEventInfo={this.refreshEventInfo} onSuccess={this.onEventEditSuccess}/>
 									</div>
 								</div>
 							:

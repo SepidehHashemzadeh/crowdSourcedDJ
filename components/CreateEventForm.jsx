@@ -165,7 +165,7 @@ class CreateEventForm extends React.Component {
             			<br />
           			</ModalBody>
           			<ModalFooter>
-            			<Button disabled={!this.validateForm} color="primary" onClick={this.submitForm}>Submit</Button>
+            			<Button disabled={!this.validateForm()} color="primary" onClick={this.submitForm}>Submit</Button>
            				{' '}
             			<Button color="secondary" onClick={this.toggle}>Cancel</Button>
           			</ModalFooter>
