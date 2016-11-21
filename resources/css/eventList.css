@@ -153,7 +153,35 @@ ul li div p {
   -webkit-transition-property: all;
   transition-property: all;
 }
-.hvr-back-pulse2:hover, .hvr-back-pulse2:focus, .hvr-back-pulse2:active .songPlaying {
+.hvr-back-pulse2:hover, .hvr-back-pulse2:focus, .hvr-back-pulse2:active{
+  -webkit-animation-name: hvr-back-pulse2;
+  animation-name: hvr-back-pulse2;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-delay: 0.7s;
+  animation-delay: 0.7s;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  background-color: #900C3F;
+  color: white;
+}
+
+.attendee-cursong {
+  vertical-align: middle;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  -webkit-transition-duration: 0.7s;
+  transition-duration: 0.7s;
+  -webkit-transition-property: all;
+  transition-property: all;
+
   -webkit-animation-name: hvr-back-pulse2;
   animation-name: hvr-back-pulse2;
   -webkit-animation-duration: 1s;
