@@ -1,8 +1,8 @@
 import React from 'react';
 
 import DatabaseHelper from '../databaseShortcuts.js';
-
-class SearchListItem extends React.Component {
+require("./../resources/css/searchEvent.css");
+class SearchEventListItem extends React.Component {
 	
 	constructor(props) {
 		super(props);
@@ -23,7 +23,7 @@ class SearchListItem extends React.Component {
 				<li className="eventSearchLoadingItem">
 					<div className="eventSearchLoadingDiv hvr-back-pulse2">
 						<p>{this.props.eventInfo.name}</p>
-						<button className="button-create btn btn-danger" onClick={this.createRequest}>Join</button>
+						<span className="button-create btn btn-danger joinEventButton" onClick={this.createRequest}>Join</span>
 					</div>
 				</li>
 			);
@@ -55,4 +55,4 @@ class SearchListItem extends React.Component {
 
 }
 
-export default SearchListItem;
+export default SearchEventListItem;

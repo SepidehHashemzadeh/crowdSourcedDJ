@@ -42,7 +42,7 @@ class EventListItem extends React.Component {
 		if(typeof this.state.userInfo === "undefined")
 		{
 			return (<li>
-						<div className={this.state.divClass+" hvr-back-pulse2"}>
+						<div className={this.state.divClass+" hvr-back-pulse2 loaderDiv"}>
 							<div className="loader"></div>
 						</div>
 					</li>);					
@@ -51,7 +51,7 @@ class EventListItem extends React.Component {
 			return (<li>
 						<div onClick={this.handleClick} onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave} className={this.state.divClass+" hvr-back-pulse2"}>
 							<p className="alwaysShown"> What: {this.props.eventInfo.name} </p>
-							<p className="alwaysShown"> Who: {this.state.userInfo.name} </p>
+							{this.props.isMyEvent?null:<p className="alwaysShown"> Who: {this.state.userInfo.name} </p>}
 							<p className="alwaysShown"> Where: {this.props.eventInfo.location} </p>
 							<br/>
 							<div className={this.state.pClass}>

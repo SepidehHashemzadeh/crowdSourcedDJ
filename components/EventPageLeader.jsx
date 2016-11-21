@@ -49,13 +49,10 @@ class EventPageLeader extends React.Component {
 		this.userIsLeader = this.userIsLeader.bind(this);
 		this.getSongTitle = this.getSongTitle.bind(this);
 		this.updateSongTitles = this.updateSongTitles.bind(this);
-		this.handleHoverQueue = this.handleHoverQueue.bind(this);
-		this.handleUnhoverQueue = this.handleUnhoverQueue.bind(this);
 		this.startPolling = this.startPolling.bind(this);
 		this.refreshInvites = this.refreshInvites.bind(this);
 		this.poll = this.poll.bind(this);
 		this.onEventEditSuccess = this.onEventEditSuccess.bind(this);
-		this.getDivClass = this.getDivClass.bind(this);
 
 		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.getEventId() + ";";
 		Database(eventQuery).then((result) => {
@@ -393,24 +390,22 @@ class EventPageLeader extends React.Component {
 							<div id="attendee-queue">
 								<p>Music Queue</p>
 								<div id="attendee-queue">
-								<ul id="attendee-queue-list">
-								{ 	this.state.songTitles.map((title, i) => {
-										return 	<li key={i}>
-													<div className={this.getDivClass(i) + " attendee-songOuterDiv songPlaying hvr-back-pulse2"}>
-														<div className="attendee-songInnerDiv"
-															 onMouseEnter={() => this.handleHoverQueue(i)}
-															 onMouseLeave={() => this.handleUnhoverQueue()}>
-															{(this.state.hoverQueueId == i) ? 
-																<a target="_blank" href={"https://www.youtube.com/watch?v="+this.state.queue[i]}>{title}</a>
-															:
-																<p>{title}</p>
-															}
-											        	</div>
-											        </div>
-											    </li>
-							       	})
-						    	}
-						    	</ul>
+									<ul id="attendee-queue-list">
+									{ 	this.state.songTitles.map((title, i) => {
+											return 	<li key={i}>
+														<a target="_blank" href={"https://www.youtube.com/watch?v="+this.state.queue[i]}>
+															<div className={this.getDivClass(i) + " attendee-songOuterDiv songPlaying hvr-back-pulse2"}>
+																<div className="attendee-songInnerDiv"
+																	 onMouseEnter={() => this.handleHoverQueue(i)}
+																	 onMouseLeave={() => this.handleUnhoverQueue()}>
+																		<p>{title}</p>
+													        	</div>
+													        </div>
+												        </a>
+												    </li>
+								       	})
+							    	}
+						    		</ul>
 					    		</div>
 							</div>
 					}

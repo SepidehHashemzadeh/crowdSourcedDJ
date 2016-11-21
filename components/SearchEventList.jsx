@@ -1,9 +1,9 @@
 import React from 'react';
-import SearchListItem from './SearchListItem.jsx';
+import SearchEventListItem from './SearchEventListItem.jsx';
 
 import DatabaseHelper from '../databaseShortcuts.js';
 
-class SearchList extends React.Component {
+class SearchEventList extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -35,7 +35,7 @@ class SearchList extends React.Component {
 			matchedEvents.map((item) => {
 				key++;
 				arr.push(
-					<SearchListItem eventInfo={item} key={key} user={this.props.user}/>
+					<SearchEventListItem eventInfo={item} key={key} user={this.props.user}/>
 				);
 			});
 		}
@@ -55,7 +55,7 @@ class SearchList extends React.Component {
   		return(
 			<div>
 				{this.props.searchStr.length>0?
-			    <ul style={{ width: "300px", paddingRight: "1.4%", marginTop: "7px" }}>
+			    <ul style={{ width: "300px", paddingRight: "1.4%", marginTop: "6px" }}>
 					{this.searchEvents(this.props.searchStr)}
 				</ul>
 				: null}
@@ -64,4 +64,4 @@ class SearchList extends React.Component {
 	}
 }
 
-export default SearchList;
+export default SearchEventList;
