@@ -11,6 +11,7 @@ import EditForm from './EditForm.jsx';
 require("./../resources/css/eventPage.css");
 require("../resources/css/eventList.css");
 var yt = require('../youtube.js');
+var speakerUrl = require('../resources/images/speaker.png');
 
 class EventPageLeader extends React.Component {
 	constructor(props) {
@@ -49,13 +50,11 @@ class EventPageLeader extends React.Component {
 		this.userIsLeader = this.userIsLeader.bind(this);
 		this.getSongTitle = this.getSongTitle.bind(this);
 		this.updateSongTitles = this.updateSongTitles.bind(this);
-		this.handleHoverQueue = this.handleHoverQueue.bind(this);
-		this.handleUnhoverQueue = this.handleUnhoverQueue.bind(this);
 		this.startPolling = this.startPolling.bind(this);
 		this.refreshInvites = this.refreshInvites.bind(this);
 		this.poll = this.poll.bind(this);
 		this.onEventEditSuccess = this.onEventEditSuccess.bind(this);
-		this.getDivClass = this.getDivClass.bind(this);
+		this.isSongPlaying = this.isSongPlaying.bind(this);
 
 		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.getEventId() + ";";
 		Database(eventQuery).then((result) => {
@@ -122,10 +121,11 @@ class EventPageLeader extends React.Component {
 		}.bind(this));
 	}
 	refreshQueue(isStateRefresh){
-		var songQuery = "SELECT songUrl, sequence FROM Event_Song WHERE eventId="+ this.props.getEventId() + ";";
+		var songQuery = "SELECT songUrl, sequence FROM Event_Song WHERE eventId="+ this.props.getEventId();
+		songQuery += " ORDER BY sequence ASC;";
 		var vidIds = [];
 		var vidStates = [];	
-		var vidSequences = [];	
+		var vidSequences = [];
 		Database(songQuery).then((res) => {
 			if(typeof res != "undefined") {
 				res.map(function(item) {
@@ -269,14 +269,7 @@ class EventPageLeader extends React.Component {
 		var eventLeader = this.props.getEventLeaderId();
 		return (currentUser == eventLeader);
 	}
-	handleHoverQueue(i){
-		this.setState({hoverQueueId:i});
-	}
-	handleUnhoverQueue(){
-		this.setState({hoverQueueId: -1});
-	}
-	getDivClass(i){
-		/*
+	isSongPlaying(i) {
 		var url = "https://djque.herokuapp.com/?query=";
 		var currSongQuery = "SELECT currSongSeq FROM Events WHERE id="+ this.props.getEventId() + ";";
 		fetch(encodeURI(url + currSongQuery)).then((res) => {
@@ -285,12 +278,11 @@ class EventPageLeader extends React.Component {
 			this.setState({currSongSeq: res[0].currSongSeq});
 			
 		});
-		if ((this.state.queueSequence[i]-1)==this.state.currSongSeq) 	
-			return "divHovered";
+		if ((this.state.queueSequence[i])==this.state.currSongSeq) {
+			return true;
+		}
 		else
-			return "divNotHovered";
-		*/
-		return "divNotHovered";
+			return false;
 	}
 	onEventEditSuccess(newState) {
 		this.setState(newState);
@@ -391,22 +383,37 @@ class EventPageLeader extends React.Component {
 						</div>
 						:
 							<div id="attendee-queue">
-								<p>Music Queue</p>
+								<p id="attendee-queue-title">Music Queue</p>
 								<div id="attendee-queue">
 								<ul id="attendee-queue-list">
 								{ 	this.state.songTitles.map((title, i) => {
 										return 	<li key={i}>
-													<div className={this.getDivClass(i) + " attendee-songOuterDiv songPlaying hvr-back-pulse2"}>
-														<div className="attendee-songInnerDiv"
-															 onMouseEnter={() => this.handleHoverQueue(i)}
-															 onMouseLeave={() => this.handleUnhoverQueue()}>
-															{(this.state.hoverQueueId == i) ? 
-																<a target="_blank" href={"https://www.youtube.com/watch?v="+this.state.queue[i]}>{title}</a>
-															:
-																<p>{title}</p>
-															}
-											        	</div>
-											        </div>
+													{this.isSongPlaying(i) ? 
+														<div autoFocus className={"divHovered attendee-songOuterDiv attendee-curSong hvr-back-pulse2"} ref="curSong" id="curSong">
+															<div className="attendee-songInnerDiv">
+																 <div className="attendee-queue-title">
+																	<a target="_blank" 
+																	   href={"https://www.youtube.com/watch?v="+this.state.queue[i]}
+																	   className="attendee-queue-link">
+																		<div color="white">{title}</div>
+																	</a>
+																</div>
+																<div className="attendee-queue-img"><img src={speakerUrl} id="speaker-icon"></img></div>
+												        	</div>
+												        </div>
+													: 
+														<div className={"divNotHovered attendee-songOuterDiv"}>
+															<div className="attendee-songInnerDiv">
+																 <div className="attendee-queue-title">
+																	<a target="_blank" 
+																	   href={"https://www.youtube.com/watch?v="+this.state.queue[i]}
+																	   className="attendee-queue-link">
+																		<div>{title}</div>
+																	</a>
+																</div>
+												        	</div>
+												        </div>
+													}
 											    </li>
 							       	})
 						    	}

@@ -55,12 +55,6 @@ hr {
 	text-align:center;
 }
 
-#queue{
-	height: 200px;
-	font-family: 'Lobster', cursive;
-	font-size: 30px;
-	text-align:center;
-}
 
 #videos{
 	display: inline-block;
@@ -130,8 +124,42 @@ hr {
 .attendee-songOuterDiv{
 	border-style: solid;
 	border-color: white;
+	border-width: 1px;
+	padding: 10px;
+}
+
+.attendee-songInnerDiv{
+	/*display: inline-block;*/
+	display: flex;
+	justify-content: space-between;
+	flex-flow: row wrap;
+	/*float: left;*/
 }
 
 #attendee-queue-list li{
 	list-style-type: none;
+	text-align: left;
+}
+
+#speaker-icon {
+	height: 24px;
+	width: 24px;
+}
+
+.attendee-queue-title {
+	display: inline-block;
+	color: white;
+	font-size: 20px;
+	float: left;
+	/*margin-left: 10px;*/
+}
+
+.attendee-queue-link {
+	color: white;
+}
+
+.attendee-queue-img {
+	text-align: right;
+	float:right;
+	margin-right: 10px;
 }
