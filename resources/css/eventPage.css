@@ -127,8 +127,9 @@ hr {
 }
 
 
-.attendee-songOuterDiv{
+.attendee-songOuterDiv {
 	border: 0.5px solid white;
+	width: 366px;
 }
 
 .attendee-songInnerDiv{
@@ -168,6 +169,7 @@ hr {
 .attendee-queue-title {
 	text-decoration: none;
 	color: white;
+	width: 320px;
 }
 
 .attendee-queue-title:hover {

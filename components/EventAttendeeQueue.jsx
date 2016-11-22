@@ -108,7 +108,7 @@ class EventAttendeeQueue extends React.Component {
 						return 	<li key={i} className="attendee-songOuterDiv">		 
 									<a target="_blank" href={"https://www.youtube.com/watch?v="+this.state.queue[i]}>
 										<div onMouseEnter={() => {this.handleHoverQueueItem(i)}} onMouseLeave={() => {this.handleUnhoverQueueItem(i)}} className={this.isSongPlaying(i) ? "divHovered attendee-songInnerDiv attendee-curSong hvr-back-pulse-constant" : (this.state.hoverQueueId === i ? "divHovered attendee-songInnerDiv hvr-back-pulse2" :"divNotHovered attendee-songInnerDiv")} ref={this.isSongPlaying(i) ?"curSong": null} id={this.isSongPlaying(i) ?"curSong": null}>
-												<div className="attendee-queue-title attendee-queue-link">{this.state.hoverQueueId === i ? title : (title.length > 47 ? title.substring(0, 47)+'...' : title )}</div>
+												<div className="attendee-queue-title attendee-queue-link">{this.isSongPlaying(i) ? title : (this.state.hoverQueueId === i ? title : (title.length > 47 ? title.substring(0, 47)+'...' : title ))}</div>
 												{this.isSongPlaying(i) ?<div className="attendee-queue-img"><img src={speakerUrl} id="speaker-icon"></img></div>:null}
 								        </div>
 							        </a>

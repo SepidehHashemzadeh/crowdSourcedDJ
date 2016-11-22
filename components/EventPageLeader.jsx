@@ -74,7 +74,7 @@ class EventPageLeader extends React.Component {
 		this._isMounted = true;
 		this.refreshQueue(true);
 		this.refreshInvites();
-		this.startPolling();
+		//this.startPolling();
 	}
 	componentWillUnmount() {
 		if(this._timer) {
