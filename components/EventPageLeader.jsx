@@ -289,11 +289,10 @@ class EventPageLeader extends React.Component {
 			this.getSongTitle(vidID);
    		});
 	}
-	userIsLeader() { /*
+	userIsLeader() { 
 		var currentUser = this.props.currentUserId;
 		var eventLeader = this.props.getEventLeaderId();
-		return (currentUser == eventLeader);*/
-		return false;
+		return (currentUser == eventLeader);
 	}
 	isSongPlaying(i) {
 		var url = "https://djque.herokuapp.com/?query=";
