@@ -366,92 +366,90 @@ class EventPageLeader extends React.Component {
 								<br/>
 								{this.state.eventDescription}
 							</div>
-						</div>
-					}
-					
-					
-					{ this.state.eventIsEnded ? 
-						<div className="eventDetails">
+							{ this.state.eventIsEnded ? 
+								<div className="eventDetails">
+									<hr/>
+									This event has ended.
+								</div>
+							 :
+								<div id="addSong">
+									<hr/>
+									<div>Search</div>
+									<SearchSong onSongAdded={this.onSongAdded} eventId={this.props.getEventId()}/>
+								</div>
+							}
 							<hr/>
-							This event has ended.
-						</div>
-					 :
-						<div id="addSong">
-							<hr/>
-							<div>Search</div>
-							<SearchSong onSongAdded={this.onSongAdded} eventId={this.props.getEventId()}/>
+							<div id="musicQueueTitle">Music Queue</div>
+							{ (this.userIsLeader() || this.state.eventIsEnded) ? 
+								<div id="queue">
+									<div id="videos">
+									{ 	this.state.queue.map((vidID, i) => {
+											return 	<div key={i} className="videoOuterDiv">
+														<div className="videoInnerDiv">
+														{
+										            		i===0 ? 
+										            		<YouTubePlayer
+												            	height='270'
+												            	playbackState='unstarted'
+												            	videoId={vidID}
+												            	width='480'
+												            	//configuration={{autoplay:1}}
+												            	configuration={{
+												            		enablejsapi: 1,
+												            		origin:"http://localhost:8080",
+												            		modestbranding: 1,
+												            		disablekb: 1,
+												            	}}
+												            	onPlay={this.onPlay(i)}
+												            	onBuffer={this.onPlay(i)}
+												            	onEnd={this.onEnd(i)}
+												            	onError={this.onError(i)}
+												            	onPause={this.onPause(i)}
+												            	playbackState= {this.state.queueState[i]}
+												        	/>
+										            		:
+															<YouTubePlayer
+												            	height='270'
+												            	playbackState='unstarted'
+												            	videoId={vidID}
+												            	width='480'
+												            	//configuration={{autoplay:0}}
+												            	configuration={{
+												            		enablejsapi: 1,
+												            		origin:"http://localhost:8080",
+												            		modestbranding: 1,
+												            		disablekb: 1,
+												            	}}
+												            	onPlay={this.onPlay(i)}
+												            	onBuffer={this.onPlay(i)}
+												            	onEnd={this.onEnd(i)}
+												            	onError={this.onError(i)}
+												            	onPause={this.onPause(i)}
+												            	playbackState= {this.state.queueState[i]}
+												        	/>
+												        }
+											        	</div>
+											        	{ this.state.eventIsEnded ? null :
+											        		<span className="videoDeleteButton" onClick={() => {this.confirmDelete(vidID, i, this.state.queueSequence[i])}}>x</span>
+											        	}
+											        	<br/>
+											        </div>
+								       	})
+							    	}
+						    		</div>
+								</div>
+								:
+									<EventAttendeeQueue eventIsEnded={this.state.eventIsEnded} queueSequence={this.state.queueSequence} songTitles={this.state.songTitles} songQueue={this.state.queue} getEventId={this.props.getEventId}/>
+							}
+							<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventNestedModal">
+			              		<ModalHeader>Are you sure you want to delete this song from your Music Queue?</ModalHeader>
+			              		<ModalFooter>
+			                		<Button color="warning" onClick={() => {this.delete(this.state.deleteID, this.state.deleteKey, this.state.deleteSequence)}}>Delete</Button>
+			                		<Button color="default" onClick={this.toggle}>Cancel</Button>
+			              		</ModalFooter>
+			            	</Modal>
 						</div>
 					}
-					<hr/>
-					<div id="musicQueueTitle">Music Queue</div>
-					{ (this.userIsLeader() || this.state.eventIsEnded) ? 
-						<div id="queue">
-							<div id="videos">
-							{ 	this.state.queue.map((vidID, i) => {
-									return 	<div key={i} className="videoOuterDiv">
-												<div className="videoInnerDiv">
-												{
-								            		i===0 ? 
-								            		<YouTubePlayer
-										            	height='270'
-										            	playbackState='unstarted'
-										            	videoId={vidID}
-										            	width='480'
-										            	//configuration={{autoplay:1}}
-										            	configuration={{
-										            		enablejsapi: 1,
-										            		origin:"http://localhost:8080",
-										            		modestbranding: 1,
-										            		disablekb: 1,
-										            	}}
-										            	onPlay={this.onPlay(i)}
-										            	onBuffer={this.onPlay(i)}
-										            	onEnd={this.onEnd(i)}
-										            	onError={this.onError(i)}
-										            	onPause={this.onPause(i)}
-										            	playbackState= {this.state.queueState[i]}
-										        	/>
-								            		:
-													<YouTubePlayer
-										            	height='270'
-										            	playbackState='unstarted'
-										            	videoId={vidID}
-										            	width='480'
-										            	//configuration={{autoplay:0}}
-										            	configuration={{
-										            		enablejsapi: 1,
-										            		origin:"http://localhost:8080",
-										            		modestbranding: 1,
-										            		disablekb: 1,
-										            	}}
-										            	onPlay={this.onPlay(i)}
-										            	onBuffer={this.onPlay(i)}
-										            	onEnd={this.onEnd(i)}
-										            	onError={this.onError(i)}
-										            	onPause={this.onPause(i)}
-										            	playbackState= {this.state.queueState[i]}
-										        	/>
-										        }
-									        	</div>
-									        	{ this.state.eventIsEnded ? null :
-									        		<span className="videoDeleteButton" onClick={() => {this.confirmDelete(vidID, i, this.state.queueSequence[i])}}>x</span>
-									        	}
-									        	<br/>
-									        </div>
-						       	})
-					    	}
-				    		</div>
-						</div>
-						:
-							<EventAttendeeQueue eventIsEnded={this.state.eventIsEnded} queueSequence={this.state.queueSequence} songTitles={this.state.songTitles} songQueue={this.state.queue} getEventId={this.props.getEventId}/>
-					}
-					<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventNestedModal">
-	              		<ModalHeader>Are you sure you want to delete this song from your Music Queue?</ModalHeader>
-	              		<ModalFooter>
-	                		<Button color="warning" onClick={() => {this.delete(this.state.deleteID, this.state.deleteKey, this.state.deleteSequence)}}>Delete</Button>
-	                		<Button color="default" onClick={this.toggle}>Cancel</Button>
-	              		</ModalFooter>
-	            	</Modal>
 				</div>
 			</div>
 		);
