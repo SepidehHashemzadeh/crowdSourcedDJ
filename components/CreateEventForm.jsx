@@ -91,10 +91,12 @@ class CreateEventForm extends React.Component {
 		query += eventLocation + "','";
 		query += this.props.user.id + "', 0, 0); ";
 
+		console.log("insert song:");
+		console.log(encodeURI(url + query));
 		fetch(encodeURI(url + query)).then((res) => {
 			return res.json();
 		}).then((res) => {
-			//console.log(res);
+			console.log(res);
 		});
 		this.props.eventCreated();
 		this.toggle();
@@ -165,7 +167,7 @@ class CreateEventForm extends React.Component {
             			<br />
           			</ModalBody>
           			<ModalFooter>
-            			<Button disabled={!this.validateForm} color="primary" onClick={this.submitForm}>Submit</Button>
+            			<Button disabled={!this.validateForm()} color="primary" onClick={this.submitForm}>Submit</Button>
            				{' '}
             			<Button color="secondary" onClick={this.toggle}>Cancel</Button>
           			</ModalFooter>
