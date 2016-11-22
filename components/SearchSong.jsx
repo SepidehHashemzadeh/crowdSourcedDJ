@@ -46,7 +46,7 @@ class SearchSong extends React.Component {
         var callBackFunction = this.props.onSongAdded;
         var emptySearch = this;
         Popup.create({
-          title: 'Add Song',
+          title: null,
           content: 'Add song to Music Queue?',
           buttons: {
             right: [{

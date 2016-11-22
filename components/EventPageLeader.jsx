@@ -38,6 +38,7 @@ class EventPageLeader extends React.Component {
 		this.delete = this.delete.bind(this);
 		this.refreshQueue = this.refreshQueue.bind(this);
 		this.refreshInvites = this.refreshInvites.bind(this);
+		this.refreshEventInfo = this.refreshEventInfo.bind(this);
 		this.confirmDelete = this.confirmDelete.bind(this);
 		this.toggle = this.toggle.bind(this);
 		this.toggleEnd = this.toggleEnd.bind(this);
