@@ -8,6 +8,7 @@ import Database from '../databaseShortcuts.js';
 import { formatDateTime } from '../timeConverter.js';
 import EventPageLeaderInviteNotificationStack from './EventPageLeaderInviteNotificationStack.jsx';
 import EditForm from './EditForm.jsx';
+import EventAttendeeQueue from './EventAttendeeQueue.jsx';
 require("./../resources/css/eventPage.css");
 require("../resources/css/eventList.css");
 var yt = require('../youtube.js');
@@ -384,41 +385,7 @@ class EventPageLeader extends React.Component {
 						:
 							<div id="attendee-queue">
 								<p id="attendee-queue-title">Music Queue</p>
-								<div id="attendee-queue">
-									<ul id="attendee-queue-list">
-									{ 	this.state.songTitles.map((title, i) => {
-											return 	<li key={i}>
-														{this.isSongPlaying(i) ? 
-															<div autoFocus className={"divHovered attendee-songOuterDiv attendee-curSong hvr-back-pulse2"} ref="curSong" id="curSong">
-																<div className="attendee-songInnerDiv">
-																	 <div className="attendee-queue-title">
-																		<a target="_blank" 
-																		   href={"https://www.youtube.com/watch?v="+this.state.queue[i]}
-																		   className="attendee-queue-link">
-																			<div color="white">{title}</div>
-																		</a>
-																	</div>
-																	<div className="attendee-queue-img"><img src={speakerUrl} id="speaker-icon"></img></div>
-													        	</div>
-													        </div>
-														: 
-															<div className={"divNotHovered attendee-songOuterDiv"}>
-																<div className="attendee-songInnerDiv">
-																	 <div className="attendee-queue-title">
-																		<a target="_blank" 
-																		   href={"https://www.youtube.com/watch?v="+this.state.queue[i]}
-																		   className="attendee-queue-link">
-																			<div>{title}</div>
-																		</a>
-																	</div>
-													        	</div>
-													        </div>
-														}
-												    </li>
-								       	})
-							    	}
-							    	</ul>
-					    		</div>
+								<EventAttendeeQueue eventIsEnded={this.state.eventIsEnded} queueSequence={this.state.queueSequence} songTitles={this.state.songTitles} songQueue={this.state.queue} getEventId={this.props.getEventId}/>
 							</div>
 					}
 					<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventNestedModal">

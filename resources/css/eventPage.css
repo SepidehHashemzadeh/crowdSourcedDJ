@@ -111,7 +111,6 @@ hr {
     -ms-user-select: none;
     user-select: none;
     background-image: none;
-    border: 1px solid transparent;
     border-radius: 4px;
     color: #fff;
     background-color: #d9534f;
@@ -130,13 +129,16 @@ hr {
 
 .attendee-songOuterDiv{
 	border: 0.5px solid white;
-	padding: 10px;
 }
 
 .attendee-songInnerDiv{
-	display: flex;
-	justify-content: space-between;
-	flex-flow: row wrap;
+	text-align: left;
+	padding-left: 5px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	/* margin-top: 0; */
+	position: relative;
+	transition: all 0.5s ease;
 }
 
 #attendee-queue-list li{
@@ -152,13 +154,9 @@ hr {
 .attendee-queue-title {
 	display: inline-block;
 	color: white;
-	font-size: 20px;
-	float: left;
+	font-size: 10px;
+	text-align: left;
 	/*margin-left: 10px;*/
-}
-
-.attendee-queue-link {
-	color: white;
 }
 
 .attendee-queue-img {
@@ -167,22 +165,22 @@ hr {
 	margin-right: 10px;
 }
 
-.attendee-songInnerDiv {
+.attendee-queue-title {
 	text-decoration: none;
 	color: white;
 }
 
-.attendee-songOuterDiv:hover {
+.attendee-queue-title:hover {
 	text-decoration: none;
 	color: white;
 }
 
-.attendee-songOuterDiv:active {
+.attendee-queue-title:active {
 	text-decoration: none;
 	color: white;
 }
 
-.attendee-songOuterDiv:visited {
+.attendee-queue-title:visited {
 	text-decoration: none;
 	color: white;
 }
