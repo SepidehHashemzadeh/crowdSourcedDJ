@@ -165,7 +165,7 @@ class EditForm extends React.Component {
             			<br />
           			</ModalBody>
           			<ModalFooter>
-            			<Button disabled={!this.validateFields()} color="primary" onClick={this.submitForm}>Submit</Button>
+            			<Button disabled={!this.validateFields()} color="primary" onClick={this.submitForm}>Save</Button>
            				{' '}
             			<Button color="secondary" onClick={this.toggle}>Cancel</Button>
           			</ModalFooter>
