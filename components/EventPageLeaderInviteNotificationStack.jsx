@@ -68,7 +68,7 @@ class EventPageLeaderInviteNotificationStack extends React.Component {
 				<li key={index} className="eventNotifListItem">
 					<div className="eventNotifListItemInnerDiv">
 						<span className="notifButton eventNotifListItemDismiss" onClick={() => {
-							var query = "UPDATE Invites SET isPending=0 WHERE id="+this.state.inviteList[index].id+";";
+							var query = "UPDATE Invites SET isPending=0, isAccepted=0 WHERE id="+this.state.inviteList[index].id+";";
 							DatabaseHelper(query).then((response) => {
 								this.state.notificationList.splice(index, 1);
 							});
@@ -78,7 +78,7 @@ class EventPageLeaderInviteNotificationStack extends React.Component {
 							var query = "INSERT INTO Event_User VALUES ("+this.props.eventId+",'"+item.id+"');";
 							DatabaseHelper(query).then((response) => {
 								this.state.notificationList.splice(index, 1);
-								var query2 = "UPDATE Invites SET isPending=0 WHERE id="+this.state.inviteList[index].id+";";
+								var query2 = "UPDATE Invites SET isPending=0, isAccepted=1 WHERE id="+this.state.inviteList[index].id+";";
 								DatabaseHelper(query2).then((response) => {
 									//this.state.notificationList.splice(index, 1);
 								});

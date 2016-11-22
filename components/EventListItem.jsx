@@ -56,7 +56,6 @@ class EventListItem extends React.Component {
 							<br/>
 							<div className={this.state.pClass}>
 								<p> When: { formatDateTime(this.props.eventInfo.startTime.toString()) } </p>
-								<p> Why: {this.props.eventInfo.description} </p>
 							</div>
 						</div>
 					</li>);

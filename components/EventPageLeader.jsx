@@ -77,7 +77,7 @@ class EventPageLeader extends React.Component {
 		this._isMounted = true;
 		this.refreshQueue(true);
 		this.refreshInvites();
-		//this.startPolling();
+		this.startPolling();
 	}
 	componentWillUnmount() {
 		if(this._timer) {
@@ -378,9 +378,9 @@ class EventPageLeader extends React.Component {
 						</div>
 					}
 					<hr/>
+					<div id="musicQueueTitle">Music Queue</div>
 					{ (this.userIsLeader() || this.state.eventIsEnded) ? 
 						<div id="queue">
-							<div>Music Queue</div>
 							<div id="videos">
 							{ 	this.state.queue.map((vidID, i) => {
 									return 	<div key={i} className="videoOuterDiv">
@@ -438,10 +438,7 @@ class EventPageLeader extends React.Component {
 				    		</div>
 						</div>
 						:
-							<div id="attendee-queue">
-								<p id="attendee-queue-title">Music Queue</p>
-								<EventAttendeeQueue eventIsEnded={this.state.eventIsEnded} queueSequence={this.state.queueSequence} songTitles={this.state.songTitles} songQueue={this.state.queue} getEventId={this.props.getEventId}/>
-							</div>
+							<EventAttendeeQueue eventIsEnded={this.state.eventIsEnded} queueSequence={this.state.queueSequence} songTitles={this.state.songTitles} songQueue={this.state.queue} getEventId={this.props.getEventId}/>
 					}
 					<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventNestedModal">
 	              		<ModalHeader>Are you sure you want to delete this song from your Music Queue?</ModalHeader>

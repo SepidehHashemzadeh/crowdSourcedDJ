@@ -55,6 +55,13 @@ hr {
     padding: 0;
 }
 
+#musicQueueTitle {
+	font-family: 'Lobster', cursive;
+	font-size: 30px;
+	text-align:center;
+	margin-bottom: -1px;
+}
+
 #addSong{
 	font-family: 'Lobster', cursive;
 	font-size: 30px;
@@ -92,8 +99,8 @@ hr {
 }
 
 .videoInnerDiv {
-	height: 9em;
-	width: 16em;
+	height: 270px;
+    width: 480px;
 }
 
 .videoDeleteButton {
@@ -133,7 +140,7 @@ hr {
 
 .attendee-songOuterDiv {
 	border: 0.5px solid white;
-	width: 366px;
+	width: 92%;
 }
 
 .attendee-songInnerDiv{
@@ -179,7 +186,7 @@ hr {
 .attendee-queue-title {
 	text-decoration: none;
 	color: white;
-	width: 320px;
+	width: 90%;
 }
 
 .attendee-queue-title:hover {
