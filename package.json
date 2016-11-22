@@ -59,6 +59,7 @@
     "image-webpack-loader": "^2.0.0",
     "jest": "^16.0.2",
     "jest-css-modules": "^1.1.0",
+    "mock-fetch-api": "^1.0.7",
     "react-addons-test-utils": "^15.3.2",
     "react-bootstrap": "^0.30.6",
     "react-dom": "^15.3.2",
