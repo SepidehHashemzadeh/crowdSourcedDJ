@@ -155,13 +155,15 @@ hr {
 
 #attendee-queue {
 	font-family: 'Lobster', cursive;
-	font-size: 30px;
+	font-size: 40px;
 	text-align:center;
 }
 
 #attendee-queue-list li{
 	list-style-type: none;
 	text-align: left;
+	font-size: 40px;
+	font-family: 'Roboto Condensed', sans-serif;
 }
 
 #speaker-icon {
@@ -172,7 +174,6 @@ hr {
 .attendee-queue-title {
 	display: inline-block;
 	color: white;
-	font-size: 10px;
 	text-align: left;
 	/*margin-left: 10px;*/
 }

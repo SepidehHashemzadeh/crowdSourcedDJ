@@ -5,6 +5,8 @@ import { formatDateTime } from '../timeConverter.js';
 import Scroll from 'react-scroll';
 import Database from '../databaseShortcuts.js';
 var speakerUrl = require('../resources/images/speaker.png');
+require("./../resources/css/eventPage.css");
+require("../resources/css/eventList.css");
 
 class EventAttendeeQueue extends React.Component {
 	constructor(props) {
