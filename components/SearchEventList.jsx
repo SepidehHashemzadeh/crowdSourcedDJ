@@ -7,16 +7,22 @@ class SearchEventList extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			events: []
+			events: [],
+			invites: []
 		};
 		this.searchEvents = this.searchEvents.bind(this);
 	}
 
 	searchEvents(searchStr) {
 		var query = "SELECT * FROM Events;";
+		var query2 = "SELECT * FROM Invites WHERE fromId='"+this.props.user.id+"';"
 
 		DatabaseHelper(query).then((res) => {
-						this.setState({events: res});
+			this.setState({events: res});
+		});
+
+		DatabaseHelper(query2).then((res) => {
+			this.setState({invites: res});
 		});
 
 		var arr = [];
@@ -34,9 +40,15 @@ class SearchEventList extends React.Component {
 			let key=0;
 			matchedEvents.map((item) => {
 				key++;
-				arr.push(
-					<SearchEventListItem eventInfo={item} key={key} user={this.props.user}/>
-				);
+				if (this.state.invites.length > 0) {
+					arr.push(
+						<SearchEventListItem eventInfo={item} key={key} user={this.props.user} invites={this.state.invites}/>
+					);
+				} else {
+					arr.push(
+						<SearchEventListItem eventInfo={item} key={key} user={this.props.user} invites={[]}/>
+					);
+				}
 			});
 		}
 		else if(searchStr.length>0) {
