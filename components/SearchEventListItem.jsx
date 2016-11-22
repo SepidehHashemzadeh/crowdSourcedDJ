@@ -1,12 +1,22 @@
 import React from 'react';
-
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import DatabaseHelper from '../databaseShortcuts.js';
 require("./../resources/css/searchEvent.css");
 class SearchEventListItem extends React.Component {
 	
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			modal: false
+		};
+
 		this.createRequest = this.createRequest.bind(this);
+		this.toggle = this.toggle.bind(this);
+	}
+
+	toggle() {
+		this.setState({ modal: !this.state.modal });
 	}
 
 	getEventDiv() {
@@ -24,6 +34,17 @@ class SearchEventListItem extends React.Component {
 					<div className="eventSearchLoadingDiv hvr-back-pulse2">
 						<p>{this.props.eventInfo.name}</p>
 						<span className="button-create btn btn-danger joinEventButton" onClick={this.createRequest}>Join</span>
+							 <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+					          	<ModalHeader>
+					          		Success!
+					          	</ModalHeader>
+					          	<ModalBody>
+					          		Your request to join has been sent to the Event Leader.
+					          	</ModalBody>
+					          	<ModalFooter>
+					            	<Button color="primary" onClick={this.toggle}>Done</Button>
+					          	</ModalFooter>
+					        </Modal>
 					</div>
 				</li>
 			);
@@ -51,6 +72,7 @@ class SearchEventListItem extends React.Component {
 			//console.log(res);
 		});
 
+		this.toggle();
 	}
 
 }

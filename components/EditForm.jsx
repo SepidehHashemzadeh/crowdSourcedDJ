@@ -20,8 +20,6 @@ class EditForm extends React.Component {
 		this.toggleNested = this.toggleNested.bind(this);
 		this.handleEventName = this.handleEventName.bind(this);
 		this.validateFields = this.validateFields.bind(this);
-		this.validateForm = this.validateForm.bind(this);
-		this.validateStartTime = this.validateStartTime.bind(this);
 		this.handleEventLocation = this.handleEventLocation.bind(this);
 		this.handleEventStartTime = this.handleEventStartTime.bind(this);
 		this.handleEventDescription = this.handleEventDescription.bind(this);
@@ -41,22 +39,10 @@ class EditForm extends React.Component {
 	handleEventName(e){
 		this.setState({ eventName: e.target.value});
 	}
-	validateStartTime(){
-		var now = new Date();
-		now.setHours(now.getHours() - 8);
-		now = now.toJSON();
-		var startTimeInFuture = (now < this.state.eventStartTime);
-		return (!this.state.eventStartTime || startTimeInFuture);
-	}
 	validateFields(){
 		var allFieldsFilled = (this.state.eventName && this.state.eventStartTime
 			    && this.state.eventDescription && this.state.eventLocation);
 		return (allFieldsFilled);
-	}
-	validateForm(){
-		var validFields = this.validateFields(); 
-		var validTime = this.validateStartTime(); 
-		return (validFields && validTime);
 	}
 	handleEventLocation(e){
 		this.setState({ eventLocation: e.target.value});
@@ -116,6 +102,7 @@ class EditForm extends React.Component {
 
 		this.toggle();
 		this.toggleNested();
+		this.props.refreshEventInfo();
 	}
 	render() {
 		return (
@@ -173,16 +160,12 @@ class EditForm extends React.Component {
 							  	</div>
 							    { this.validateFields() ? null : 
 							    		<div><div>Please fill out all fields.</div></div> }
-						    	<div>
-						    		{ this.validateStartTime() ? null : 
-						    			<div>Please select an Event Time in the future.</div>}
-						    	</div>
 							</Form>
 						</div>
             			<br />
           			</ModalBody>
           			<ModalFooter>
-            			<Button disabled={!this.validateForm()} color="primary" onClick={this.submitForm}>Save</Button>
+            			<Button disabled={!this.validateFields()} color="primary" onClick={this.submitForm}>Save</Button>
            				{' '}
             			<Button color="secondary" onClick={this.toggle}>Cancel</Button>
           			</ModalFooter>

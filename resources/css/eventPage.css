@@ -17,14 +17,18 @@
 	margin-bottom: auto;
 }
 
-#buttonToolbar {
-	margin-left: auto;
-	margin-right: auto;
+#backButton {
+	float: left;
 	display: inline-block;
 }
 
-#hiddenButtons {
+#endButton {
+	float: right;
 	display: inline-block;
+}
+
+#editButton {
+	padding-left: 90px;
 }
 
 .eventName{
@@ -32,13 +36,14 @@
 	font-size: 50px;
 	text-align:center;
     margin-top: 0px;
+	display: inline-block;
 }
 
 .eventDetails{
 	font-size: 20px;
-	font-family: Arial, Helvetica, sans-serif;
 	text-align:center;
 	margin-top: 10px;
+	font-family: 'Roboto Condensed', sans-serif;
 }
 
 hr {
@@ -126,7 +131,6 @@ hr {
     border-color: #ac2925;
 }
 
-
 .attendee-songOuterDiv {
 	border: 0.5px solid white;
 	width: 366px;
@@ -140,6 +144,12 @@ hr {
 	/* margin-top: 0; */
 	position: relative;
 	transition: all 0.5s ease;
+}
+
+#attendee-queue {
+	font-family: 'Lobster', cursive;
+	font-size: 30px;
+	text-align:center;
 }
 
 #attendee-queue-list li{
