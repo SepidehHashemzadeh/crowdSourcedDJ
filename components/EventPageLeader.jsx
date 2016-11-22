@@ -289,11 +289,10 @@ class EventPageLeader extends React.Component {
 			this.getSongTitle(vidID);
    		});
 	}
-	userIsLeader() { /*
+	userIsLeader() { 
 		var currentUser = this.props.currentUserId;
 		var eventLeader = this.props.getEventLeaderId();
-		return (currentUser == eventLeader);*/
-		return false;
+		return (currentUser == eventLeader);
 	}
 	isSongPlaying(i) {
 		var url = "https://djque.herokuapp.com/?query=";
@@ -319,52 +318,57 @@ class EventPageLeader extends React.Component {
 			<div id="eventPageLeaderOuterDivId"> 
 				{ (this.userIsLeader())?<EventPageLeaderInviteNotificationStack eventId={this.props.getEventId()} inviteList={this.state.pendingInvites}/>:null}
 				<div id="eventPageLeader">
-					<div>
-						<h2 className="eventName">{this.state.eventName}</h2>
+					{ ((typeof this.state.eventName == "undefined") || (this.state.eventName == "")) ? 
+						<div className="loader loaderDiv"></div>
+					:
 						<div>
-							<div id="backButton">
-								<Button color="default" onClick={this.props.back}>Back</Button>
-							</div>
-							{ (this.userIsLeader() && !this.state.eventIsEnded) ?  
-								<div> 
-									<div id="endButton">
-										<Button color="danger" onClick={this.toggleEnd}>End Event</Button>
-										<Modal isOpen={this.state.endEventModal} toggle={this.toggleEnd} className={this.props.className}>
-								          	<ModalHeader>
-								          		End Event
-								          	</ModalHeader>
-								          	<ModalBody>
-								          		Are you sure you want to end this event? Videos cannot be added to the queue once an event has ended.
-								          	</ModalBody>
-								          	<ModalFooter>
-								            	<Button color="danger" onClick={this.end}>End</Button>
-								            	<Button color="secondary" onClick={this.toggleEnd}>Cancel</Button>
-								          	</ModalFooter>
-								        </Modal>
-									</div>
-									<div id="editButton">
-										<EditForm eventId={this.props.getEventId()} refreshEventInfo={this.refreshEventInfo} onSuccess={this.onEventEditSuccess}/>
-									</div>
+							<h2 className="eventName">{this.state.eventName}</h2>
+							<div>
+								<div id="backButton">
+									<Button color="default" onClick={this.props.back}>Back</Button>
 								</div>
-							:
-								null 
-							}
-						</div>
-					</div>
-					<div className="eventDetails">
-						{ (this.userIsLeader() && !this.state.eventIsEnded) ?
-							null
-						:
-							<br/>
-						}
+								{ (this.userIsLeader() && !this.state.eventIsEnded) ?  
+									<div> 
+										<div id="endButton">
+											<Button color="danger" onClick={this.toggleEnd}>End Event</Button>
+											<Modal isOpen={this.state.endEventModal} toggle={this.toggleEnd} className={this.props.className}>
+									          	<ModalHeader>
+									          		End Event
+									          	</ModalHeader>
+									          	<ModalBody>
+									          		Are you sure you want to end this event? Videos cannot be added to the queue once an event has ended.
+									          	</ModalBody>
+									          	<ModalFooter>
+									            	<Button color="danger" onClick={this.end}>End</Button>
+									            	<Button color="secondary" onClick={this.toggleEnd}>Cancel</Button>
+									          	</ModalFooter>
+									        </Modal>
+										</div>
+										<div id="editButton">
+											<EditForm eventId={this.props.getEventId()} refreshEventInfo={this.refreshEventInfo} onSuccess={this.onEventEditSuccess}/>
+										</div>
+									</div>
+								:
+									null 
+								}
+							</div>
+							<div className="eventDetails">
+								{ (this.userIsLeader() && !this.state.eventIsEnded) ?
+									null
+								:
+									<br/>
+								}
 
-						{this.state.eventLocation}
-						<br/>
-						{ formatDateTime(this.state.eventStartTime.toString()) }
-						<br/>
-						<br/>
-						{this.state.eventDescription}
-					</div>
+								{this.state.eventLocation}
+								<br/>
+								{ formatDateTime(this.state.eventStartTime.toString()) }
+								<br/>
+								<br/>
+								{this.state.eventDescription}
+							</div>
+						</div>
+					}
+					
 					
 					{ this.state.eventIsEnded ? 
 						<div className="eventDetails">
