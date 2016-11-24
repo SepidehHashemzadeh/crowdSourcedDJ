@@ -5,7 +5,7 @@
 	/* background: rgba(255, 255, 255, 0.85) ; */
 	color: white;
 	width: 75%;
-	padding-top: 20px;
+	padding-top: 40px;
 	padding-right: 50px;
 	padding-left: 50px;
 	margin-left: auto;
@@ -17,14 +17,18 @@
 	margin-bottom: auto;
 }
 
-#buttonToolbar {
-	margin-left: auto;
-	margin-right: auto;
+#backButton {
+	float: left;
 	display: inline-block;
 }
 
-#hiddenButtons {
+#endButton {
+	float: right;
 	display: inline-block;
+}
+
+#editButton {
+	padding-left: 90px;
 }
 
 .eventName{
@@ -32,13 +36,14 @@
 	font-size: 50px;
 	text-align:center;
     margin-top: 0px;
+	display: inline-block;
 }
 
 .eventDetails{
 	font-size: 20px;
-	font-family: Arial, Helvetica, sans-serif;
 	text-align:center;
 	margin-top: 10px;
+	font-family: 'Roboto Condensed', sans-serif;
 }
 
 hr {
@@ -48,6 +53,13 @@ hr {
     border-top: 1px solid #ccc;
     margin: 1em 0;
     padding: 0;
+}
+
+#musicQueueTitle {
+	font-family: 'Lobster', cursive;
+	font-size: 30px;
+	text-align:center;
+	margin-bottom: -1px;
 }
 
 #addSong{
@@ -87,8 +99,8 @@ hr {
 }
 
 .videoInnerDiv {
-	height: 9em;
-	width: 16em;
+	height: 270px;
+    width: 480px;
 }
 
 .videoDeleteButton {
@@ -111,7 +123,6 @@ hr {
     -ms-user-select: none;
     user-select: none;
     background-image: none;
-    border: 1px solid transparent;
     border-radius: 4px;
     color: #fff;
     background-color: #d9534f;
@@ -127,21 +138,32 @@ hr {
     border-color: #ac2925;
 }
 
-
-.attendee-songOuterDiv{
+.attendee-songOuterDiv {
 	border: 0.5px solid white;
-	padding: 10px;
+	width: 92%;
 }
 
 .attendee-songInnerDiv{
-	display: flex;
-	justify-content: space-between;
-	flex-flow: row wrap;
+	text-align: left;
+	padding-left: 5px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	/* margin-top: 0; */
+	position: relative;
+	transition: all 0.5s ease;
+}
+
+#attendee-queue {
+	font-family: 'Lobster', cursive;
+	font-size: 40px;
+	text-align:center;
 }
 
 #attendee-queue-list li{
 	list-style-type: none;
 	text-align: left;
+	font-size: 40px;
+	font-family: 'Roboto Condensed', sans-serif;
 }
 
 #speaker-icon {
@@ -152,13 +174,8 @@ hr {
 .attendee-queue-title {
 	display: inline-block;
 	color: white;
-	font-size: 20px;
-	float: left;
+	text-align: left;
 	/*margin-left: 10px;*/
-}
-
-.attendee-queue-link {
-	color: white;
 }
 
 .attendee-queue-img {
@@ -167,22 +184,23 @@ hr {
 	margin-right: 10px;
 }
 
-.attendee-songInnerDiv {
+.attendee-queue-title {
+	text-decoration: none;
+	color: white;
+	width: 90%;
+}
+
+.attendee-queue-title:hover {
 	text-decoration: none;
 	color: white;
 }
 
-.attendee-songOuterDiv:hover {
+.attendee-queue-title:active {
 	text-decoration: none;
 	color: white;
 }
 
-.attendee-songOuterDiv:active {
-	text-decoration: none;
-	color: white;
-}
-
-.attendee-songOuterDiv:visited {
+.attendee-queue-title:visited {
 	text-decoration: none;
 	color: white;
 }

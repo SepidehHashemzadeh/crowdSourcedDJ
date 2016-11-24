@@ -8,6 +8,7 @@ import Database from '../databaseShortcuts.js';
 import { formatDateTime } from '../timeConverter.js';
 import EventPageLeaderInviteNotificationStack from './EventPageLeaderInviteNotificationStack.jsx';
 import EditForm from './EditForm.jsx';
+import EventAttendeeQueue from './EventAttendeeQueue.jsx';
 require("./../resources/css/eventPage.css");
 require("../resources/css/eventList.css");
 var yt = require('../youtube.js');
@@ -27,6 +28,7 @@ class EventPageLeader extends React.Component {
 			queue: [],
 			songTitles: [],
 			modal: false,
+			endEventModal: false,
 			deleteID: "",
 			queueState: [],
 			queueSequence: [],
@@ -35,11 +37,13 @@ class EventPageLeader extends React.Component {
 		};
 		this.render = this.render.bind(this);
 		this.end = this.end.bind(this);
-		this.edit = this.edit.bind(this);
 		this.delete = this.delete.bind(this);
 		this.refreshQueue = this.refreshQueue.bind(this);
+		this.refreshInvites = this.refreshInvites.bind(this);
+		this.refreshEventInfo = this.refreshEventInfo.bind(this);
 		this.confirmDelete = this.confirmDelete.bind(this);
 		this.toggle = this.toggle.bind(this);
+		this.toggleEnd = this.toggleEnd.bind(this);
 		this.onPlay = this.onPlay.bind(this);
 		this.onBuffer = this.onBuffer.bind(this);
 		this.onEnd = this.onEnd.bind(this);
@@ -120,6 +124,23 @@ class EventPageLeader extends React.Component {
 			}
 		}.bind(this));
 	}
+	refreshEventInfo() {
+		if(!this._isMounted) {
+			return; //abandon
+		}
+		var eventQuery = "SELECT * FROM Events WHERE id="+ this.props.getEventId() + ";";
+		Database(eventQuery).then((result) => {
+			if(typeof result[0] != "undefined") {
+				this.setState({
+					eventName: result[0].name,
+					eventLocation: result[0].location,
+					eventStartTime: result[0].startTime,
+					eventDescription: result[0].description,
+					eventIsEnded: result[0].isEnded
+				});
+			}
+		});
+	}
 	refreshQueue(isStateRefresh){
 		var songQuery = "SELECT songUrl, sequence FROM Event_Song WHERE eventId="+ this.props.getEventId();
 		songQuery += " ORDER BY sequence ASC;";
@@ -165,15 +186,19 @@ class EventPageLeader extends React.Component {
 			//console.log("Changed currSongSeq to -1");
 		}.bind(this));
 
+		this.toggleEnd();
 		this.props.back();
 		this.props.eventCreated();
-	}
-	edit(){
 	}
 	toggle() {
 		this.refreshQueue(false);
 		this.setState({ 
 			modal: !this.state.modal
+		});
+	}
+	toggleEnd() {
+		this.setState({ 
+			endEventModal: !this.state.endEventModal
 		});
 	}
 	confirmDelete(vidID, key, sequence){
@@ -264,7 +289,7 @@ class EventPageLeader extends React.Component {
 			this.getSongTitle(vidID);
    		});
 	}
-	userIsLeader() {
+	userIsLeader() { 
 		var currentUser = this.props.currentUserId;
 		var eventLeader = this.props.getEventLeaderId();
 		return (currentUser == eventLeader);
@@ -293,141 +318,138 @@ class EventPageLeader extends React.Component {
 			<div id="eventPageLeaderOuterDivId"> 
 				{ (this.userIsLeader())?<EventPageLeaderInviteNotificationStack eventId={this.props.getEventId()} inviteList={this.state.pendingInvites}/>:null}
 				<div id="eventPageLeader">
-					<div>
-						<h2 className="eventName">{this.state.eventName}</h2>
-						<div id="buttonToolbar">
-							<Button color="default" onClick={this.props.back}>Back</Button>
-							{' '}
-							{ (this.userIsLeader() && !this.state.eventIsEnded) ?  
-								<div id = "hiddenButtons">
-									<Button color="danger" onClick={this.end}>End Event</Button>
-									{' '}
-									<EditForm eventId={this.props.getEventId()} onSuccess={this.onEventEditSuccess}/>
+					{ ((typeof this.state.eventName == "undefined") || (this.state.eventName == "")) ? 
+						<div className="loader loaderDiv"></div>
+					:
+						<div>
+							<h2 className="eventName">{this.state.eventName}</h2>
+							<div>
+								<div id="backButton">
+									<Button color="default" onClick={this.props.back}>Back</Button>
 								</div>
-							:
-								null 
+								{ (this.userIsLeader() && !this.state.eventIsEnded) ?  
+									<div> 
+										<div id="endButton">
+											<Button color="danger" onClick={this.toggleEnd}>End Event</Button>
+											<Modal isOpen={this.state.endEventModal} toggle={this.toggleEnd} className={this.props.className}>
+									          	<ModalHeader>
+									          		End Event
+									          	</ModalHeader>
+									          	<ModalBody>
+									          		Are you sure you want to end this event? Videos cannot be added to the queue once an event has ended.
+									          	</ModalBody>
+									          	<ModalFooter>
+									            	<Button color="danger" onClick={this.end}>End</Button>
+									            	<Button color="secondary" onClick={this.toggleEnd}>Cancel</Button>
+									          	</ModalFooter>
+									        </Modal>
+										</div>
+										<div id="editButton">
+											<EditForm eventId={this.props.getEventId()} refreshEventInfo={this.refreshEventInfo} onSuccess={this.onEventEditSuccess}/>
+										</div>
+									</div>
+								:
+									null 
+								}
+							</div>
+							<div className="eventDetails">
+								{ (this.userIsLeader() && !this.state.eventIsEnded) ?
+									null
+								:
+									<br/>
+								}
+
+								{this.state.eventLocation}
+								<br/>
+								{ formatDateTime(this.state.eventStartTime.toString()) }
+								<br/>
+								<br/>
+								{this.state.eventDescription}
+							</div>
+							{ this.state.eventIsEnded ? 
+								<div className="eventDetails">
+									<hr/>
+									This event has ended.
+								</div>
+							 :
+								<div id="addSong">
+									<hr/>
+									<div>Search</div>
+									<SearchSong onSongAdded={this.onSongAdded} eventId={this.props.getEventId()}/>
+								</div>
 							}
-						</div>
-					</div>
-					<p className="eventDetails">{this.state.eventLocation}</p>
-					<p className="eventDetails">{ formatDateTime(this.state.eventStartTime.toString()) }</p>
-					<br/>
-					<p className="eventDetails">{this.state.eventDescription}</p>
-					
-					{ this.state.eventIsEnded ? null :
-						<div id="addSong">
 							<hr/>
-							<div>Search</div>
-							<SearchSong onSongAdded={this.onSongAdded} eventId={this.props.getEventId()}/>
-						</div>
-					}
-					<hr/>
-					{ (this.userIsLeader() || this.state.eventIsEnded) ? 
-						<div id="queue">
-							<div>Music Queue</div>
-							<div id="videos">
-							{ 	this.state.queue.map((vidID, i) => {
-									return 	<div key={i} className="videoOuterDiv">
-												<div className="videoInnerDiv">
-												{
-								            		i===0 ? 
-								            		<YouTubePlayer
-										            	height='270'
-										            	playbackState='unstarted'
-										            	videoId={vidID}
-										            	width='480'
-										            	//configuration={{autoplay:1}}
-										            	configuration={{
-										            		enablejsapi: 1,
-										            		origin:"http://localhost:8080",
-										            		modestbranding: 1,
-										            		disablekb: 1,
-										            	}}
-										            	onPlay={this.onPlay(i)}
-										            	onBuffer={this.onPlay(i)}
-										            	onEnd={this.onEnd(i)}
-										            	onError={this.onError(i)}
-										            	onPause={this.onPause(i)}
-										            	playbackState= {this.state.queueState[i]}
-										        	/>
-								            		:
-													<YouTubePlayer
-										            	height='270'
-										            	playbackState='unstarted'
-										            	videoId={vidID}
-										            	width='480'
-										            	//configuration={{autoplay:0}}
-										            	configuration={{
-										            		enablejsapi: 1,
-										            		origin:"http://localhost:8080",
-										            		modestbranding: 1,
-										            		disablekb: 1,
-										            	}}
-										            	onPlay={this.onPlay(i)}
-										            	onBuffer={this.onPlay(i)}
-										            	onEnd={this.onEnd(i)}
-										            	onError={this.onError(i)}
-										            	onPause={this.onPause(i)}
-										            	playbackState= {this.state.queueState[i]}
-										        	/>
-										        }
-									        	</div>
-									        	{ this.state.eventIsEnded ? null :
-									        		<span className="videoDeleteButton" onClick={() => {this.confirmDelete(vidID, i, this.state.queueSequence[i])}}>x</span>
-									        	}
-									        	<br/>
-									        </div>
-						       	})
-					    	}
-				    		</div>
-						</div>
-						:
-							<div id="attendee-queue">
-								<p id="attendee-queue-title">Music Queue</p>
-								<div id="attendee-queue">
-									<ul id="attendee-queue-list">
-									{ 	this.state.songTitles.map((title, i) => {
-											return 	<li key={i}>
-														{this.isSongPlaying(i) ? 
-															<div autoFocus className={"divHovered attendee-songOuterDiv attendee-curSong hvr-back-pulse2"} ref="curSong" id="curSong">
-																<div className="attendee-songInnerDiv">
-																	 <div className="attendee-queue-title">
-																		<a target="_blank" 
-																		   href={"https://www.youtube.com/watch?v="+this.state.queue[i]}
-																		   className="attendee-queue-link">
-																			<div color="white">{title}</div>
-																		</a>
-																	</div>
-																	<div className="attendee-queue-img"><img src={speakerUrl} id="speaker-icon"></img></div>
-													        	</div>
-													        </div>
-														: 
-															<div className={"divNotHovered attendee-songOuterDiv"}>
-																<div className="attendee-songInnerDiv">
-																	 <div className="attendee-queue-title">
-																		<a target="_blank" 
-																		   href={"https://www.youtube.com/watch?v="+this.state.queue[i]}
-																		   className="attendee-queue-link">
-																			<div>{title}</div>
-																		</a>
-																	</div>
-													        	</div>
-													        </div>
-														}
-												    </li>
+							<div id="musicQueueTitle">Music Queue</div>
+							{ (this.userIsLeader() || this.state.eventIsEnded) ? 
+								<div id="queue">
+									<div id="videos">
+									{ 	this.state.queue.map((vidID, i) => {
+											return 	<div key={i} className="videoOuterDiv">
+														<div className="videoInnerDiv">
+														{
+										            		i===0 ? 
+										            		<YouTubePlayer
+												            	height='270'
+												            	playbackState='unstarted'
+												            	videoId={vidID}
+												            	width='480'
+												            	//configuration={{autoplay:1}}
+												            	configuration={{
+												            		enablejsapi: 1,
+												            		origin:"http://localhost:8080",
+												            		modestbranding: 1,
+												            		disablekb: 1,
+												            	}}
+												            	onPlay={this.onPlay(i)}
+												            	onBuffer={this.onPlay(i)}
+												            	onEnd={this.onEnd(i)}
+												            	onError={this.onError(i)}
+												            	onPause={this.onPause(i)}
+												            	playbackState= {this.state.queueState[i]}
+												        	/>
+										            		:
+															<YouTubePlayer
+												            	height='270'
+												            	playbackState='unstarted'
+												            	videoId={vidID}
+												            	width='480'
+												            	//configuration={{autoplay:0}}
+												            	configuration={{
+												            		enablejsapi: 1,
+												            		origin:"http://localhost:8080",
+												            		modestbranding: 1,
+												            		disablekb: 1,
+												            	}}
+												            	onPlay={this.onPlay(i)}
+												            	onBuffer={this.onPlay(i)}
+												            	onEnd={this.onEnd(i)}
+												            	onError={this.onError(i)}
+												            	onPause={this.onPause(i)}
+												            	playbackState= {this.state.queueState[i]}
+												        	/>
+												        }
+											        	</div>
+											        	{ this.state.eventIsEnded ? null :
+											        		<span className="videoDeleteButton" onClick={() => {this.confirmDelete(vidID, i, this.state.queueSequence[i])}}>x</span>
+											        	}
+											        	<br/>
+											        </div>
 								       	})
 							    	}
-							    	</ul>
-					    		</div>
-							</div>
+						    		</div>
+								</div>
+								:
+									<EventAttendeeQueue eventIsEnded={this.state.eventIsEnded} queueSequence={this.state.queueSequence} songTitles={this.state.songTitles} songQueue={this.state.queue} getEventId={this.props.getEventId}/>
+							}
+							<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventNestedModal">
+			              		<ModalHeader>Are you sure you want to delete this song from your Music Queue?</ModalHeader>
+			              		<ModalFooter>
+			                		<Button color="warning" onClick={() => {this.delete(this.state.deleteID, this.state.deleteKey, this.state.deleteSequence)}}>Delete</Button>
+			                		<Button color="default" onClick={this.toggle}>Cancel</Button>
+			              		</ModalFooter>
+			            	</Modal>
+						</div>
 					}
-					<Modal isOpen={this.state.modal} toggle={this.toggle} className="createEventNestedModal">
-	              		<ModalHeader>Are you sure you want to delete this song from your Music Queue?</ModalHeader>
-	              		<ModalFooter>
-	                		<Button color="warning" onClick={() => {this.delete(this.state.deleteID, this.state.deleteKey, this.state.deleteSequence)}}>Delete</Button>
-	                		<Button color="default" onClick={this.toggle}>Cancel</Button>
-	              		</ModalFooter>
-	            	</Modal>
 				</div>
 			</div>
 		);
