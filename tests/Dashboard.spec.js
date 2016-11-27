@@ -31,6 +31,14 @@ describe('Dashboard Behavior', () => {
 describe('Dashboard inegration test', () => {
   it('test Dashboard integrates correctly with its child components', () => {
      const Mwrapper = mount(<Dashboard/>);
-     const searchItem=Mwrapper.find('SearchEvent')
-     expect(searchItem.find("span")).to.have.length(1)
+     const searchEven=Mwrapper.find('SearchEvent');
+     expect(searchItem.find("span")).to.have.length(1);
+     const searchItemList=Mwrapper.find('SearchEventList');
+     expect(searchItemList.find("ul")).to.have.length(1);
+     const ControlledTabs=Mwrapper.find('ControlledTabs');
+     expect(ControlledTabs.find("label")).to.have.length(2);
+     const CreateEventForm=Mwrapper.find('CreateEventForm');
+     expect(CreateEventForm.find("Form")).to.have.length(1);
+     const EventPageLeader=Mwrapper.find('EventPageLeader');
+     expect(EventPageLeader.find("button")).to.have.length(4);
   }
