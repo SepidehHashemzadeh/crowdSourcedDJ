@@ -25,4 +25,6 @@ describe('EventList inegration test', () => {
      const Mwrapper = mount(<EventList/>);
      const EventListItem=Mwrapper.find('EventListItem');
      expect(EventListItem.find("p")).to.have.length(3);
-  }
+ });
+
+});
