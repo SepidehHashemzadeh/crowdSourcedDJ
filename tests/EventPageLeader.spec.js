@@ -31,7 +31,10 @@ describe('EventPageLeader inegration test', () => {
      expect(SearchSong.find("input")).to.have.length(1);
      const EventPageLeaderInviteNotificationStack=Mwrapper.find('EventPageLeaderInviteNotificationStack');
      expect(EventPageLeaderInviteNotificationStack.find("ul")).to.have.length(1);
-    
+     const EditForm'=Mwrapper.find('EditForm');
+     expect(EditForm'.find("Form")).to.have.length(1);
+     const EventAttendeeQueue=Mwrapper.find('EventAttendeeQueue');
+     expect(EventAttendeeQueue.find("ul")).to.have.length(1);
   });
 });
 
