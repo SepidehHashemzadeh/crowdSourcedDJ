@@ -22,7 +22,7 @@ describe('<EventList rendering />', () => {
 });
 describe('EventList inegration test', () => {
   it('test EventList integrates correctly with its child components', () => {
-     const Mwrapper = mount(<Dashboard/>);
+     const Mwrapper = mount(<EventList/>);
      const EventListItem=Mwrapper.find('EventListItem');
      expect(EventListItem.find("p")).to.have.length(3);
   }
