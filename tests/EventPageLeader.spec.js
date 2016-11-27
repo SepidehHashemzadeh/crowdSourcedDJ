@@ -1,5 +1,5 @@
 import { expect, assert } from 'chai';
-import { shallow } from 'enzyme';  
+import { shallow, mount} from 'enzyme';  
 import React from 'react';  
 import EventPageLeader  from '../components/EventPageLeader';
 import sinon from 'sinon';
