@@ -27,7 +27,6 @@ describe('EventPageLeader inegration test', () => {
      expect(EventPageLeaderInviteNotificationStack.find("ul")).to.have.length(1);
      const EditForm'=Mwrapper.find('EditForm');
      expect(EditForm'.find("Form")).to.have.length(1);
-     
   });
 });
 
