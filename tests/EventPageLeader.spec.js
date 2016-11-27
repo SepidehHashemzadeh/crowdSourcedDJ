@@ -37,3 +37,4 @@ describe('EventPageLeader inegration test', () => {
      expect(EventAttendeeQueue.find("ul")).to.have.length(1);
   });
 });
+
