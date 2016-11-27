@@ -9,19 +9,13 @@ describe('<EventPageLeader rendering />', () => {
    
     expect(wrapper.find("button")).to.have.length(4);
   });
-  
-
 });
 describe('components', () => {
   it('test EventPageLeader behavior', () => {
-
-       const onClick = sinon.spy();
-
+    const onClick = sinon.spy();
     const wrapper = shallow( <EventPageLeader onClick={onClick}/> );
-   
     wrapper.find('button').at(1).simulate('click');
     expect(onClick.calledOnce).to.equal(true);
-  
      });
 });
 describe('EventPageLeader inegration test', () => {
