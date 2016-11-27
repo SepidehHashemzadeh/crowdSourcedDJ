@@ -1,5 +1,5 @@
 import { expect, assert } from 'chai';
-import { shallow } from 'enzyme';  
+import { shallow, mount } from 'enzyme';  
 import React from 'react';  
 import SearchEventList from '../components/SearchEventList';
 import sinon from 'sinon';
@@ -18,4 +18,11 @@ describe('<SearchEventList rendering/>', () => {
   });
   
 
+});
+describe('SearchEventList inegration test', () => {
+  it('test SearchEventList integrates correctly with its child components', () => {
+     const Mwrapper = mount(<SearchEventList/>);
+     const SearchEventListItem=Mwrapper.find('SearchEventListItem');
+     expect(SearchEventListItem.find("div")).to.have.length(3);
+     });
 });
