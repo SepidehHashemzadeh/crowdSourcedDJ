@@ -41,4 +41,5 @@ describe('Dashboard inegration test', () => {
      expect(CreateEventForm.find("Form")).to.have.length(1);
      const EventPageLeader=Mwrapper.find('EventPageLeader');
      expect(EventPageLeader.find("button")).to.have.length(4);
-  }
+     });
+});
