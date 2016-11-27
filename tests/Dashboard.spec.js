@@ -1,5 +1,5 @@
 import { expect, assert } from 'chai';
-import { shallow } from 'enzyme';  
+import { shallow, mount } from 'enzyme';  
 import React from 'react';  
 import Dashboard from '../components/Dashboard';
 var sinon      = require('sinon');
@@ -28,3 +28,9 @@ describe('Dashboard Behavior', () => {
   
      });
 });
+describe('Dashboard inegration test', () => {
+  it('test Dashboard integrates correctly with its child components', () => {
+     const Mwrapper = mount(<Dashboard/>);
+     const searchItem=Mwrapper.find('SearchEvent')
+     expect(searchItem.find("span")).to.have.length(1)
+  }
